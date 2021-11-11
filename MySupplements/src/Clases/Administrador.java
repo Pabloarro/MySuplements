@@ -1,7 +1,7 @@
 package Clases;
 
 public class Administrador {
-	
+	private String especialidad;
 	private String dni;
 	private String nombre;
 	private String apellido;
