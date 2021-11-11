@@ -1,5 +1,6 @@
 package Ventanas;
  
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -11,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.sun.prism.Image;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
