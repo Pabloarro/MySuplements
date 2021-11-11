@@ -32,6 +32,10 @@ public class Producto {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
+	@Override
+	public String toString() {
+		return "Producto [nom=" + nom + ", precio=" + precio + "]";
+	}
 	
 }
 
