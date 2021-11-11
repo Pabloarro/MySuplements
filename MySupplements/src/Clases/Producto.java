@@ -1,14 +1,17 @@
 package Clases;
 
 public class Producto {
+	
 	String codigo_Producto;
 	float precio;
-	String nom;
+	String nombre;
+	
+	
 	public Producto(String codigo_Producto, float precio, String nom) {
 		super();
 		this.codigo_Producto = codigo_Producto;
 		this.precio = precio;
-		this.nom = nom;
+		this.nombre = nom;
 	}
 	public Producto() {
 		super();
@@ -27,14 +30,14 @@ public class Producto {
 		this.precio = precio;
 	}
 	public String getNom() {
-		return nom;
+		return nombre;
 	}
 	public void setNom(String nom) {
-		this.nom = nom;
+		this.nombre = nom;
 	}
 	@Override
 	public String toString() {
-		return "Producto [nom=" + nom + ", precio=" + precio + "]";
+		return "Producto [nom=" + nombre + ", precio=" + precio + "]";
 	}
 	
 }
