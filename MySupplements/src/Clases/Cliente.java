@@ -1,68 +1,51 @@
 package Clases;
 
+import java.util.HashMap;
+
 public class Cliente {
-	
-	private String dni;
-	private String nombre;
-	private String apellido;
-	private String contrasenya;
-	private String nomUsuario;
-	
-	public Cliente(String dni, String nombre, String apellido, String contrasenya, String nomUsuario) {
+	String nom;
+	String dni;
+	int edad;
+
+
+	public Cliente() {
 		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Cliente(String nom, String dni, int edad) {
+		super();
+		this.nom = nom;
 		this.dni = dni;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.contrasenya = contrasenya;
-		this.nomUsuario = nomUsuario;
+		this.edad = edad;
 	}
-
-	@Override
-	public String toString() {
-		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellido=" + apellido + ", contrasenya=" + contrasenya
-				+ ", nomUsuario=" + nomUsuario + "]";
+	public String getNom() {
+		return nom;
 	}
-
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
 	public String getDni() {
 		return dni;
 	}
-
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
-
-	public String getNombre() {
-		return nombre;
+	public int getEdad() {
+		return edad;
 	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setEdad(int edad) {
+		this.edad = edad;
 	}
-
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
-
-	public String getContrasenya() {
-		return contrasenya;
-	}
-
-	public void setContrasenya(String contrasenya) {
-		this.contrasenya = contrasenya;
-	}
-
-	public String getNomUsuario() {
-		return nomUsuario;
-	}
-
-	public void setNomUsuario(String nomUsuario) {
-		this.nomUsuario = nomUsuario;
+	@Override
+	public String toString() {
+		return "Cliente [nom=" + nom + ", dni=" + dni + ", edad=" + edad + "]";
 	}
 	
+	public void guardarDatos() {
+		
+	}
 	
-
+	public void cargarDatos() {
+		
+	}
 }

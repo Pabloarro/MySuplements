@@ -1,6 +1,9 @@
 package Clases;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -93,6 +96,37 @@ public class Pedido {
 
 	public void setPedidos(LinkedList<Pedido> pedidos) {
 		this.pedidos = pedidos;
+	}
+	//LEER FICHERO BINARIO Y CARGAR LISTA PEDIDOS
+	public void cargarDatos() {
+		ObjectInputStream ois = null;
+		try {
+			ois = new ObjectInputStream(newFileInputStream("Pedidos.dat"));
+			pedidos = (LinkedList<Pedido>)ois.readObject();
+		}catch(FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch(IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch(ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(ois!=null) {
+				try {
+					ois.close();
+				}catch(IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private InputStream newFileInputStream(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
