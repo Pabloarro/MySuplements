@@ -1,15 +1,15 @@
 package Clases;
 
-public class Producto {
+public class Producto{
 	
-	String codigo_Producto;
+	String codigo_producto;
 	float precio;
 	String nombre;
 	
 	
 	public Producto(String codigo_Producto, float precio, String nom) {
 		super();
-		this.codigo_Producto = codigo_Producto;
+		this.codigo_producto = codigo_Producto;
 		this.precio = precio;
 		this.nombre = nom;
 	}
@@ -18,10 +18,10 @@ public class Producto {
 		// TODO Auto-generated constructor stub
 	}
 	public String getCodigo_Producto() {
-		return codigo_Producto;
+		return codigo_producto;
 	}
 	public void setCodigo_Producto(String codigo_Producto) {
-		this.codigo_Producto = codigo_Producto;
+		this.codigo_producto = codigo_Producto;
 	}
 	public float getPrecio() {
 		return precio;
