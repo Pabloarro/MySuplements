@@ -14,16 +14,7 @@ public class VentanaInicioDeSesion extends JFrame {
 
 	private JPanel contentPane;
 	private JFrame ventanaActual, ventanaAnterior;
-	/**
-	 * Launch the application.
-	 */
-	
-	
 
-	/**
-	 * Create the frame.
-	 */
-	
 	public VentanaInicioDeSesion(JFrame Vanterior) {
 		setTitle("Inicio de sesion");
 		ventanaAnterior = Vanterior;
