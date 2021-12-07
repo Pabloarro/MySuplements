@@ -6,16 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import Clases.Cliente;
 
 public class BaseDatos {
 	private static Connection con;
+	private static Logger logger = Logger.getLogger( "BaseDatos" );
 	public static void initBD(String nombreBD) {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
 			con = DriverManager.getConnection("jdbc:sqlite:"+nombreBD);
+			logger.log(Level.INFO, "Conexión establecida con jdbc:sqlite:"+nombreBD);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,6 +34,7 @@ public class BaseDatos {
 		if(con!=null) {
 			try {
 				con.close();
+				logger.log(Level.INFO, "Conexión cerrada");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -133,6 +138,7 @@ public class BaseDatos {
 				 c = new Cliente(nom, con, dni, fecha);
 			}
 			rs.close();
+			logger.log(Level.INFO, "Cliente obtenido");
 			return c;
 	}
 }

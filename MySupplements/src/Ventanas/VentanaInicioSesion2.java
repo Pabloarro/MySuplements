@@ -18,7 +18,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,7 +36,7 @@ public class VentanaInicioSesion2 extends JFrame {
 	private JTextField textNombre;
 	private JLabel lblContrasenia;
 	private JPasswordField textContrasenia;
-
+	private static Logger logger = Logger.getLogger( "VentanaInicioSesion2" );
 	private JButton btnInicioSesion;
 
 	/**
@@ -101,6 +102,7 @@ public class VentanaInicioSesion2 extends JFrame {
 				String con = textContrasenia.getText();
 				if(nom.equals("") || con.equals("")) {
 					JOptionPane.showMessageDialog(null, "Tienes que rellenar todos los campos");
+					logger.log(Level.INFO, "Parte de los datos introducidos son nulos");
 				}else {
 					BaseDatos.initBD("DatosClientes.db");
 					int resul = BaseDatos.existeCliente(nom, con);
@@ -113,6 +115,7 @@ public class VentanaInicioSesion2 extends JFrame {
 							e1.printStackTrace();
 						}
 						JOptionPane.showMessageDialog(null, "Iniciada la sesión correctamente");
+						logger.log(Level.INFO, "Sesión iniciada");
 						new VentanaProducto();
 					}else {
 						JOptionPane.showMessageDialog(null, "No te puedes registrar, ya existe ese nombre de usuario");

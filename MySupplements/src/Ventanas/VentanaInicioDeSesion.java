@@ -18,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -40,6 +42,7 @@ public class VentanaInicioDeSesion extends JFrame {
 	private JButton btnRegistro;
 	private JDateChooser calendario;
 	private SimpleDateFormat sdf;
+	private static Logger logger = Logger.getLogger( "VentanaInicioDeSesion" );
 	/**
 	 * Launch the application.
 	 */
@@ -127,6 +130,7 @@ public class VentanaInicioDeSesion extends JFrame {
 						BaseDatos.insertarCliente(nom, con,dni, f);
 						VentanaPrincipal.clientesesion = new Cliente(nom, con, dni, fecha);
 						JOptionPane.showMessageDialog(null, "Registro realizado con éxito");
+						logger.log(Level.INFO, "Registro realizado ");
 						new VentanaProducto();
 					}
 					BaseDatos.closeBD();
