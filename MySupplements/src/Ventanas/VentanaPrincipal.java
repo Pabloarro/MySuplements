@@ -2,10 +2,15 @@ package Ventanas;
 
 import java.awt.EventQueue;
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import Clases.Cliente;
+
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Toolkit;
@@ -19,6 +24,7 @@ import javax.swing.GroupLayout.Alignment;
 
 public class VentanaPrincipal {
 
+	public static Cliente clientesesion;
 	private JFrame frame;
 	private JPanel panelLogo;
 	private JLabel lblLOGO;
@@ -30,6 +36,9 @@ public class VentanaPrincipal {
 	private JButton btnInicioSesion;
 	
 	
+	/**
+	 * Launch the application.
+	 */
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -44,13 +53,11 @@ public class VentanaPrincipal {
 		});
 	}
 
-	
+	/**
+	 * Create the frame.
+	 */
 	public VentanaPrincipal() {
-		initialize();
-	}
-
 	
-	private void initialize() {
 		frame = new JFrame();
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		frame.setBounds(100, 100, 558, 380);
@@ -97,7 +104,12 @@ public class VentanaPrincipal {
 		btnInicioSesion = new JButton("Inicio Sesion");
 		btnInicioSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VentanaInicioDeSesion vi = new VentanaInicioDeSesion(frame);
+			 JOptionPane.showConfirmDialog(null,"¿Es tu primera vez?","Pregunta",JOptionPane.YES_NO_OPTION);
+					if(true) {
+					new VentanaInicioDeSesion();
+				}else
+					new VentanaInicioSesion2();
+				
 			}
 		});
 		GroupLayout gl_panel_mid = new GroupLayout(panel_mid);

@@ -1,22 +1,32 @@
 package Clases;
 
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Cliente {
 	String nom;
 	String dni;
-	int edad;
-
+	String con;
+	Date fechanac;
+	
 
 	public Cliente() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Cliente(String nom, String dni, int edad) {
+	public Cliente(String nom,String con, String dni, Date fechanac) {
 		super();
+		this.con = con;
 		this.nom = nom;
 		this.dni = dni;
-		this.edad = edad;
+		this.fechanac = fechanac;
+	}
+	
+	public String getCon() {
+		return con;
+	}
+	public void setCon(String con) {
+		this.con = con;
 	}
 	public String getNom() {
 		return nom;
@@ -30,22 +40,21 @@ public class Cliente {
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
-	public int getEdad() {
-		return edad;
+
+	
+	public Date getFechanac() {
+		return fechanac;
 	}
-	public void setEdad(int edad) {
-		this.edad = edad;
+	public void setFechanac(Date fechanac) {
+		this.fechanac = fechanac;
 	}
+	
+	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy" );
+	
 	@Override
 	public String toString() {
-		return "Cliente [nom=" + nom + ", dni=" + dni + ", edad=" + edad + "]";
+		return "Cliente [nom=" + nom + ", con=" + dni +", dni=" + dni + ", Fecha de nacimiento=" + sdf.format(fechanac) + "]";
 	}
 	
-	public void guardarDatos() {
-		
-	}
-	
-	public void cargarDatos() {
-		
-	}
+
 }

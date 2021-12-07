@@ -1,5 +1,6 @@
 package Ventanas;
 
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -8,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
-import com.toedter.calendar.JDateChooser;
+
 
 import BaseDatos.BaseDatos;
 import Clases.Cliente;
@@ -16,15 +17,15 @@ import Clases.Cliente;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.SQLException;
+
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class VentanaInicioDeSesion extends JFrame {
+public class VentanaInicioSesion2 extends JFrame {
 
 	
 	private JPanel contentPane;
@@ -34,12 +35,9 @@ public class VentanaInicioDeSesion extends JFrame {
 	private JTextField textNombre;
 	private JLabel lblContrasenia;
 	private JPasswordField textContrasenia;
-	private JLabel lbldni;
-	private JTextField textdni;
-	private JLabel lblFNac;
-	private JButton btnRegistro;
-	private JDateChooser calendario;
-	private SimpleDateFormat sdf;
+
+	private JButton btnInicioSesion;
+
 	/**
 	 * Launch the application.
 	 */
@@ -47,7 +45,7 @@ public class VentanaInicioDeSesion extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaInicioDeSesion frame = new VentanaInicioDeSesion();
+					VentanaInicioSesion2 frame = new VentanaInicioSesion2();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,7 +57,7 @@ public class VentanaInicioDeSesion extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaInicioDeSesion() {
+	public VentanaInicioSesion2() {
 		BaseDatos.initBD("DatosClientes.db");
 		BaseDatos.crearTablas();
 		BaseDatos.closeBD();
@@ -73,8 +71,8 @@ public class VentanaInicioDeSesion extends JFrame {
 		panelSur = new JPanel();
 		contentPane.add(panelSur, BorderLayout.SOUTH);
 		
-		btnRegistro = new JButton("REGISTRO");
-		panelSur.add(btnRegistro);
+		btnInicioSesion = new JButton("Iniciar sesión");
+		panelSur.add(btnInicioSesion);
 		
 		panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
@@ -94,44 +92,34 @@ public class VentanaInicioDeSesion extends JFrame {
 		panelCentro.add(textContrasenia);
 		textContrasenia.setColumns(10);
 		
-		lbldni = new JLabel("Introduce el dni:");
-		panelCentro.add(lbldni);
-		
-		textdni = new JTextField();
-		panelCentro.add(textdni);
-		textNombre.setColumns(10);
-		
-		lblFNac = new JLabel("Introduce tu fecha de nacimiento:");
-		panelCentro.add(lblFNac);
-		
-		calendario = new JDateChooser();
-		panelCentro.add(calendario);
-		
-		sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date fechaActual = new Date(System.currentTimeMillis());
-		calendario.getJCalendar().setMaxSelectableDate(fechaActual);
 		/*EVENTOS*/
-		btnRegistro.addActionListener(new ActionListener() {
+		btnInicioSesion.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String nom = textNombre.getText();
 				String con = textContrasenia.getText();
-				String dni = textdni.getText();
-				Date fecha = calendario.getDate();
-				if(nom.equals("") || con.equals("") || dni.equals("") || fecha==null) {
+				if(nom.equals("") || con.equals("")) {
 					JOptionPane.showMessageDialog(null, "Tienes que rellenar todos los campos");
 				}else {
-					String f = sdf.format(fecha);
 					BaseDatos.initBD("DatosClientes.db");
-						BaseDatos.insertarCliente(nom, con,dni, f);
-						VentanaPrincipal.clientesesion = new Cliente(nom, con, dni, fecha);
-						JOptionPane.showMessageDialog(null, "Registro realizado con éxito");
+					int resul = BaseDatos.existeCliente(nom, con);
+					if(resul == 0) {
+						try {
+							Cliente c = BaseDatos.ObtenerCliente(nom);
+							VentanaPrincipal.clientesesion=c;
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						JOptionPane.showMessageDialog(null, "Iniciada la sesión correctamente");
 						new VentanaProducto();
+					}else {
+						JOptionPane.showMessageDialog(null, "No te puedes registrar, ya existe ese nombre de usuario");
 					}
 					BaseDatos.closeBD();
 				}
-			
+			}
 		});
 	}
 
