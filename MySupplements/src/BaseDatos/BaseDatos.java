@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Clases.Cliente;
+import Clases.Pedido;
 
 public class BaseDatos {
 	private static Connection con;
@@ -141,7 +142,7 @@ public class BaseDatos {
 			logger.log(Level.INFO, "Cliente obtenido");
 			return c;
 	}
-	public static borrarPedido( Pedido pedido) throws SQLException {
+	public static void borrarPedido( Pedido pedido) throws SQLException {
 		Statement stmnt = con.createStatement();
 		String s = "DELETE FROM PEDIDO WHERE cod = " + pedido.getCod() + ";";
 		logger.log(Level.INFO, "Statement: " + s);

@@ -93,6 +93,7 @@ public class Pedido {
 	public static void setSdf(SimpleDateFormat sdf) {
 		Pedido.sdf = sdf;
 	}
+}
 	
 	
 	
