@@ -141,4 +141,14 @@ public class BaseDatos {
 			logger.log(Level.INFO, "Cliente obtenido");
 			return c;
 	}
+	public static borrarPedido( Pedido pedido) throws SQLException {
+		Statement stmnt = con.createStatement();
+		String s = "DELETE FROM PEDIDO WHERE cod = " + pedido.getCod() + ";";
+		logger.log(Level.INFO, "Statement: " + s);
+		int eliminados = stmnt.executeUpdate(s);
+		if(eliminados == 0) throw new SQLException("Ningun pedido ha sido eliminado cuyo id = " + pedido.getCod());
+		stmnt.close();
+		
+	}
+	
 }

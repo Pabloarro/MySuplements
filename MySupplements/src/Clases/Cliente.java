@@ -4,10 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Cliente {
-	String nom;
-	String dni;
-	String con;
-	Date fechanac;
+	private String nom;
+	private String dni;
+	private String con;
+	private Date fechanac;
 	
 
 	public Cliente() {
