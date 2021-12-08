@@ -30,6 +30,38 @@ public class BaseDatos {
 		}
 	}
 	
+	public static TreeMap<String, Double> mapaClientes(Connection con){
+		String sent = "SELECT * FROM Cliente";
+		Statement stmnt = null;
+		TreeMap <String, Cliente> mapaClientes = new TreeMap<>();
+		try {
+			stmnt = con.createStatement();
+			ResulSet rs = st.executeQuery(sent);
+			while(rs.next()) {
+				String d = rs.getString("dni");
+				String n = rs.getString("nom");
+				String co = rs.getString("con");
+				Date fnac = rs.getDate("fechanac");
+				Cliente c = new Cliente(d, n, co, fnac);
+				mapaClientes.put(d, c);
+			}
+			rs.close();
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(stmnt!=null) {
+				try {
+					s.close();
+				}catch(SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					
+				}
+			}
+		}
+		return mapaClientes;
+	}
 
 	public static void closeBD() {
 		if(con!=null) {
@@ -125,6 +157,35 @@ public class BaseDatos {
 		
 		return resul;
 	}
+	public static TreeSet<Producto> obtenerConjuntoProductos(){
+		String s = "SELECT * FROM Producto";
+		Statement stmnt = null;
+		TreeSet<Producto>conjuntoProductos = new TreeSet<>();
+		try {
+			stmnt = con.createStatement();
+			ResulSet rs = stmnt.executeQuery(s);
+			while(rs.next()) {
+				String cod = rs.getString("cod");
+				float precio = rs.getFloat("precio");
+				String nombre = rs.getString("nombre")
+				Producto p = new Producto(cod, precio, nombre);
+			}
+			rs.close();
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(stmnt!=null) {
+				try {
+					st.close();
+				}catch(SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return conjuntoProductos;
+	}
 	
 	public static Cliente ObtenerCliente(String nom) throws SQLException{
 		
@@ -133,15 +194,45 @@ public class BaseDatos {
 			ResultSet rs = statement.executeQuery(sent);
 			Cliente c = null;
 			if(rs.next()) {
+				String nom = rs.getString("nom")
 				String con = rs.getString("con");
 				String dni = rs.getString("dni");
-				Date fecha = rs.getDate("fnac");
+				Date fechanac = rs.getDate("fechanac");
 				 c = new Cliente(nom, con, dni, fecha);
 			}
 			rs.close();
 			logger.log(Level.INFO, "Cliente obtenido");
 			return c;
 	}
+	public static void eliminarCliente(String dni) throws SQLException {
+		Statement stmnt = con.createStatement();
+		String s = "DELETE FROM CLIENTE WHERE ID = " + dni;
+		stmnt.executeUpdate(s);
+		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
+	}
+	
+	public static void guardarPedido(Pedido p) {
+		String s = "INSERT INTO PEDIDO VALUES('"+c.getCod()+"','"+c.getFec()+"', '"+c.getCliente()+"' , '"c.getPedido"')";
+		Statement stmnt = null;
+		
+		try {
+			stmnt = con.createStatement();
+			stmnt.executeUpdate(s);
+		}catch(SQLEception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(stmnt!=null) {
+				try {
+					stmnt.close();
+				}catch(SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public static void borrarPedido( Pedido pedido) throws SQLException {
 		Statement stmnt = con.createStatement();
 		String s = "DELETE FROM PEDIDO WHERE cod = " + pedido.getCod() + ";";

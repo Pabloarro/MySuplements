@@ -17,7 +17,7 @@ public class Pedido {
 	private Cliente cliente;
 	private Producto producto;
 	
-	private HashMap <String, Double> dineroPorCliente;
+	private TreeMap <String, Cliente> mapaClientes;
 	private ArrayList<Pedido> listaPedidos;
     
 	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy HH:mm:ss" );

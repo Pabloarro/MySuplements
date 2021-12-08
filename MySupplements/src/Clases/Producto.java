@@ -2,10 +2,11 @@ package Clases;
 
 public class Producto{
 	
-	String codigo_producto;
-	float precio;
-	String nombre;
+	private String cod;
+	private float precio;
+	private String nombre;
 	
+	private TreeSet<Producto> conjuntoProductos;
 	
 	public Producto(String codigo_Producto, float precio, String nom) {
 		super();
