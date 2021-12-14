@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,13 +31,13 @@ public class BaseDatos {
 		}
 	}
 	
-	public static TreeMap<String, Double> mapaClientes(Connection con){
+	/*public static TreeMap<String, Double> mapaClientes(Connection con){
 		String sent = "SELECT * FROM Cliente";
 		Statement stmnt = null;
 		TreeMap <String, Cliente> mapaClientes = new TreeMap<>();
 		try {
 			stmnt = con.createStatement();
-			ResulSet rs = st.executeQuery(sent);
+			ResultSet rs = stmnt.executeQuery(sent);
 			while(rs.next()) {
 				String d = rs.getString("dni");
 				String n = rs.getString("nom");
@@ -52,7 +53,7 @@ public class BaseDatos {
 		}finally {
 			if(stmnt!=null) {
 				try {
-					s.close();
+					stmnt.close();
 				}catch(SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -61,7 +62,7 @@ public class BaseDatos {
 			}
 		}
 		return mapaClientes;
-	}
+	}*/
 
 	public static void closeBD() {
 		if(con!=null) {
@@ -157,7 +158,7 @@ public class BaseDatos {
 		
 		return resul;
 	}
-	public static TreeSet<Producto> obtenerConjuntoProductos(){
+/*	public static TreeSet<Producto> obtenerConjuntoProductos(){
 		String s = "SELECT * FROM Producto";
 		Statement stmnt = null;
 		TreeSet<Producto>conjuntoProductos = new TreeSet<>();
@@ -185,7 +186,7 @@ public class BaseDatos {
 			}
 		}
 		return conjuntoProductos;
-	}
+	}*/
 	
 	public static Cliente ObtenerCliente(String nom) throws SQLException{
 		
@@ -194,31 +195,30 @@ public class BaseDatos {
 			ResultSet rs = statement.executeQuery(sent);
 			Cliente c = null;
 			if(rs.next()) {
-				String nom = rs.getString("nom")
 				String con = rs.getString("con");
 				String dni = rs.getString("dni");
-				Date fechanac = rs.getDate("fechanac");
+				Date fecha = rs.getDate("fechanac");
 				 c = new Cliente(nom, con, dni, fecha);
 			}
 			rs.close();
 			logger.log(Level.INFO, "Cliente obtenido");
 			return c;
-	}
-	public static void eliminarCliente(String dni) throws SQLException {
+	}}
+	/*public static void eliminarCliente(String dni) throws SQLException {
 		Statement stmnt = con.createStatement();
 		String s = "DELETE FROM CLIENTE WHERE ID = " + dni;
 		stmnt.executeUpdate(s);
 		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
-	}
+	}}*/
 	
-	public static void guardarPedido(Pedido p) {
+	/*public static void guardarPedido(Pedido p) {
 		String s = "INSERT INTO PEDIDO VALUES('"+c.getCod()+"','"+c.getFec()+"', '"+c.getCliente()+"' , '"c.getPedido"')";
 		Statement stmnt = null;
 		
 		try {
 			stmnt = con.createStatement();
 			stmnt.executeUpdate(s);
-		}catch(SQLEception e) {
+		}catch(SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
@@ -231,9 +231,9 @@ public class BaseDatos {
 				}
 			}
 		}
-	}
+	}*/
 	
-	public static void borrarPedido( Pedido pedido) throws SQLException {
+/*	public static void borrarPedido( Pedido pedido) throws SQLException {
 		Statement stmnt = con.createStatement();
 		String s = "DELETE FROM PEDIDO WHERE cod = " + pedido.getCod() + ";";
 		logger.log(Level.INFO, "Statement: " + s);
@@ -243,4 +243,4 @@ public class BaseDatos {
 		
 	}
 	
-}
+}*/

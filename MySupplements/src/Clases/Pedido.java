@@ -10,15 +10,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 public class Pedido {
 	private int cod;
     private Date fec;
 	private Cliente cliente;
 	private Producto producto;
-	
-	private TreeMap <String, Cliente> mapaClientes;
-	private ArrayList<Pedido> listaPedidos;
+
     
 	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy HH:mm:ss" );
 
@@ -27,15 +26,13 @@ public class Pedido {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Pedido(int cod, Date fec, Cliente cliente, Producto producto, HashMap<String, Double> dineroPorCliente,
-			ArrayList<Pedido> listaPedidos) {
+	public Pedido(int cod, Date fec, Cliente cliente, Producto producto) {
 		super();
 		this.cod = cod;
 		this.fec = fec;
 		this.cliente = cliente;
 		this.producto = producto;
-		this.dineroPorCliente = dineroPorCliente;
-		this.listaPedidos = listaPedidos;
+
 	}
 
 	public int getCod() {
@@ -70,21 +67,6 @@ public class Pedido {
 		this.producto = producto;
 	}
 
-	public HashMap<String, Double> getDineroPorCliente() {
-		return dineroPorCliente;
-	}
-
-	public void setDineroPorCliente(HashMap<String, Double> dineroPorCliente) {
-		this.dineroPorCliente = dineroPorCliente;
-	}
-
-	public ArrayList<Pedido> getListaPedidos() {
-		return listaPedidos;
-	}
-
-	public void setListaPedidos(ArrayList<Pedido> listaPedidos) {
-		this.listaPedidos = listaPedidos;
-	}
 
 	public static SimpleDateFormat getSdf() {
 		return sdf;

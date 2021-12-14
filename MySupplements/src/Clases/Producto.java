@@ -6,11 +6,11 @@ public class Producto{
 	private float precio;
 	private String nombre;
 	
-	private TreeSet<Producto> conjuntoProductos;
+
 	
 	public Producto(String codigo_Producto, float precio, String nom) {
 		super();
-		this.codigo_producto = codigo_Producto;
+		this.cod = codigo_Producto;
 		this.precio = precio;
 		this.nombre = nom;
 	}
@@ -19,10 +19,10 @@ public class Producto{
 		// TODO Auto-generated constructor stub
 	}
 	public String getCodigo_Producto() {
-		return codigo_producto;
+		return cod;
 	}
 	public void setCodigo_Producto(String codigo_Producto) {
-		this.codigo_producto = codigo_Producto;
+		this.cod = codigo_Producto;
 	}
 	public float getPrecio() {
 		return precio;
