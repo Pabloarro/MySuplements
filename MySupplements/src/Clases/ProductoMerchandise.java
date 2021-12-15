@@ -7,7 +7,7 @@ public class ProductoMerchandise extends Producto {
 		private String material ;
 		public ProductoMerchandise(String codigo_Producto, float precio, String nom, EnumTallas talla,
 				String material) {
-			super(codigo_Producto, precio, nom);
+			//super(codigo_Producto, precio, nom);
 			this.talla = talla;
 			this.material = material;
 		}

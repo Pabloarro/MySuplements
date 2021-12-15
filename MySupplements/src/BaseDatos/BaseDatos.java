@@ -79,7 +79,7 @@ public class BaseDatos {
 	public static void crearTablas() {
 		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom String, con String, dni String,fnac String)";
 		Statement st = null;
-		
+	//	String sent2 = "CREATE TABLE IF NOT EXISTS Pedido(";
 		try {
 			st = con.createStatement();
 			st.executeUpdate(sent1);
