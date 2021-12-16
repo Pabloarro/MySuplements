@@ -25,7 +25,7 @@ import javax.swing.GroupLayout.Alignment;
 public class VentanaPrincipal {
 
 	public static Cliente clientesesion;
-	private JFrame frame,ventanaActual;
+	private JFrame frame;
 	private JPanel panelLogo;
 	private JLabel lblLOGO;
 	private JPanel panel_sur;
@@ -58,7 +58,6 @@ public class VentanaPrincipal {
 	 */
 	public VentanaPrincipal() {
 		frame = new JFrame();
-		ventanaActual = frame;
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		frame.setBounds(100, 100, 558, 380);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -110,7 +109,7 @@ public class VentanaPrincipal {
 			}else
 				new VentanaInicioSesion2();
 			}
-			//ventanaActual.setVisible(false);
+			//setvisible(false)
 		});
 		GroupLayout gl_panel_mid = new GroupLayout(panel_mid);
 		gl_panel_mid.setHorizontalGroup(
@@ -135,7 +134,7 @@ public class VentanaPrincipal {
 					.addGap(62))
 		);
 		panel_mid.setLayout(gl_panel_mid);
-		ventanaActual = frame;
+
 		
 	}
 }

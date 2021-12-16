@@ -21,7 +21,7 @@ public class Pedido {
 												//Y luego en la clase pedido recogeremos la lista de productos que se han seleccionado
 
     
-	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy HH:mm:ss" );
+	private  SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy HH:mm:ss" );
 
 	public Pedido() {
 		super();
@@ -78,14 +78,16 @@ public class Pedido {
 		Listaproductos = listaproductos;
 	}
 
-	public static SimpleDateFormat getSdf() {
+	public SimpleDateFormat getSdf() {
 		return sdf;
 	}
 
-	public static void setSdf(SimpleDateFormat sdf) {
-		Pedido.sdf = sdf;
+	public void setSdf(SimpleDateFormat sdf) {
+		this.sdf = sdf;
 	}
+
 }
+
 	
 	
 	

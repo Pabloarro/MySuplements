@@ -1,10 +1,16 @@
 package Ventanas;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.swing.JFrame;
+
+import Clases.Producto;
 
 public class VentanaProducto {
 
 	private JFrame frame;
+	public static ArrayList<Producto> ListadeTodosLosProductos;//POR HACER
 
 	
 	public VentanaProducto() {

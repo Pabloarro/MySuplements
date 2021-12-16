@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -34,38 +35,7 @@ public class BaseDatos {
 	
 	
 	
-	/*public static TreeMap<String, Double> mapaClientes(Connection con){
-		String sent = "SELECT * FROM Cliente";
-		Statement stmnt = null;
-		TreeMap <String, Cliente> mapaClientes = new TreeMap<>();
-		try {
-			stmnt = con.createStatement();
-			ResultSet rs = stmnt.executeQuery(sent);
-			while(rs.next()) {
-				String d = rs.getString("dni");
-				String n = rs.getString("nom");
-				String co = rs.getString("con");
-				Date fnac = rs.getDate("fechanac");
-				Cliente c = new Cliente(d, n, co, fnac);
-				mapaClientes.put(d, c);
-			}
-			rs.close();
-		}catch(SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			if(stmnt!=null) {
-				try {
-					stmnt.close();
-				}catch(SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					
-				}
-			}
-		}
-		return mapaClientes;
-	}*/
+	
 
 	public static void closeBD() {
 		if(con!=null) {
@@ -78,14 +48,17 @@ public class BaseDatos {
 			}
 		}
 	}
-	
+	/**
+	 * 
+	 */
 	public static void crearTablas() {
 		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom String, con String, dni String,fnac String)";
 		Statement st = null;
-		String sent2 = "CREATE TABLE IF NOT EXISTS Pedido(codPedido Integer, String fecha, String dni, String codProducto)";
+		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido String , dnic String , cprod String)";
 		try {
 			st = con.createStatement();
 			st.executeUpdate(sent1);
+			st.executeUpdate(sent2);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,16 +73,148 @@ public class BaseDatos {
 			}
 		}
 	}
-	
-	public static void insertarPedido(Pedido p) {
-		for(Producto pr: p.getListaproductos()) {
-			String sent = "insert into pedido("+p.getCod()+",'"+p.getSdf().format(p.getFec()+"','"+p.getCliente().getDni()+"'"+p.getCod());
+	/**
+	 * Metodo que elimina un producto de un Pedido de la tabla Pedidos de la base de datos
+	 * @param pr Producto que se desea eliminar
+	 */
+	public static void eliminarProductodePedido(Producto pr) {
+		String sent = "DELETE FROM Pedidos WHERE cprod ='"+pr.getCod()+"'";
+		Statement st = null;
+		try {
+			st=con.createStatement();
+			st.executeUpdate(sent);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				st.close();
+				logger.log(Level.INFO,"Producto"+pr.getNombre()+"con un precio de "+pr.getPrecio()+"€ elimidao correctamente de su pedido");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
-
+	/**
+	 * Metodo que elimina el pedido de la tabla Pedidos de la  base de datos
+	 * @param P Pedido que se desea eliminar
+	 */
+	public static void eliminarPedido(Pedido P) {
+		String sent = "DELETE * FROM Pedidos WHERE cped='"+P.getCod()+"'";
+		Statement st = null;
+		try {
+			st=con.createStatement();
+			st.executeUpdate(sent);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				st.close();
+				logger.log(Level.INFO,"Pedido eliminado correctamente de la base de datos");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		}
+	
+	
+	
+	
+	
+	/**
+	 * Metodo que obtiene una lista de los pedidos 
+	 * @param c Cliente del que se quieren obtener sus pedidos
+	 * @return Devuelve la lista de pedidos del Cliente
+	 */
+	
+	//POR HACER
+	
+/*	public static ArrayList<Pedido> obtenerPedidosdeCliente(Cliente c) {
+		String sent = "SELECT * FROM Pedido WHERE dnic='"+c.getDni()+"'";
+		Statement st=null;
+		ArrayList<Pedido> AlPedidosClientes=new ArrayList<>();//necesito obtener los datos del pedido y luego la lista de productos
+		
+		Pedido p =null;
+		try {
+			ResultSet rs = st.executeQuery(sent);
+			if(rs.next()) {
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}*/
+	
+	
+	
+	
+	
+	/**
+	 * Metodo que obtiene una lista con todos los productos del pedido
+	 * @param codpedido codigo del pedido que queremos obtener
+	 * @return devuelve una lista con los productos del pedido
+	 */
+	
+	//POR HACER
+	/*public static ArrayList<Producto> obtenerProductosdePedido(String codpedido){
+		String sent= "SELECT * FROM Pedidos WHERE cped='"+codpedido+"'";
+		Statement st=null;
+		try {
+			st = con.createStatement();
+			ResultSet rs = st.executeQuery(sent);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
+		return null;
+	}
+	*/
+	
+	
+	
+	
+	/**
+	 * Metodo que inserta en la tabla de Pedidos los productos en fila
+	 * @param p producto que se inserta en la tabla pedidos
+	 */
+	public static void insertarPedido(Pedido p) {
+		for(Producto pr: p.getListaproductos()) {
+			String sent = "INSERT INTO Pedidos VALUES("+p.getCod()+",'"+p.getSdf().format(p.getFec()+"','"+p.getCliente().getDni()+"'"+pr.getCod());
+			Statement st = null;
+			try {
+				st = con.createStatement();
+				st.executeUpdate(sent);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					st.close();
+					logger.log(Level.INFO,"Pedido guardado correctamente en la base de datos");
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+/**
+ * Metodo que inserta el cliente en la tabla de clientes en la base de datos
+ * @param nom Nombre del cliente
+ * @param c Contraseña del cliente
+ * @param d	Dni del cliente
+ * @param ed Fecha de nacimiento del cliente
+ */
 	public static void insertarCliente(String nom, String c,String d, String ed) {//nombre,contraseña,dni y fecha de nacimiento
 		
-		String sent = "INSERT INTO Cliente VALUES('"+nom+"','"+c+"','"+d+"','"+ed+"')";
+		String sent = "INSERT INTO Cliente VALUES('"+nom+"','"+c+"','"+d+"','"+ed+"')";//la fecha de nacimiento hay que mirar si se mete a la bd como long
 		Statement st = null;
 		try {
 			st = con.createStatement();
@@ -120,6 +225,7 @@ public class BaseDatos {
 		} finally {
 			try {
 				st.close();
+				logger.log(Level.INFO,"Cliente guardado correctamente en la base de datos");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -166,36 +272,12 @@ public class BaseDatos {
 		
 		return resul;
 	}
-/*	public static TreeSet<Producto> obtenerConjuntoProductos(){
-		String s = "SELECT * FROM Producto";
-		Statement stmnt = null;
-		TreeSet<Producto>conjuntoProductos = new TreeSet<>();
-		try {
-			stmnt = con.createStatement();
-			ResulSet rs = stmnt.executeQuery(s);
-			while(rs.next()) {
-				String cod = rs.getString("cod");
-				float precio = rs.getFloat("precio");
-				String nombre = rs.getString("nombre")
-				Producto p = new Producto(cod, precio, nombre);
-			}
-			rs.close();
-		}catch(SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			if(stmnt!=null) {
-				try {
-					st.close();
-				}catch(SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		return conjuntoProductos;
-	}*/
 	
+	/**
+	 * Metodo que obtiene el cliente de la base de datos
+	 * @param nom nombre del cliente
+	 * @return Devuelve el cliente q
+	 */
 	public static Cliente ObtenerCliente(String nom) throws SQLException{
 		
 			Statement statement = con.createStatement();
@@ -211,44 +293,16 @@ public class BaseDatos {
 			rs.close();
 			logger.log(Level.INFO, "Cliente obtenido");
 			return c;
-	}}
-	/*public static void eliminarCliente(String dni) throws SQLException {
+	}
+	/**
+	 * Método que elimina el cliente de la tabla de clientes de la base de datos
+	 * @param dni Dni del cliente que ha introducido al iniciar sesión
+	 */
+	public static void eliminarCliente(String dni) throws SQLException {
 		Statement stmnt = con.createStatement();
 		String s = "DELETE FROM CLIENTE WHERE ID = " + dni;
 		stmnt.executeUpdate(s);
 		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
-	}}*/
-	
-	/*public static void guardarPedido(Pedido p) {
-		String s = "INSERT INTO PEDIDO VALUES('"+c.getCod()+"','"+c.getFec()+"', '"+c.getCliente()+"' , '"c.getPedido"')";
-		Statement stmnt = null;
-		
-		try {
-			stmnt = con.createStatement();
-			stmnt.executeUpdate(s);
-		}catch(SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			if(stmnt!=null) {
-				try {
-					stmnt.close();
-				}catch(SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	}*/
-	
-/*	public static void borrarPedido( Pedido pedido) throws SQLException {
-		Statement stmnt = con.createStatement();
-		String s = "DELETE FROM PEDIDO WHERE cod = " + pedido.getCod() + ";";
-		logger.log(Level.INFO, "Statement: " + s);
-		int eliminados = stmnt.executeUpdate(s);
-		if(eliminados == 0) throw new SQLException("Ningun pedido ha sido eliminado cuyo id = " + pedido.getCod());
-		stmnt.close();
-		
-	}
-	
-}*/
+	}}
+
+
