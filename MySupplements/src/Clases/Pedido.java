@@ -16,7 +16,9 @@ public class Pedido {
 	private int cod;
     private Date fec;
 	private Cliente cliente;
-	private Producto producto;
+	//private Producto producto;
+	private ArrayList<Producto> Listaproductos;//En la tabla de la bd se introducirán en cada fila un producto del pedido.
+												//Y luego en la clase pedido recogeremos la lista de productos que se han seleccionado
 
     
 	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy HH:mm:ss" );
@@ -26,12 +28,12 @@ public class Pedido {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Pedido(int cod, Date fec, Cliente cliente, Producto producto) {
+	public Pedido(int cod, Date fec, Cliente cliente, ArrayList<Producto> alproductos) {
 		super();
 		this.cod = cod;
 		this.fec = fec;
 		this.cliente = cliente;
-		this.producto = producto;
+		this.Listaproductos = alproductos;
 
 	}
 
@@ -59,14 +61,22 @@ public class Pedido {
 		this.cliente = cliente;
 	}
 
-	public Producto getProducto() {
+	/*public Producto getProducto() {
 		return producto;
 	}
 
 	public void setProducto(Producto producto) {
 		this.producto = producto;
 	}
+*/
 
+	public ArrayList<Producto> getListaproductos() {
+		return Listaproductos;
+	}
+
+	public void setListaproductos(ArrayList<Producto> listaproductos) {
+		Listaproductos = listaproductos;
+	}
 
 	public static SimpleDateFormat getSdf() {
 		return sdf;

@@ -7,7 +7,7 @@ public class Producto{
 	private String cod;
 	private float precio;
 	private String nombre;
-	private ArrayList<Pedido> pedidosdeproducto;
+	//private ArrayList<Pedido> pedidosdeproducto;
 
 	
 	public Producto(String codigo_Producto, float precio, String nom,ArrayList<Pedido>pedidosdeproductos) {
@@ -15,7 +15,7 @@ public class Producto{
 		this.cod = codigo_Producto;
 		this.precio = precio;
 		this.nombre = nom;
-		this.pedidosdeproducto = pedidosdeproductos;
+	//	this.pedidosdeproducto = pedidosdeproductos;
 	}
 	public Producto() {
 		super();
@@ -40,12 +40,12 @@ public class Producto{
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public ArrayList<Pedido> getPedidosdeproducto() {
+	/*public ArrayList<Pedido> getPedidosdeproducto() {
 		return pedidosdeproducto;
 	}
 	public void setPedidosdeproducto(ArrayList<Pedido> pedidosdeproducto) {
 		this.pedidosdeproducto = pedidosdeproducto;
-	}
+	}*/
 	@Override
 	public String toString() {
 		return "Producto [nom=" + nombre + ", precio=" + precio + "]";

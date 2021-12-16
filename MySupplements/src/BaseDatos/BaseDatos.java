@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import Clases.Cliente;
 import Clases.Pedido;
+import Clases.Producto;
 
 public class BaseDatos {
 	private static Connection con;
@@ -30,6 +31,8 @@ public class BaseDatos {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 	/*public static TreeMap<String, Double> mapaClientes(Connection con){
 		String sent = "SELECT * FROM Cliente";
@@ -79,7 +82,7 @@ public class BaseDatos {
 	public static void crearTablas() {
 		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom String, con String, dni String,fnac String)";
 		Statement st = null;
-	//	String sent2 = "CREATE TABLE IF NOT EXISTS Pedido(";
+		String sent2 = "CREATE TABLE IF NOT EXISTS Pedido(codPedido Integer, String fecha, String dni, String codProducto)";
 		try {
 			st = con.createStatement();
 			st.executeUpdate(sent1);
@@ -98,6 +101,11 @@ public class BaseDatos {
 		}
 	}
 	
+	public static void insertarPedido(Pedido p) {
+		for(Producto pr: p.getListaproductos()) {
+			String sent = "insert into pedido("+p.getCod()+",'"+p.getSdf().format(p.getFec()+"','"+p.getCliente().getDni()+"'"+p.getCod());
+		}
+	}
 
 	public static void insertarCliente(String nom, String c,String d, String ed) {//nombre,contraseña,dni y fecha de nacimiento
 		

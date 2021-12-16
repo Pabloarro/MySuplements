@@ -124,6 +124,8 @@ public class VentanaInicioSesion2 extends JFrame {
 				}
 			}
 		});
+		
+		setVisible(true);
 	}
 
 }
