@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Clases.Administrador;
 import Clases.Cliente;
 
 import java.awt.BorderLayout;
@@ -15,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -34,7 +36,7 @@ public class VentanaPrincipal {
 	private JButton btnAdministrador;
 	private JButton btnComprar;
 	private JButton btnInicioSesion;
-	
+	private ArrayList<Administrador> listaAdmins;//lista con los administradores para comprobar al entrar al btnAdmins
 	
 	/**
 	 * Launch the application.
@@ -86,7 +88,16 @@ public class VentanaPrincipal {
 		btnAdministrador = new JButton("Administrador");
 		btnAdministrador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VentanaAdministrador va = new VentanaAdministrador();
+			String id = JOptionPane.showInputDialog("Introduzca su identificación");
+			String con = JOptionPane.showInputDialog("Introduzca su contraseña");
+			Administrador a = new Administrador(id, con);
+			for(Administrador ad : listaAdmins) {//POR HACER LA LISTA DE ADMINS QUE ESTARA PREDEFINIDA EN UN FICHERO DE TEXTO
+				if(ad.equals(a)) {
+					new VentanaProducto();
+				}else {
+					JOptionPane.showMessageDialog(null, "Lo sentimos, se ha introducido un administrador erróneo");
+				}
+			}
 				
 				
 			}
