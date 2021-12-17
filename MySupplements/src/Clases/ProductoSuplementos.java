@@ -10,6 +10,23 @@ public class ProductoSuplementos extends Producto {
 	private int hidratos;
 	
 	
+	
+	public ProductoSuplementos(String codigo_Producto, float precio, String nom,String urlimagen, int proteinas, int calorias,
+			int grasas, int hidratos) {
+		super(codigo_Producto, precio, nom,urlimagen);
+		this.proteinas = proteinas;
+		this.calorias = calorias;
+		this.grasas = grasas;
+		this.hidratos = hidratos;
+	}
+	
+
+	public ProductoSuplementos(String codigo_Producto, float precio, String nom, String urlimagen) {
+		super(codigo_Producto, precio, nom, urlimagen);
+		
+	}
+
+
 	@Override
 	public String toString() {
 		return "ProductoSuplementos [proteinas=" + proteinas + ", calorias=" + calorias + ", grasas=" + grasas
