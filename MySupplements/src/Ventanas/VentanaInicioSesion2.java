@@ -59,7 +59,7 @@ public class VentanaInicioSesion2 extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInicioSesion2() {
-		BaseDatos.initBD("DatosClientes.db");
+		BaseDatos.initBD("Basedatos.db");
 		BaseDatos.crearTablas();
 		BaseDatos.closeBD();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

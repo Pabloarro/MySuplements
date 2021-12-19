@@ -64,7 +64,7 @@ public class VentanaInicioDeSesion extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInicioDeSesion() {
-		BaseDatos.initBD("DatosClientes.db");
+		BaseDatos.initBD("Basedatos.db");
 		BaseDatos.crearTablas();
 		BaseDatos.closeBD();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
