@@ -82,6 +82,18 @@ public class VentanaProducto extends JFrame {
 		JScrollPane scrollLista = new JScrollPane(listaProductos);
 		
 		
+		/*listaProductos.setCellRenderer(new DefaultListCellRenderer() {
+			public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean isSelected,boolean cellHasFocus) {
+				Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				Producto p = (Producto) value;
+				if(p.getPrecio()<100) {
+					c.setForeground(Color.RED);
+				}else {
+					c.setForeground(Color.BLACK);
+				}
+				return c;
+			}
+		});*/
 		
 		/*JTABLE*/
 		
@@ -101,7 +113,7 @@ public class VentanaProducto extends JFrame {
 		
 		ArrayList<Producto> alp = new ArrayList<>();
 		
-		Scanner scanner = new Scanner(VentanaProducto.class.getResourceAsStream("productosSuplementos.txt"));//txt de productos
+/*	Scanner scanner = new Scanner(VentanaProducto.class.getResourceAsStream("productosSuplementos.txt"));//txt de productos
 		while(scanner.hasNextLine()){
 			String linea = scanner.nextLine();
 			String[] datos = linea.split(",");
@@ -123,11 +135,14 @@ public class VentanaProducto extends JFrame {
 			String dataRow[] = {p.getCod(),p.getNombre(),String.valueOf(p.getPrecio())};
 			modeloTablaProductos.addRow(dataRow);
 		}
+		*/
+		tablaProductos = new JTable(modeloTablaProductos);
+		JScrollPane scrollTabla = new JScrollPane(tablaProductos);
 		
-		}
+	
+		//panelCentro.setLayout(new GridLayout(0, 2, 0, 0));
+		panelCentro.add(scrollTabla);
+		/*panelCentro.add(scrollLista);*/
 		
 		
-		
-		
-		
-	}
+	}}
