@@ -3,12 +3,15 @@ package Clases;
 public class ProductoMerchandise extends Producto {
 	
 		
-		protected EnumTallas talla;
+		protected EnumTallas talla;//Al realizar el pedido hay que elegir la talla.POR HACER
 		private String material ;
-		public ProductoMerchandise(String codigo_Producto, float precio, String nom,String urlimagen, EnumTallas talla,
-				String material) {
+		
+		
+		
+		
+		public ProductoMerchandise(String codigo_Producto, float precio, String nom,String urlimagen,String material) {
 			super(codigo_Producto, precio, nom,urlimagen);
-			this.talla = talla;
+			this.talla = null;
 			this.material = material;
 		}
 		
@@ -21,8 +24,8 @@ public class ProductoMerchandise extends Producto {
 
 
 
-
-		@Override
+		
+		@Override			//CREAR EL TOSTRING PARA EL FICHERO POR HACER
 		public String toString() {
 			return "ProductoMerchandise [talla=" + talla + ", material=" + material + "]";
 		}

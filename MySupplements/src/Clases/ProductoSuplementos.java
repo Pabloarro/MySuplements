@@ -11,13 +11,13 @@ public class ProductoSuplementos extends Producto {
 	
 	
 	
-	public ProductoSuplementos(String codigo_Producto, float precio, String nom,String urlimagen, int proteinas, int calorias,
-			int grasas, int hidratos) {
+	public ProductoSuplementos(String codigo_Producto, float precio, String nom,String urlimagen, int proteinas,
+			int grasas, int hidratos, int calorias) {
 		super(codigo_Producto, precio, nom,urlimagen);
 		this.proteinas = proteinas;
-		this.calorias = calorias;
 		this.grasas = grasas;
 		this.hidratos = hidratos;
+		this.calorias = calorias;
 	}
 	
 
@@ -27,7 +27,7 @@ public class ProductoSuplementos extends Producto {
 	}
 
 
-	@Override
+	@Override		//crear el toString para ponerlo en el txt POR HACER
 	public String toString() {
 		return "ProductoSuplementos [proteinas=" + proteinas + ", calorias=" + calorias + ", grasas=" + grasas
 				+ ", hidratos=" + hidratos + "]";

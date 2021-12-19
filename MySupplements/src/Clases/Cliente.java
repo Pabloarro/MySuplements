@@ -8,18 +8,20 @@ public class Cliente {
 	private String dni;
 	private String con;
 	private Date fechanac;
+	private float puntos;
 	
 
 	public Cliente() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Cliente(String nom,String con, String dni, Date fechanac) {
+	public Cliente(String nom,String con, String dni, Date fechanac,float p) {
 		super();
 		this.con = con;
 		this.nom = nom;
 		this.dni = dni;
 		this.fechanac = fechanac;
+		this.puntos = p;
 	}
 	
 	public String getCon() {
@@ -42,6 +44,12 @@ public class Cliente {
 	}
 
 	
+	public float getPuntos() {
+		return puntos;
+	}
+	public void setPuntos(float puntos) {
+		this.puntos = puntos;
+	}
 	public Date getFechanac() {
 		return fechanac;
 	}
@@ -53,7 +61,7 @@ public class Cliente {
 	
 	@Override
 	public String toString() {
-		return "Cliente [nom=" + nom + ", con=" + dni +", dni=" + dni + ", Fecha de nacimiento=" + sdf.format(fechanac) + "]";
+		return  nom + "," + con + ","+ dni +","+ sdf.format(fechanac) + ","+puntos ;
 	}
 	
 

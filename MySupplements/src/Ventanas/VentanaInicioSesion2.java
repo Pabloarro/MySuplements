@@ -104,7 +104,7 @@ public class VentanaInicioSesion2 extends JFrame {
 					JOptionPane.showMessageDialog(null, "Tienes que rellenar todos los campos");
 					logger.log(Level.INFO, "Parte de los datos introducidos son nulos");
 				}else {
-					BaseDatos.initBD("DatosClientes.db");
+					BaseDatos.initBD("BaseDatos.db");
 					int resul = BaseDatos.existeCliente(nom, con);
 					if(resul == 0) {
 						try {

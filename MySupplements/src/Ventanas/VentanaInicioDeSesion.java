@@ -16,6 +16,7 @@ import Clases.Cliente;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -126,9 +127,15 @@ public class VentanaInicioDeSesion extends JFrame {
 					JOptionPane.showMessageDialog(null, "Tienes que rellenar todos los campos");
 				}else {
 					String f = sdf.format(fecha);
-					BaseDatos.initBD("DatosClientes.db");
+					String puntos="0";
+					BaseDatos.initBD("BaseDatos.db");
 						BaseDatos.insertarCliente(nom, con,dni, f);
-						VentanaPrincipal.clientesesion = new Cliente(nom, con, dni, fecha);
+						try {
+							VentanaPrincipal.clientesesion = BaseDatos.ObtenerCliente(nom);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						JOptionPane.showMessageDialog(null, "Registro realizado con éxito");
 						logger.log(Level.INFO, "Registro realizado ");
 						new VentanaProducto();

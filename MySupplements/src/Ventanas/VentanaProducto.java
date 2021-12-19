@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -22,6 +23,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import Clases.Producto;
+import Clases.ProductoMerchandise;
+import Clases.ProductoSuplementos;
 
 public class VentanaProducto extends JFrame {
 
@@ -93,11 +96,33 @@ public class VentanaProducto extends JFrame {
 		};
 		
 		
-		String [] columnas = {"DNI","NOMBRE","EDAD"};
+		String [] columnas = {"CODIGO","NOMBRE","PRECIO"};
 		modeloTablaProductos.setColumnIdentifiers(columnas);
 		
+		ArrayList<Producto> alp = new ArrayList<>();
 		
+		Scanner scanner = new Scanner(VentanaProducto.class.getResourceAsStream("productosSuplementos.txt"));//txt de productos
+		while(scanner.hasNextLine()){
+			String linea = scanner.nextLine();
+			String[] datos = linea.split(",");
+			//cod,precio,nombre,url,proteinas,grasas,hidratos,calorias
+			alp.add(new ProductoSuplementos(datos[0], Float.valueOf(datos[1]), datos[2], datos[3], Integer.parseInt(datos[4]), Integer.parseInt(datos[5]), Integer.parseInt(datos[6]),Integer.parseInt(datos[7])));
+			
+		}
+		scanner.close();
+		scanner= new Scanner(VentanaProducto.class.getResourceAsStream("productosMerchandise.txt"));
+		while(scanner.hasNextLine()) {
+			String linea = scanner.nextLine();
+			String[] datos = linea.split(",");
+			//cod,precio,nombre,url,material
+			alp.add(new ProductoMerchandise(datos[0],Float.valueOf(datos[1]), datos[3], datos[4],datos[5]));
+		}
+		scanner.close();
 		
+		for(Producto p : alp) {
+			String dataRow[] = {p.getCod(),p.getNombre(),String.valueOf(p.getPrecio())};
+			modeloTablaProductos.addRow(dataRow);
+		}
 		
 		}
 		

@@ -16,7 +16,6 @@ public class Pedido {
 	private int cod;
     private Date fec;
 	private Cliente cliente;
-	//private Producto producto;
 	private ArrayList<Producto> Listaproductos;//En la tabla de la bd se introducirán en cada fila un producto del pedido.
 												//Y luego en la clase pedido recogeremos la lista de productos que se han seleccionado
 
