@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -136,6 +138,7 @@ public class VentanaProducto extends JFrame {
 			modeloTablaProductos.addRow(dataRow);
 		}
 		*/
+		
 		tablaProductos = new JTable(modeloTablaProductos);
 		JScrollPane scrollTabla = new JScrollPane(tablaProductos);
 		
@@ -144,5 +147,36 @@ public class VentanaProducto extends JFrame {
 		panelCentro.add(scrollTabla);
 		/*panelCentro.add(scrollLista);*/
 		
-		
+	/*	tablaProductos.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});*/
 	}}
