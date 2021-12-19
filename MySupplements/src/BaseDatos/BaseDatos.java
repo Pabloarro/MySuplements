@@ -52,7 +52,7 @@ public class BaseDatos {
 	 * 
 	 */
 	public static void crearTablas() {
-		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom String, con String, dni String,fnac String,puntos String)";
+		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom String, con String, dni String,fnac bigint,puntos String)";
 		Statement st = null;
 		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido String , dnic String , cprod String)";
 		try {
@@ -212,9 +212,9 @@ public class BaseDatos {
  * @param d	Dni del cliente
  * @param ed Fecha de nacimiento del cliente
  */
-	public static void insertarCliente(String nom, String c,String d, String ed) {//nombre,contraseña,dni y fecha de nacimiento
+	public static void insertarCliente(String nom, String c,String d, long fc) {//nombre,contraseña,dni y fecha de nacimiento
 		String p="0";//puntos del cliente empiezan en 0
-		String sent = "INSERT INTO Cliente VALUES('"+nom+"','"+c+"','"+d+"','"+ed+"','"+p+"')";//la fecha de nacimiento hay que mirar si se mete a la bd como long
+		String sent = "INSERT INTO Cliente VALUES('"+nom+"','"+c+"','"+d+"','"+fc+"','"+p+"')";//la fecha de nacimiento hay que mirar si se mete a la bd como long
 		Statement st = null;
 		try {
 			st = con.createStatement();
@@ -287,7 +287,7 @@ public class BaseDatos {
 			if(rs.next()) {
 				String con = rs.getString("con");
 				String dni = rs.getString("dni");
-				Date fecha = rs.getDate("fnac");
+				long fecha = rs.getLong("fnac");
 				float puntos = rs.getFloat("puntos");
 				 c = new Cliente(nom, con, dni, fecha,puntos);
 			}

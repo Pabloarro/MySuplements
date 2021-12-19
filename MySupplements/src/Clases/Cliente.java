@@ -7,7 +7,7 @@ public class Cliente {
 	private String nom;
 	private String dni;
 	private String con;
-	private Date fechanac;
+	private long fechanac;
 	private float puntos;
 	
 
@@ -15,7 +15,7 @@ public class Cliente {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Cliente(String nom,String con, String dni, Date fechanac,float p) {
+	public Cliente(String nom,String con, String dni, long fechanac,float p) {
 		super();
 		this.con = con;
 		this.nom = nom;
@@ -50,10 +50,10 @@ public class Cliente {
 	public void setPuntos(float puntos) {
 		this.puntos = puntos;
 	}
-	public Date getFechanac() {
+	public long getFechanac() {
 		return fechanac;
 	}
-	public void setFechanac(Date fechanac) {
+	public void setFechanac(long fechanac) {
 		this.fechanac = fechanac;
 	}
 	

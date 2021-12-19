@@ -115,8 +115,9 @@ public class VentanaProducto extends JFrame {
 		
 		ArrayList<Producto> alp = new ArrayList<>();
 		
-/*	Scanner scanner = new Scanner(VentanaProducto.class.getResourceAsStream("productosSuplementos.txt"));//txt de productos
-		while(scanner.hasNextLine()){
+		
+	/*	Scanner scanner = new Scanner("productosSuplementos.txt");//txt de productos
+		while(scanner.hasNextLine()){ 
 			String linea = scanner.nextLine();
 			String[] datos = linea.split(",");
 			//cod,precio,nombre,url,proteinas,grasas,hidratos,calorias
@@ -124,7 +125,7 @@ public class VentanaProducto extends JFrame {
 			
 		}
 		scanner.close();
-		scanner= new Scanner(VentanaProducto.class.getResourceAsStream("productosMerchandise.txt"));
+		scanner= new Scanner("productosMerchandise.txt");
 		while(scanner.hasNextLine()) {
 			String linea = scanner.nextLine();
 			String[] datos = linea.split(",");
@@ -179,4 +180,5 @@ public class VentanaProducto extends JFrame {
 				
 			}
 		});*/
+		setVisible(true);
 	}}

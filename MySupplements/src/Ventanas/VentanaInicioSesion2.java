@@ -106,7 +106,7 @@ public class VentanaInicioSesion2 extends JFrame {
 				}else {
 					BaseDatos.initBD("BaseDatos.db");
 					int resul = BaseDatos.existeCliente(nom, con);
-					if(resul == 0) {
+					if(resul == 2) {
 						try {
 							Cliente c = BaseDatos.ObtenerCliente(nom);
 							VentanaPrincipal.clientesesion=c;
@@ -117,8 +117,11 @@ public class VentanaInicioSesion2 extends JFrame {
 						JOptionPane.showMessageDialog(null, "Iniciada la sesión correctamente");
 						logger.log(Level.INFO, "Sesión iniciada");
 						new VentanaProducto();
+						setVisible(false);
+					}else if(resul==1) {
+						JOptionPane.showMessageDialog(null, "Contraseña incorrecta");
 					}else {
-						JOptionPane.showMessageDialog(null, "No te puedes registrar, ya existe ese nombre de usuario");
+						JOptionPane.showMessageDialog(null, "No te puedes registrar, no existe ese nombre de usuario");
 					}
 					BaseDatos.closeBD();
 				}

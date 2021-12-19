@@ -126,10 +126,11 @@ public class VentanaInicioDeSesion extends JFrame {
 				if(nom.equals("") || con.equals("") || dni.equals("") || fecha==null) {
 					JOptionPane.showMessageDialog(null, "Tienes que rellenar todos los campos");
 				}else {
-					String f = sdf.format(fecha);
+					long f = fecha.getTime();
 					String puntos="0";
 					BaseDatos.initBD("BaseDatos.db");
-						BaseDatos.insertarCliente(nom, con,dni, f);
+					BaseDatos.crearTablas();
+						BaseDatos.insertarCliente(nom, con,dni,f);
 						try {
 							VentanaPrincipal.clientesesion = BaseDatos.ObtenerCliente(nom);
 						} catch (SQLException e1) {
@@ -139,6 +140,7 @@ public class VentanaInicioDeSesion extends JFrame {
 						JOptionPane.showMessageDialog(null, "Registro realizado con éxito");
 						logger.log(Level.INFO, "Registro realizado ");
 						new VentanaProducto();
+						setVisible(false);
 					}
 					BaseDatos.closeBD();
 				}
