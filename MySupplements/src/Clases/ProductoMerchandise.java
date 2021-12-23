@@ -7,23 +7,13 @@ public class ProductoMerchandise extends Producto {
 		private String material ;
 		
 		
+		//EL CODIGO ES PAR
 		
-		
-		public ProductoMerchandise(String codigo_Producto, float precio, String nom,String urlimagen,String material) {
+		public ProductoMerchandise(int codigo_Producto, float precio, String nom,String urlimagen,String material) {
 			super(codigo_Producto, precio, nom,urlimagen);
 			this.talla = null;
 			this.material = material;
 		}
-		
-		
-
-
-		public ProductoMerchandise(String codigo_Producto, float precio, String nom, String urlimagen) {
-			super(codigo_Producto, precio, nom, urlimagen);
-		}
-
-
-
 		
 		@Override			//CREAR EL TOSTRING PARA EL FICHERO POR HACER
 		public String toString() {

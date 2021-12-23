@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class Producto{
 	
-	private String cod;
+	private int cod;
 	private float precio;
 	private String nombre;
 	private String imagen;
 
 	
-	public Producto(String codigo_Producto, float precio, String nom,String urlimagen) {
+	public Producto(int codigo_Producto, float precio, String nom,String urlimagen) {
 		super();
 		this.cod = codigo_Producto;
 		this.precio = precio;
@@ -22,10 +22,10 @@ public class Producto{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public String getCod() {
+	public int getCod() {
 		return cod;
 	}
-	public void setCod(String cod) {
+	public void setCod(int cod) {
 		this.cod = cod;
 	}
 	public float getPrecio() {

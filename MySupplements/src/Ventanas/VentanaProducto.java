@@ -7,6 +7,10 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -115,30 +119,45 @@ public class VentanaProducto extends JFrame {
 		
 		ArrayList<Producto> alp = new ArrayList<>();
 		
+		BufferedReader br = null;
+		try {
+			br=new BufferedReader(new FileReader("productos.txt"));
+			String linea = br.readLine();
+			while(linea!=null) {
+				String [] datos= linea.split("	");
+				int cod=Integer.parseInt(datos[0]);
+				if(cod % 2 == 0) {//SI EL RESTO DE LA DIVISION DEL CODIGO ENTRE DOS ES 0 ES PAR SI NO IMPAR
+					Float pr = Float.valueOf(datos[1]);
+					String nom = datos[2];
+					String url= datos[3];
+					String mat = datos[4];
+					alp.add(new ProductoMerchandise(cod, pr, nom, url, mat));	
+				}else {
+					Float pr = Float.valueOf(datos[1]);
+					String nom = datos[2];
+					String url = datos[3];
+					int prot = Integer.parseInt(datos[4]);
+					int gra = Integer.parseInt(datos[5]);
+					int hi = Integer.parseInt(datos[6]);
+					int cal = Integer.parseInt(datos[7]);
+					alp.add(new ProductoSuplementos(cod, pr, nom, url, prot, gra, hi, cal));
+				}
+					}
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				}
 		
-	/*	Scanner scanner = new Scanner("productosSuplementos.txt");//txt de productos
-		while(scanner.hasNextLine()){ 
-			String linea = scanner.nextLine();
-			String[] datos = linea.split(",");
-			//cod,precio,nombre,url,proteinas,grasas,hidratos,calorias
-			alp.add(new ProductoSuplementos(datos[0], Float.valueOf(datos[1]), datos[2], datos[3], Integer.parseInt(datos[4]), Integer.parseInt(datos[5]), Integer.parseInt(datos[6]),Integer.parseInt(datos[7])));
-			
-		}
-		scanner.close();
-		scanner= new Scanner("productosMerchandise.txt");
-		while(scanner.hasNextLine()) {
-			String linea = scanner.nextLine();
-			String[] datos = linea.split(",");
-			//cod,precio,nombre,url,material
-			alp.add(new ProductoMerchandise(datos[0],Float.valueOf(datos[1]), datos[3], datos[4],datos[5]));
-		}
-		scanner.close();
-		
+		//12	59.99	Caseina	/FOTOS/caseina.jpg	50	10	15	360
+		//alp.add(new ProductoSuplementos(12,(float) 59.99,"Caseina","/FOTOS/caseina.jpg",50,10,15,360));
 		for(Producto p : alp) {
-			String dataRow[] = {p.getCod(),p.getNombre(),String.valueOf(p.getPrecio())};
+			String dataRow[] = {String.valueOf(p.getCod()),p.getNombre(),String.valueOf(p.getPrecio())};
 			modeloTablaProductos.addRow(dataRow);
 		}
-		*/
+		
 		
 		tablaProductos = new JTable(modeloTablaProductos);
 		JScrollPane scrollTabla = new JScrollPane(tablaProductos);

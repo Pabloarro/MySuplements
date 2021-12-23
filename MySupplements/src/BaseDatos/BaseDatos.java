@@ -304,6 +304,9 @@ public class BaseDatos {
 		String s = "DELETE FROM CLIENTE WHERE ID = " + dni;
 		stmnt.executeUpdate(s);
 		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
-	}}
+	}
 	
-
+	public void CargarProductos() {
+		
+	}
+}
