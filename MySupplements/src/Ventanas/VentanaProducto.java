@@ -5,9 +5,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,10 +21,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,6 +41,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import BaseDatos.BaseDatos;
 import Clases.Producto;
 import Clases.ProductoMerchandise;
 import Clases.ProductoSuplementos;
@@ -38,6 +52,8 @@ public class VentanaProducto extends JFrame {
 	private JPanel panelNorte;
 	private JPanel panelSur;
 	private JPanel panelCentro;
+	private JComboBox<String> comboFiltro;
+	private JButton btnPedido;
 	
 	private JTable tablaProductos;
 	private DefaultTableModel modeloTablaProductos;
@@ -65,7 +81,8 @@ public class VentanaProducto extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaProducto() {
-		
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
+		setTitle("PRODUCTOS");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 300);
 		contentPane = new JPanel();
@@ -81,14 +98,26 @@ public class VentanaProducto extends JFrame {
 		
 		panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
-		/* JLIST */
+		
+		btnPedido = new JButton();
+		btnPedido.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				/*POR HACER*/
+			}
+		});
+
+		
+		/* JLIST 
 		
 		modeloListaProductos = new DefaultListModel<>();
 		listaProductos = new JList<>(modeloListaProductos);
 		JScrollPane scrollLista = new JScrollPane(listaProductos);
 		
 		
-		/*listaProductos.setCellRenderer(new DefaultListCellRenderer() {
+		listaProductos.setCellRenderer(new DefaultListCellRenderer() {
 			public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean isSelected,boolean cellHasFocus) {
 				Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				Producto p = (Producto) value;
@@ -105,11 +134,7 @@ public class VentanaProducto extends JFrame {
 		
 		modeloTablaProductos = new DefaultTableModel() {
 			public boolean isCellEditable(int row, int col) {
-				if(row==1 && col==1)
-					return false;
-				else if(col==0)
-					return false;
-				return true;
+				return false;
 			}
 		};
 		
@@ -118,30 +143,20 @@ public class VentanaProducto extends JFrame {
 		modeloTablaProductos.setColumnIdentifiers(columnas);
 		
 		ArrayList<Producto> alp = new ArrayList<>();
-		
-		BufferedReader br = null;
+	
+	/*	BufferedReader br = null;
 		try {
 			br=new BufferedReader(new FileReader("productos.txt"));
 			String linea = br.readLine();
 			while(linea!=null) {
 				String [] datos= linea.split("	");
 				int cod=Integer.parseInt(datos[0]);
-				if(cod % 2 == 0) {//SI EL RESTO DE LA DIVISION DEL CODIGO ENTRE DOS ES 0 ES PAR SI NO IMPAR
 					Float pr = Float.valueOf(datos[1]);
 					String nom = datos[2];
 					String url= datos[3];
 					String mat = datos[4];
 					alp.add(new ProductoMerchandise(cod, pr, nom, url, mat));	
-				}else {
-					Float pr = Float.valueOf(datos[1]);
-					String nom = datos[2];
-					String url = datos[3];
-					int prot = Integer.parseInt(datos[4]);
-					int gra = Integer.parseInt(datos[5]);
-					int hi = Integer.parseInt(datos[6]);
-					int cal = Integer.parseInt(datos[7]);
-					alp.add(new ProductoSuplementos(cod, pr, nom, url, prot, gra, hi, cal));
-				}
+				
 					}
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -150,54 +165,34 @@ public class VentanaProducto extends JFrame {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				}
-		
-		//12	59.99	Caseina	/FOTOS/caseina.jpg	50	10	15	360
-		//alp.add(new ProductoSuplementos(12,(float) 59.99,"Caseina","/FOTOS/caseina.jpg",50,10,15,360));
+		*/
+	
+		//1	59.99	Caseina	/FOTOS/caseina.jpg	50	10	15	360
+		alp.add(new ProductoSuplementos(1,(float) 59.99,"Caseina","/FOTOS/caseina.jpg",50,10,15,360));
+		//2	20	Sudadera con gorro	/FOTOS/sudaderaGorro.jpg	algodón
+		alp.add(new ProductoMerchandise(2,(float) 20,"Sudadera con goro","/FOTOS/sudaderaGorro.jpg", "algodón"));
 		for(Producto p : alp) {
-			String dataRow[] = {String.valueOf(p.getCod()),p.getNombre(),String.valueOf(p.getPrecio())};
+			//Icon i = new ImageIcon(""+p.getImagen());
+			Object dataRow[] = {""+String.valueOf(p.getCod()),""+p.getNombre(),""+String.valueOf(p.getPrecio())};
 			modeloTablaProductos.addRow(dataRow);
 		}
 		
+
 		
 		tablaProductos = new JTable(modeloTablaProductos);
 		JScrollPane scrollTabla = new JScrollPane(tablaProductos);
-		
+
+
 	
-		//panelCentro.setLayout(new GridLayout(0, 2, 0, 0));
-		panelCentro.add(scrollTabla);
-		/*panelCentro.add(scrollLista);*/
 		
-	/*	tablaProductos.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});*/
+		panelCentro.add(scrollTabla);
+	
+
+		
+
 		setVisible(true);
-	}}
+	}
+	
+
+}
+	

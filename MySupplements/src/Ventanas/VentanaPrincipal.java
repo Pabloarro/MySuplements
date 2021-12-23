@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 
 import Clases.Administrador;
 import Clases.Cliente;
+import Clases.Producto;
+import Clases.ProductoMerchandise;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -16,6 +18,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.GroupLayout;
@@ -25,7 +31,6 @@ import javax.swing.GroupLayout.Alignment;
 
 
 public class VentanaPrincipal {
-
 	public static Cliente clientesesion;
 	private JFrame frame;
 	private JPanel panelLogo;
@@ -84,6 +89,8 @@ public class VentanaPrincipal {
 		
 		panel_mid = new JPanel();
 		frame.getContentPane().add(panel_mid, BorderLayout.CENTER);
+		
+
 		
 		btnAdministrador = new JButton("Administrador");
 		btnAdministrador.addActionListener(new ActionListener() {

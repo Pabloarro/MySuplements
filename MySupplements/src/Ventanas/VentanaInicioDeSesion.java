@@ -14,6 +14,7 @@ import BaseDatos.BaseDatos;
 import Clases.Cliente;
 
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -64,6 +65,7 @@ public class VentanaInicioDeSesion extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInicioDeSesion() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		BaseDatos.initBD("Basedatos.db");
 		BaseDatos.crearTablas();
 		BaseDatos.closeBD();

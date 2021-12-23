@@ -1,5 +1,9 @@
 package BaseDatos;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,6 +18,7 @@ import java.util.logging.Logger;
 import Clases.Cliente;
 import Clases.Pedido;
 import Clases.Producto;
+import Clases.ProductoMerchandise;
 
 public class BaseDatos {
 	private static Connection con;
@@ -306,7 +311,4 @@ public class BaseDatos {
 		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
 	}
 	
-	public void CargarProductos() {
-		
-	}
 }

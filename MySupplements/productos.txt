@@ -1,2 +1,1 @@
-1	59.99	Caseina	/FOTOS/caseina.jpg	50	10	15	360
 2	20	Sudadera con gorro	/FOTOS/sudaderaGorro.jpg	algodón
