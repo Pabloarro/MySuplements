@@ -48,10 +48,10 @@ public class Producto{
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
-	@Override
+	/*@Override
 	public String toString() {
 		return "Producto [nom=" + nombre + ", precio=" + precio + "]";
-	}
+	}*/
 	
 }
 

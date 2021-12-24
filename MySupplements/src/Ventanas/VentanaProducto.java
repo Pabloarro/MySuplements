@@ -51,15 +51,19 @@ import Clases.ProductoSuplementos;
 public class VentanaProducto extends JFrame {
 
 	private JPanel contentPane,panelNorte,panelSur,panelCentro,panelCentroDerecha;
-	private JLabel lblInfo,lblFiltro;
+	private JLabel lblInfo,lblFiltro,lblLogo;
 	private JComboBox<String> comboFiltro;
-	private JButton btnAtras,btnVerPedido,btnAdd,btnRealizarPedido;
+	private JButton btnAtras,btnVerPedido,btnAdd,btnRealizarPedido,btnEditarPedido;
 	
 	private JTable tablaProductos;
 	private DefaultTableModel modeloTablaProductos;
 	
-	private JList<Producto> listaProductos;
-	private DefaultListModel<Producto> modeloListaProductos;
+	private ArrayList<Producto>listaPedido,alp;
+	
+	private int cant;
+	
+	private JList<Producto> listaProductosPedidos;
+	private DefaultListModel<Producto> modeloListaProductosPedidos;
 
 	/**
 	 * Launch the application.
@@ -102,21 +106,43 @@ public class VentanaProducto extends JFrame {
 		comboFiltro.addItem("Orden de A-Z");
 		
 
+		
+		modeloListaProductosPedidos = new DefaultListModel<>();
+		listaProductosPedidos = new JList<>(modeloListaProductosPedidos);
+		JScrollPane scrollLista = new JScrollPane(listaProductosPedidos);
+		
 		lblInfo= new JLabel();
-		lblInfo.setText("Productos en carrito: "+0);
+		 cant = 0;
+		lblInfo.setText("Productos en carrito: "+cant);
 		
 		lblFiltro = new JLabel();
 		lblFiltro.setText("Filtrar Productos por:");		
 
-		btnAdd = new JButton("AÑADIR A CARRITO");
+		lblLogo = new JLabel();
+		
+		btnEditarPedido = new JButton("Editar Pedido");
+		btnEditarPedido.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// POR HACER
+				
+			}
+		});
+		
+		btnAdd = new JButton("Añadir a carrito");
 		btnAdd.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//POR HACER
+			
+				int pos = tablaProductos.getSelectedRow();
+				listaPedido.add(alp.get(pos));
+				//AÑADIR A LISTA Y LUEGO EN EL BOTON VER PEDIDO VISUALIZARLO
+				cant++;
+				lblInfo.setText("Productos en carrito: "+cant);
 				
-			}
-		});
+			}});
 		
 		btnVerPedido = new JButton("Ver Carrito");
 		btnVerPedido.addActionListener(new ActionListener() {
@@ -128,12 +154,12 @@ public class VentanaProducto extends JFrame {
 				btnRealizarPedido.setVisible(true);
 				btnVerPedido.setEnabled(false);
 				btnAdd.setEnabled(false);
-				modeloListaProductos = new DefaultListModel<>();
-				listaProductos = new JList<>(modeloListaProductos);
-				JScrollPane scrollLista = new JScrollPane(listaProductos);
+
 				panelCentro.setLayout(new GridLayout(0,2));
+				panelCentroDerecha.setLayout(new GridLayout(2,0));
 				panelCentro.add(panelCentroDerecha);
 				panelCentroDerecha.add(scrollLista);
+				panelCentroDerecha.add(btnEditarPedido);
 				
 			}
 		});
@@ -143,17 +169,20 @@ public class VentanaProducto extends JFrame {
 		
 		btnAtras = new JButton("Salir del Carrito");
 		btnAtras.setVisible(false);
+		
 		btnAtras.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				panelCentro.setLayout(new GridLayout(1,1));
+				panelCentroDerecha.remove(scrollLista);
 				panelCentro.remove(panelCentroDerecha);
 				btnAtras.setVisible(false);
 				btnRealizarPedido.setVisible(false);
 				btnVerPedido.setEnabled(true);
 				btnAdd.setEnabled(true);
 				lblInfo.setVisible(true);
+				panelCentroDerecha.remove(lblLogo);;
 			}
 		});
 		
@@ -176,13 +205,18 @@ public class VentanaProducto extends JFrame {
 		panelCentroDerecha = new JPanel();
 		panelCentroDerecha.setLayout(new GridLayout(2,0));
 		
+		
+		
+		listaPedido = new ArrayList<>();
+		
+		
 		/* JLIST 
 		
-		modeloListaProductos = new DefaultListModel<>();
-		listaProductos = new JList<>(modeloListaProductos);
-		JScrollPane scrollLista = new JScrollPane(listaProductos);
-		
-		
+		modeloListaProductosPedidos = new DefaultListModel<>();
+		listaProductosPedidos = new JList<>(modeloListaProductosPedidos);
+		JScrollPane scrollLista = new JScrollPane(listaProductosPedidos);
+		*/
+		/*
 		listaProductos.setCellRenderer(new DefaultListCellRenderer() {
 			public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean isSelected,boolean cellHasFocus) {
 				Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
@@ -208,7 +242,7 @@ public class VentanaProducto extends JFrame {
 		String [] columnas = {"CODIGO","NOMBRE","PRECIO"};
 		modeloTablaProductos.setColumnIdentifiers(columnas);
 		
-		ArrayList<Producto> alp = new ArrayList<>();
+		alp = new ArrayList<>();
 	
 	/*	BufferedReader br = null;
 		try {
@@ -235,6 +269,8 @@ public class VentanaProducto extends JFrame {
 	
 		//1	59.99	Caseina	/FOTOS/caseina.jpg	50	10	15	360
 		alp.add(new ProductoSuplementos(1,(float) 59.99,"Caseina","/FOTOS/caseina.jpg",50,10,15,360));
+		alp.add(new ProductoSuplementos(3,(float) 49.99,"Proteina en polvo","/FOTOS/proteina.jpg",46,8,18,346));
+
 		//2	20	Sudadera con gorro	/FOTOS/sudaderaGorro.jpg	algodón
 		alp.add(new ProductoMerchandise(2,(float) 20,"Sudadera con goro","/FOTOS/sudaderaGorro.jpg", "algodón"));
 		for(Producto p : alp) {
@@ -248,16 +284,82 @@ public class VentanaProducto extends JFrame {
 		tablaProductos = new JTable(modeloTablaProductos);
 		JScrollPane scrollTabla = new JScrollPane(tablaProductos);
 
+		tablaProductos.addMouseListener(new MouseAdapter() {
+				
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount()>=2) {
+				int pos = tablaProductos.getSelectedRow();
+				String dir = alp.get(pos).getImagen();
+				lblLogo.setIcon(new ImageIcon(VentanaProducto.class.getResource(dir)));
+				
+				panelCentro.setLayout(new GridLayout(1,2));
+				panelCentroDerecha.setLayout(new GridLayout(1,0));
+				panelCentro.add(panelCentroDerecha);
+				panelCentroDerecha.remove(scrollTabla);
+				panelCentroDerecha.add(lblLogo);
+				btnAtras.setVisible(true);
+				btnAtras.setText("Salir de imagen");
+			}}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				panelCentro.setLayout(new GridLayout(1,1));
+				panelCentro.add(scrollTabla);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(e.isAltDown()) {
+					btnAdd.doClick();
+				}				
+			}
+		});
 
 	
 		
+		panelCentro.setLayout(new GridLayout(1,1));
 		panelCentro.add(scrollTabla);
 	
 
 		setVisible(true);
 		JOptionPane.showMessageDialog(null,"Presione ALT+Click o el botón 'AÑADIR' para añadir a su carrito el producto");
 	}
-	
-
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 */
+	public ArrayList<Producto> OrdenarListaMayoraMenor(ArrayList<Producto> a) {
+		
+		
+		return a;
+	}
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 */
+	public ArrayList<Producto> OrdenarListaMenoraMayor(ArrayList<Producto> a) {
+		
+		
+		return a;
+	}
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 */
+	public ArrayList<Producto> OrdenarListaSuplementos(ArrayList<Producto> a){
+		
+		return a;
+	}
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 */
+	public ArrayList<Producto> OrdenarListaAlfabetica(ArrayList<Producto> a){
+		
+		return a;
+	}
 }
 	
