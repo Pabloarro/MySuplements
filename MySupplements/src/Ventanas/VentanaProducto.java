@@ -1,6 +1,7 @@
 package Ventanas;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -41,6 +42,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+
 import BaseDatos.BaseDatos;
 import Clases.Producto;
 import Clases.ProductoMerchandise;
@@ -48,12 +50,10 @@ import Clases.ProductoSuplementos;
 
 public class VentanaProducto extends JFrame {
 
-	private JPanel contentPane;
-	private JPanel panelNorte;
-	private JPanel panelSur;
-	private JPanel panelCentro;
+	private JPanel contentPane,panelNorte,panelSur,panelCentro,panelCentroDerecha;
+	private JLabel lblInfo,lblFiltro;
 	private JComboBox<String> comboFiltro;
-	private JButton btnPedido;
+	private JButton btnAtras,btnVerPedido,btnAdd,btnRealizarPedido;
 	
 	private JTable tablaProductos;
 	private DefaultTableModel modeloTablaProductos;
@@ -92,23 +92,89 @@ public class VentanaProducto extends JFrame {
 		
 		panelNorte = new JPanel();
 		contentPane.add(panelNorte, BorderLayout.NORTH);
+				
+		comboFiltro = new JComboBox<>();
+		comboFiltro.addItem("");
+		comboFiltro.addItem("Precio mayor a menor");
+		comboFiltro.addItem("Precio menor a mayor");
+		comboFiltro.addItem("Suplementos");
+		comboFiltro.addItem("Merchandise");
+		comboFiltro.addItem("Orden de A-Z");
 		
-		panelSur = new JPanel();
-		contentPane.add(panelSur, BorderLayout.SOUTH);
+
+		lblInfo= new JLabel();
+		lblInfo.setText("Productos en carrito: "+0);
 		
-		panelCentro = new JPanel();
-		contentPane.add(panelCentro, BorderLayout.CENTER);
-		
-		btnPedido = new JButton();
-		btnPedido.addActionListener(new ActionListener() {
+		lblFiltro = new JLabel();
+		lblFiltro.setText("Filtrar Productos por:");		
+
+		btnAdd = new JButton("AÑADIR A CARRITO");
+		btnAdd.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//POR HACER
 				
-				/*POR HACER*/
 			}
 		});
+		
+		btnVerPedido = new JButton("Ver Carrito");
+		btnVerPedido.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblInfo.setVisible(false);
+				btnAtras.setVisible(true);
+				btnRealizarPedido.setVisible(true);
+				btnVerPedido.setEnabled(false);
+				btnAdd.setEnabled(false);
+				modeloListaProductos = new DefaultListModel<>();
+				listaProductos = new JList<>(modeloListaProductos);
+				JScrollPane scrollLista = new JScrollPane(listaProductos);
+				panelCentro.setLayout(new GridLayout(0,2));
+				panelCentro.add(panelCentroDerecha);
+				panelCentroDerecha.add(scrollLista);
+				
+			}
+		});
+		
+		btnRealizarPedido = new JButton("Realizar Pedido");
+		btnRealizarPedido.setVisible(false);
+		
+		btnAtras = new JButton("Salir del Carrito");
+		btnAtras.setVisible(false);
+		btnAtras.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panelCentro.setLayout(new GridLayout(1,1));
+				panelCentro.remove(panelCentroDerecha);
+				btnAtras.setVisible(false);
+				btnRealizarPedido.setVisible(false);
+				btnVerPedido.setEnabled(true);
+				btnAdd.setEnabled(true);
+				lblInfo.setVisible(true);
+			}
+		});
+		
+		panelNorte.setLayout(new GridLayout(1,3));
+		panelNorte.add(lblInfo);
+		panelNorte.add(lblFiltro);
+		panelNorte.add(comboFiltro);
+		
+		panelSur = new JPanel();
 
+		contentPane.add(panelSur, BorderLayout.SOUTH);
+		
+		panelSur.add(btnAtras);
+		panelSur.add(btnVerPedido);
+		panelSur.add(btnAdd);
+		panelSur.add(btnRealizarPedido);
+		panelCentro = new JPanel();
+		contentPane.add(panelCentro, BorderLayout.CENTER);
+		
+		panelCentroDerecha = new JPanel();
+		panelCentroDerecha.setLayout(new GridLayout(2,0));
 		
 		/* JLIST 
 		
@@ -188,9 +254,8 @@ public class VentanaProducto extends JFrame {
 		panelCentro.add(scrollTabla);
 	
 
-		
-
 		setVisible(true);
+		JOptionPane.showMessageDialog(null,"Presione ALT+Click o el botón 'AÑADIR' para añadir a su carrito el producto");
 	}
 	
 
