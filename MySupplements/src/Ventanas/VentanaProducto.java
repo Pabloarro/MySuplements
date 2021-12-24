@@ -154,7 +154,7 @@ public class VentanaProducto extends JFrame {
 				btnRealizarPedido.setVisible(true);
 				btnVerPedido.setEnabled(false);
 				btnAdd.setEnabled(false);
-
+				btnAtras.setText("Salir del carrito");
 				panelCentro.setLayout(new GridLayout(0,2));
 				panelCentroDerecha.setLayout(new GridLayout(2,0));
 				panelCentro.add(panelCentroDerecha);
@@ -297,6 +297,7 @@ public class VentanaProducto extends JFrame {
 				panelCentroDerecha.setLayout(new GridLayout(1,0));
 				panelCentro.add(panelCentroDerecha);
 				panelCentroDerecha.remove(scrollTabla);
+				panelCentroDerecha.remove(btnEditarPedido);
 				panelCentroDerecha.add(lblLogo);
 				btnAtras.setVisible(true);
 				btnAtras.setText("Salir de imagen");
