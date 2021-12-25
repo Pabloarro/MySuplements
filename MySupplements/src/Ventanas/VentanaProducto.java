@@ -19,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -58,7 +59,7 @@ public class VentanaProducto extends JFrame {
 	private JTable tablaProductos;
 	private DefaultTableModel modeloTablaProductos;
 	
-	private ArrayList<Producto>listaPedido,alp;
+	private ArrayList<Producto>listaPedido,alp;//lista de productos 
 	
 	private int cant;
 	
@@ -98,14 +99,44 @@ public class VentanaProducto extends JFrame {
 		contentPane.add(panelNorte, BorderLayout.NORTH);
 				
 		comboFiltro = new JComboBox<>();
-		comboFiltro.addItem("");
+		comboFiltro.addItem("Todos los productos");
 		comboFiltro.addItem("Precio mayor a menor");
 		comboFiltro.addItem("Precio menor a mayor");
 		comboFiltro.addItem("Suplementos");
 		comboFiltro.addItem("Merchandise");
 		comboFiltro.addItem("Orden de A-Z");
 		
-
+		comboFiltro.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(comboFiltro.getSelectedItem()=="Precio mayor a menor") {
+					OrdenarListaMayoraMenor(alp, alp.size());
+					vaciarTabla();
+					agregarAtabla(alp);
+				}else if (comboFiltro.getSelectedItem()=="Precio menor a mayor") {
+					OrdenarListaMenoraMayor(alp);
+					vaciarTabla();
+					agregarAtabla(alp);
+				}else if(comboFiltro.getSelectedItem()=="Orden de A-Z"){
+					OrdenarListaAlfabetica(alp,alp.size());
+					vaciarTabla();
+					agregarAtabla(alp);
+				}else if(comboFiltro.getSelectedItem()=="Suplementos") {
+					vaciarTabla();
+					agregarAtabla(OrdenarListaSuplementos(alp, alp.size()));
+					
+				}else if(comboFiltro.getSelectedItem()=="Merchandise") {
+					vaciarTabla();
+					agregarAtabla(OrdenarListaMerchandise(alp, alp.size()));
+				}else {
+					ordenarListaCodigoAscendente(alp, alp.size());
+					vaciarTabla();
+					agregarAtabla(alp);
+				}
+				
+			}
+		});
 		
 		modeloListaProductosPedidos = new DefaultListModel<>();
 		listaProductosPedidos = new JList<>(modeloListaProductosPedidos);
@@ -273,13 +304,9 @@ public class VentanaProducto extends JFrame {
 
 		//2	20	Sudadera con gorro	/FOTOS/sudaderaGorro.jpg	algodón
 		alp.add(new ProductoMerchandise(2,(float) 20,"Sudadera con goro","/FOTOS/sudaderaGorro.jpg", "algodón"));
-		for(Producto p : alp) {
-			//Icon i = new ImageIcon(""+p.getImagen());
-			Object dataRow[] = {""+String.valueOf(p.getCod()),""+p.getNombre(),""+String.valueOf(p.getPrecio())};
-			modeloTablaProductos.addRow(dataRow);
-		}
 		
-
+		ordenarListaCodigoAscendente(alp, alp.size());
+		agregarAtabla(alp);
 		
 		tablaProductos = new JTable(modeloTablaProductos);
 		JScrollPane scrollTabla = new JScrollPane(tablaProductos);
@@ -324,43 +351,115 @@ public class VentanaProducto extends JFrame {
 		setVisible(true);
 		JOptionPane.showMessageDialog(null,"Presione ALT+Click o el botón 'AÑADIR' para añadir a su carrito el producto");
 	}
+	
+	/**
+	 * Método que añade a la tabla los Productos
+	 * @param a lista de los Productos a cargar
+	 */
+	
+	public void agregarAtabla(ArrayList<Producto> a) {
+		for(Producto p : a) {
+			//Icon i = new ImageIcon(""+p.getImagen());
+			Object dataRow[] = {""+String.valueOf(p.getCod()),""+p.getNombre(),""+String.valueOf(p.getPrecio())};
+			modeloTablaProductos.addRow(dataRow);
+		}
+		
+	}
+	/**
+	 * Metodo que vacía la tabla
+	 */
+	public void vaciarTabla() {
+		while(modeloTablaProductos.getRowCount()>0) {
+			modeloTablaProductos.removeRow(0);
+		}
+	}
+	
+	
+	/**
+	 * Método que ordena una lista recursivamente de mayor a menor.
+	 * @param a Lista a ordenar
+	 * @param n size de la lista
+	 * @return Devuelve la lista ordenada de Precio más alto a bajo
+	 */
+	public void OrdenarListaMayoraMenor(ArrayList<Producto> a,int n) {
+		if(n==1) {
+			return;
+		}else {
+			for(int i=0;i<n-1;i++) {
+				if(a.get(i).getPrecio()<a.get(i+1).getPrecio()) {
+					Producto p = a.remove(i+1);
+					a.add(i, p);
+				}
+			}
+			OrdenarListaMayoraMenor(a, n-1);
+		}
+		return;
+	}
+	/**
+	 * Metodo que ordena la lista de menor a mayor recursivamente por el precio del producto
+	 * @param a lista a ordenar
+	 */
+	public void OrdenarListaMenoraMayor(ArrayList<Producto> a) {
+		OrdenarListaMayoraMenor(a, a.size());
+		Collections.reverse(a);
+	}
+	
+	/**
+	 * Metodo que recorre una lista recursivamente obteniendo los productos que son suplementos
+	 * @param a lista de productos
+	 * @param t tamaño de la lista
+	 */
+	public ArrayList<Producto> OrdenarListaSuplementos(ArrayList<Producto> a, int t) {
+		ArrayList<Producto>al = new ArrayList<>();
+		
+		return al;
+	}
+	
 	/**
 	 * 
 	 * @param a
-	 * @return
+	 * @param t
 	 */
-	public ArrayList<Producto> OrdenarListaMayoraMenor(ArrayList<Producto> a) {
+	public ArrayList<Producto> OrdenarListaMerchandise(ArrayList<Producto> a, int t) {
+		ArrayList<Producto>al = new ArrayList<>();
 		
-		
-		return a;
+		return al;
 	}
 	/**
 	 * 
 	 * @param a
+	 * @param t
 	 * @return
 	 */
-	public ArrayList<Producto> OrdenarListaMenoraMayor(ArrayList<Producto> a) {
+	public void OrdenarListaAlfabetica(ArrayList<Producto> a,int t){
 		
-		
-		return a;
+		return ;
 	}
 	/**
 	 * 
 	 * @param a
-	 * @return
+	 * @param t
 	 */
-	public ArrayList<Producto> OrdenarListaSuplementos(ArrayList<Producto> a){
-		
-		return a;
-	}
+	
+	
 	/**
-	 * 
-	 * @param a
-	 * @return
+	 * Metodo que ordena la lista Ascendentemente po codigo
+	 * @param a lista a ordenar
+	 * @param t tamaño de la lista
 	 */
-	public ArrayList<Producto> OrdenarListaAlfabetica(ArrayList<Producto> a){
-		
-		return a;
+	public void ordenarListaCodigoAscendente(ArrayList<Producto>a,int t) {
+			if(t==1) {
+				return;
+			}else {
+				for(int i=0;i<t-1;i++) {
+					if(a.get(i).getCod()>a.get(i+1).getCod()) {
+						Producto p = a.remove(i+1);
+						a.add(i, p);
+					}
+				}
+				ordenarListaCodigoAscendente(a, t-1);
+			}
+			return;
 	}
 }
 	
