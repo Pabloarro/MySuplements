@@ -13,23 +13,23 @@ import java.util.LinkedList;
 import java.util.TreeMap;
 
 public class Pedido {
-	private int cod;
+	static int cod ;//TODO		/*Hay que hacer que se obtenga de la bd cada vez que se inicie */
     private Date fec;
 	private Cliente cliente;
 	private ArrayList<Producto> Listaproductos;//En la tabla de la bd se introducirán en cada fila un producto del pedido.
 												//Y luego en la clase pedido recogeremos la lista de productos que se han seleccionado
 
-    
+    	
 	private  SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yy HH:mm:ss" );
 
 	public Pedido() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Pedido(int cod, Date fec, Cliente cliente, ArrayList<Producto> alproductos) {
 		super();
-		this.cod = cod;
+		Pedido.cod = cod;
 		this.fec = fec;
 		this.cliente = cliente;
 		this.Listaproductos = alproductos;
@@ -41,7 +41,7 @@ public class Pedido {
 	}
 
 	public void setCod(int cod) {
-		this.cod = cod;
+		Pedido.cod = cod;
 	}
 
 	public Date getFec() {

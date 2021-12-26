@@ -46,6 +46,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 import BaseDatos.BaseDatos;
+import Clases.Pedido;
 import Clases.Producto;
 import Clases.ProductoMerchandise;
 import Clases.ProductoSuplementos;
@@ -207,7 +208,7 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// POR HACER
+				//TODO
 				
 			}
 		});
@@ -229,7 +230,7 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// POR HACER
+				//TODO
 				
 			}
 		});
@@ -239,7 +240,7 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//POR HACER
+				//TODO
 				
 			}
 		});
@@ -261,7 +262,6 @@ public class VentanaProducto extends JFrame {
 			
 				int pos = tablaProductos.getSelectedRow();
 				listaPedido.add(alp.get(pos));
-				//AÑADIR A LISTA Y LUEGO EN EL BOTON VER PEDIDO VISUALIZARLO
 				cant++;
 				lblInfo.setText("Productos en carrito: "+cant);
 				btnVerPedido.setEnabled(true);
@@ -308,6 +308,7 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//Pedido p = new Pedido(ICONIFIED, null, null, alp)
 				// POR HACER
 				
 			}
@@ -401,6 +402,8 @@ public class VentanaProducto extends JFrame {
 		estructuratabla();
 		
 		alp = new ArrayList<>();
+			
+		//TODO
 	
 	/*	BufferedReader br = null;
 		try {
@@ -417,10 +420,10 @@ public class VentanaProducto extends JFrame {
 				
 					}
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				}
 		*/
@@ -659,7 +662,7 @@ public class VentanaProducto extends JFrame {
 	}
 	
 	/**
-	 * 
+	 * Metodo que modifica la ventana Producto para el administrador
 	 */
 	public static void ModificarVentanaProductoAdministrador() {
 		btnVerPedido.setVisible(false);
@@ -669,7 +672,8 @@ public class VentanaProducto extends JFrame {
 		
 	}
 	/**
-	 * 
+	 * Metodo que modifica la ventana Producto para que al darle al comprar solo se puedam ver los productos
+	 * si no se ha iniciado la sesión
 	 */
 	public static void ModificarVentanaProductoComprar() {
 		btnVerPedido.setVisible(false);

@@ -40,6 +40,7 @@ public class VentanaPrincipal {
 	private JPanel panel_mid;
 	private JButton btnAdministrador;
 	private JButton btnComprar;
+	private JButton btnMisPedidos;
 	private  JButton btnInicioSesion;//Cambiar a Pagina de cliente
 	private ArrayList<Administrador> listaAdmins;//lista con los administradores para comprobar al entrar al btnAdmins
 	
@@ -98,7 +99,8 @@ public class VentanaPrincipal {
 			public void actionPerformed(ActionEvent e) {
 			String id = JOptionPane.showInputDialog("Introduzca su identificación");
 			String con = JOptionPane.showInputDialog("Introduzca su contraseña");
-			for(Administrador ad : listaAdmins) {//POR HACER LA LISTA DE ADMINS QUE ESTARA PREDEFINIDA EN UN FICHERO DE TEXTO
+			for(Administrador ad : listaAdmins) {//TODO
+				//POR HACER LA LISTA DE ADMINS QUE ESTARA PREDEFINIDA EN UN FICHERO DE TEXTO
 				/*if(ad.getDni()==id && ad.getContrasenya()==con) {
 					new VentanaProducto();
 					VentanaProducto.ModificarVentanaProductoAdministrador();
@@ -138,6 +140,16 @@ public class VentanaPrincipal {
 			}
 			frame.setVisible(false);
 			}});
+		
+		btnMisPedidos = new JButton();
+		btnMisPedidos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO 
+				
+			}
+		});
 		GroupLayout gl_panel_mid = new GroupLayout(panel_mid);
 		gl_panel_mid.setHorizontalGroup(
 			gl_panel_mid.createParallelGroup(Alignment.LEADING)

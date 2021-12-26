@@ -30,10 +30,8 @@ public class BaseDatos {
 			con = DriverManager.getConnection("jdbc:sqlite:"+nombreBD);
 			logger.log(Level.INFO, "Conexión establecida con jdbc:sqlite:"+nombreBD);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -48,7 +46,6 @@ public class BaseDatos {
 				con.close();
 				logger.log(Level.INFO, "Conexión cerrada");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -65,14 +62,12 @@ public class BaseDatos {
 			st.executeUpdate(sent1);
 			st.executeUpdate(sent2);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			if(st!=null) {
 				try {
 					st.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -89,14 +84,12 @@ public class BaseDatos {
 			st=con.createStatement();
 			st.executeUpdate(sent);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				st.close();
 				logger.log(Level.INFO,"Producto"+pr.getNombre()+"con un precio de "+pr.getPrecio()+"€ elimidao correctamente de su pedido");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -112,14 +105,12 @@ public class BaseDatos {
 			st=con.createStatement();
 			st.executeUpdate(sent);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				st.close();
 				logger.log(Level.INFO,"Pedido eliminado correctamente de la base de datos");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -149,7 +140,6 @@ public class BaseDatos {
 				
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -173,7 +163,6 @@ public class BaseDatos {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(sent);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	
@@ -197,14 +186,12 @@ public class BaseDatos {
 				st = con.createStatement();
 				st.executeUpdate(sent);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
 				try {
 					st.close();
 					logger.log(Level.INFO,"Pedido guardado correctamente en la base de datos");
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -225,14 +212,12 @@ public class BaseDatos {
 			st = con.createStatement();
 			st.executeUpdate(sent);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				st.close();
 				logger.log(Level.INFO,"Cliente guardado correctamente en la base de datos");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -263,14 +248,12 @@ public class BaseDatos {
 			}
 			rs.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			
 			try {
 				st.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
