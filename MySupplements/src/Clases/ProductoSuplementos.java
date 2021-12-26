@@ -21,6 +21,7 @@ public class ProductoSuplementos extends Producto {
 	}
 	
 	@Override		//crear el toString para ponerlo en el txt POR HACER
+	//TODO
 	public String toString() {
 		return  getNombre()+", Precio: "+getPrecio()+"€ , Proteinas: "+ proteinas+", Grasas: "+grasas+", Hidratos: "+hidratos+", Calorías: "+calorias;
 	}

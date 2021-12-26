@@ -14,7 +14,7 @@ public class ProductoMerchandise extends Producto {
 			this.material = material;
 		}
 		
-		@Override
+		@Override		//TODO
 		public String toString() {
 			return  getNombre()+" Precio: "+getPrecio()+"€	Material"+material;
 		}

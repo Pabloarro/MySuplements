@@ -13,7 +13,6 @@ public class Cliente {
 
 	public Cliente() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Cliente(String nom,String con, String dni, long fechanac,float p) {
 		super();
