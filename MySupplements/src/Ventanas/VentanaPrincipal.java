@@ -52,7 +52,6 @@ public class VentanaPrincipal {
 			public void run() {
 				try {
 					VentanaPrincipal window = new VentanaPrincipal();
-					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -110,7 +109,7 @@ public class VentanaPrincipal {
 				VentanaProducto.ModificarVentanaProductoAdministrador();
 			}
 				
-				
+				frame.setVisible(false);
 			}
 		});
 		
@@ -124,7 +123,7 @@ public class VentanaPrincipal {
 					new VentanaProducto();
 				}
 				
-				
+				frame.setVisible(false);
 			}
 		});
 		
@@ -134,11 +133,11 @@ public class VentanaPrincipal {
 			int resp = JOptionPane.showConfirmDialog(null,"¿Es tu primera vez?","Pregunta",JOptionPane.YES_NO_OPTION);
 			if(resp == JOptionPane.YES_OPTION) {
 				new VentanaInicioDeSesion();
-			}else
+			}else {
 				new VentanaInicioSesion2();
 			}
-			//setvisible(false)
-		});
+			frame.setVisible(false);
+			}});
 		GroupLayout gl_panel_mid = new GroupLayout(panel_mid);
 		gl_panel_mid.setHorizontalGroup(
 			gl_panel_mid.createParallelGroup(Alignment.LEADING)
@@ -163,6 +162,6 @@ public class VentanaPrincipal {
 		);
 		panel_mid.setLayout(gl_panel_mid);
 
-		
+		frame.setVisible(true);
 	}
 }

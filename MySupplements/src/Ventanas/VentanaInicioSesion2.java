@@ -119,6 +119,7 @@ public class VentanaInicioSesion2 extends JFrame {
 						JOptionPane.showMessageDialog(null, "Iniciada la sesión correctamente");
 						logger.log(Level.INFO, "Sesión iniciada");
 						new VentanaProducto();
+						JOptionPane.showMessageDialog(null,"Presione ALT+Click o el botón 'AÑADIR' para añadir a su carrito el producto");
 						setVisible(false);
 					}else if(resul==1) {
 						JOptionPane.showMessageDialog(null, "Contraseña incorrecta");

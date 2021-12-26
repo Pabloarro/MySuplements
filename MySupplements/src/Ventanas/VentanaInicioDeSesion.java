@@ -142,6 +142,7 @@ public class VentanaInicioDeSesion extends JFrame {
 						JOptionPane.showMessageDialog(null, "Registro realizado con éxito");
 						logger.log(Level.INFO, "Registro realizado ");
 						new VentanaProducto();
+						JOptionPane.showMessageDialog(null,"Presione ALT+Click o el botón 'AÑADIR' para añadir a su carrito el producto");
 						setVisible(false);
 					}
 					BaseDatos.closeBD();

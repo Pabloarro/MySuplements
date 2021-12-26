@@ -224,6 +224,7 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
+				new VentanaPrincipal();
 				
 			}
 		});
@@ -439,7 +440,6 @@ public class VentanaProducto extends JFrame {
 	
 
 		setVisible(true);
-		JOptionPane.showMessageDialog(null,"Presione ALT+Click o el botón 'AÑADIR' para añadir a su carrito el producto");
 	}
 	
 	/**
