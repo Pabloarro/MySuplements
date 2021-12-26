@@ -117,7 +117,13 @@ public class VentanaPrincipal {
 		btnComprar = new JButton("Comprar");
 		btnComprar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VentanaProducto vp = new VentanaProducto();
+				if(VentanaPrincipal.clientesesion == null) {
+					new VentanaProducto();
+					VentanaProducto.ModificarVentanaProductoComprar();
+				}else {
+					new VentanaProducto();
+				}
+				
 				
 			}
 		});

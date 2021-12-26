@@ -58,7 +58,7 @@ public class VentanaProducto extends JFrame {
 	private JButton btnAtras;
 	private static JButton btnVerPedido;
 	private static JButton btnAdd;
-	private JButton btnRealizarPedido;
+	private JButton btnRealizarPedido,btnSalir;
 	private JButton btnEditarPedido;
 	private JButton btnBorrarPedido;
 	private JButton btnAddDescuento;
@@ -218,6 +218,15 @@ public class VentanaProducto extends JFrame {
 				
 			}
 		});
+		btnSalir = new JButton("Salir de la página");
+		btnSalir.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				
+			}
+		});
 		btnAdd = new JButton("Añadir a carrito");
 		btnAdd.addActionListener(new ActionListener() {
 			
@@ -283,7 +292,8 @@ public class VentanaProducto extends JFrame {
 				btnVerPedido.setEnabled(true);
 				btnAdd.setEnabled(true);
 				lblInfo.setVisible(true);
-				panelCentroDerecha.remove(lblLogo);;
+				panelCentroDerecha.remove(lblLogo);
+				btnAdd.setVisible(true);
 			}
 		});
 		btnVerPedido.setVisible(true);
@@ -299,6 +309,7 @@ public class VentanaProducto extends JFrame {
 
 		contentPane.add(panelSur, BorderLayout.SOUTH);
 		
+		panelSur.add(btnSalir);
 		panelSur.add(btnAtras);
 		panelSur.add(btnVerPedido);
 		panelSur.add(btnAdd);
@@ -594,6 +605,12 @@ public class VentanaProducto extends JFrame {
 		btnAdd.setVisible(false);
 		btnCrearDescuento.setVisible(true);
 		btnAddProductoNuevo.setVisible(true);
+		
+	}
+	
+	public static void ModificarVentanaProductoComprar() {
+		btnVerPedido.setVisible(false);
+		btnAdd.setVisible(false);
 		
 	}
 }
