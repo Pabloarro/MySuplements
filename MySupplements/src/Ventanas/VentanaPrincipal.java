@@ -99,7 +99,11 @@ public class VentanaPrincipal {
 			public void actionPerformed(ActionEvent e) {
 			String id = JOptionPane.showInputDialog("Introduzca su identificación");
 			String con = JOptionPane.showInputDialog("Introduzca su contraseña");
-			for(Administrador ad : listaAdmins) {//TODO
+			for(Administrador ad : listaAdmins) {
+				
+				
+				//TODO
+				
 				//POR HACER LA LISTA DE ADMINS QUE ESTARA PREDEFINIDA EN UN FICHERO DE TEXTO
 				/*if(ad.getDni()==id && ad.getContrasenya()==con) {
 					new VentanaProducto();

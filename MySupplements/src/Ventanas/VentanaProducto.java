@@ -2,8 +2,7 @@ package Ventanas;
 
 import java.awt.BorderLayout;
 
-import java.awt.Color;
-import java.awt.Component;
+
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -11,23 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Scanner;
 
-import javax.imageio.ImageIO;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -39,20 +26,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
+
 import javax.swing.table.DefaultTableModel;
 
 
-import BaseDatos.BaseDatos;
-import Clases.Pedido;
 import Clases.Producto;
 import Clases.ProductoMerchandise;
 import Clases.ProductoSuplementos;
 
 public class VentanaProducto extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane,panelNorte,panelSur,panelCentro,panelCentroDerecha,panelCentroDerechaAbajo,panelCentroDerechaAbajo1;
 	private JLabel lblInfo,lblFiltro,lblLogo,lblSumaDinero;
 	private JComboBox<String> comboFiltro;
@@ -68,10 +55,10 @@ public class VentanaProducto extends JFrame {
 	private static JButton btnInicioSesion;
 
 	
-	private JTable tablaProductos;
-	private DefaultTableModel modeloTablaProductos;
+	private JTable tablaProductos,tablaPedidos;	//TODO
+	private DefaultTableModel modeloTablaProductos,modeloTablaPedidos; //TODO
 	
-	private ArrayList<Producto>listaPedido,alp;//lista de productos 
+	private ArrayList<Producto>listaProductosPedido,alp;//lista de productos 
 	
 	private int cant;
 	
@@ -179,7 +166,7 @@ public class VentanaProducto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int pos = listaProductosPedidos.getSelectedIndex();
 				modeloListaProductosPedidos.remove(pos);
-				listaPedido.remove(pos);
+				listaProductosPedido.remove(pos);
 				cant--;
 				lblInfo.setText("Productos en carrito: "+cant);
 
@@ -218,7 +205,7 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				vaciarLista();
-				listaPedido.clear();
+				listaProductosPedido.clear();
 				JOptionPane.showMessageDialog(null, "Pedido eliminado correctamente", "Eliminar Pedido", JOptionPane.INFORMATION_MESSAGE);
 				cant = 0;
 				lblInfo.setText("Productos en carrito: "+cant);
@@ -261,7 +248,7 @@ public class VentanaProducto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			
 				int pos = tablaProductos.getSelectedRow();
-				listaPedido.add(alp.get(pos));
+				listaProductosPedido.add(alp.get(pos));
 				cant++;
 				lblInfo.setText("Productos en carrito: "+cant);
 				btnVerPedido.setEnabled(true);
@@ -275,7 +262,7 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				vaciarLista();
-				agregarALista(listaPedido);
+				agregarALista(listaProductosPedido);
 				btnAdd.setVisible(false);
 				lblInfo.setVisible(false);
 				btnAtras.setVisible(true);
@@ -288,10 +275,10 @@ public class VentanaProducto extends JFrame {
 				panelCentro.add(panelCentroDerecha);
 				panelCentroDerecha.add(scrollLista);
 				panelCentroDerechaAbajo.add(btnEditarPedido);
-				if(listaPedido == null) {
+				if(listaProductosPedido == null) {
 					panelCentroDerechaAbajo1.add(lblSumaDinero);
 				}else {
-					lblSumaDinero.setText("TOTAL: "+obtenerDineroTotal(listaPedido)+" €");
+					lblSumaDinero.setText("TOTAL: "+obtenerDineroTotal(listaProductosPedido)+" €");
 					panelCentroDerechaAbajo1.add(lblSumaDinero);
 				}
 				panelCentroDerechaAbajo.add(panelCentroDerechaAbajo1);
@@ -368,7 +355,7 @@ public class VentanaProducto extends JFrame {
 		
 		panelCentroDerechaAbajo1 = new JPanel();
 
-		listaPedido = new ArrayList<>();
+		listaProductosPedido = new ArrayList<>();
 		
 		
 		/* JLIST 
@@ -680,6 +667,13 @@ public class VentanaProducto extends JFrame {
 		btnAdd.setVisible(false);
 		btnInicioSesion.setVisible(true);
 		
+	}
+	/**
+	 * Metodo que modifica la VentanaProducto para que quite la tabla de productos y 
+	 * haya una tabla de Pedidos del cliente
+	 */
+	public static void ModificarVentanaProductoConPedidos() {	
+		//TODO
 	}
 }
 	
