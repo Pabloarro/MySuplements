@@ -1,8 +1,6 @@
 package Clases;
 
-
-
-public class Producto{
+public class Producto implements Comparable<Producto>{
 	
 	private int cod;
 	private float precio;
@@ -48,10 +46,13 @@ public class Producto{
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
-	/*@Override
-	public String toString() {
-		return "Producto [nom=" + nombre + ", precio=" + precio + "]";
-	}*/
+	@Override
+	public int compareTo(Producto p) {
+		
+		return p.getNombre().compareTo(this.getNombre());
+	}
+	
+
 	
 }
 

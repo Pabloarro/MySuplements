@@ -20,6 +20,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -51,10 +52,10 @@ import Clases.ProductoSuplementos;
 
 public class VentanaProducto extends JFrame {
 
-	private JPanel contentPane,panelNorte,panelSur,panelCentro,panelCentroDerecha;
-	private JLabel lblInfo,lblFiltro,lblLogo;
+	private JPanel contentPane,panelNorte,panelSur,panelCentro,panelCentroDerecha,panelCentroDerechaAbajo,panelCentroDerechaAbajo1;
+	private JLabel lblInfo,lblFiltro,lblLogo,lblSumaDinero;
 	private JComboBox<String> comboFiltro;
-	private JButton btnAtras,btnVerPedido,btnAdd,btnRealizarPedido,btnEditarPedido;
+	private JButton btnAtras,btnVerPedido,btnAdd,btnRealizarPedido,btnEditarPedido,btnBorrarPedido,btnDescuento;
 	
 	private JTable tablaProductos;
 	private DefaultTableModel modeloTablaProductos;
@@ -113,25 +114,31 @@ public class VentanaProducto extends JFrame {
 				if(comboFiltro.getSelectedItem()=="Precio mayor a menor") {
 					OrdenarListaMayoraMenor(alp, alp.size());
 					vaciarTabla();
-					agregarAtabla(alp);
+					modificarTablafiltro();
+					agregarAtablaFiltro(alp);
 				}else if (comboFiltro.getSelectedItem()=="Precio menor a mayor") {
 					OrdenarListaMenoraMayor(alp);
 					vaciarTabla();
-					agregarAtabla(alp);
+					modificarTablafiltro();
+					agregarAtablaFiltro(alp);
 				}else if(comboFiltro.getSelectedItem()=="Orden de A-Z"){
-					OrdenarListaAlfabetica(alp,alp.size());
+					OrdenarListaAlfabetica(alp);
 					vaciarTabla();
-					agregarAtabla(alp);
+					modificarTablafiltro();
+					agregarAtablaFiltro(alp);
 				}else if(comboFiltro.getSelectedItem()=="Suplementos") {
 					vaciarTabla();
-					agregarAtabla(OrdenarListaSuplementos(alp, alp.size()));
+					modificarTablafiltro();
+					agregarAtablaFiltro(OrdenarListaSuplementos(alp));
 					
 				}else if(comboFiltro.getSelectedItem()=="Merchandise") {
 					vaciarTabla();
-					agregarAtabla(OrdenarListaMerchandise(alp, alp.size()));
+					modificarTablafiltro();
+					agregarAtablaFiltro(OrdenarListaMerchandise(alp));
 				}else {
 					ordenarListaCodigoAscendente(alp, alp.size());
 					vaciarTabla();
+					estructuratabla();
 					agregarAtabla(alp);
 				}
 				
@@ -147,12 +154,34 @@ public class VentanaProducto extends JFrame {
 		lblInfo.setText("Productos en carrito: "+cant);
 		
 		lblFiltro = new JLabel();
-		lblFiltro.setText("Filtrar Productos por:");		
-
+		lblFiltro.setText("Filtrar Productos por:");
+		
+		lblSumaDinero = new JLabel();
+		lblSumaDinero.setText("TOTAL: " + 0+ "€");
+		 
 		lblLogo = new JLabel();
 		
 		btnEditarPedido = new JButton("Editar Pedido");
 		btnEditarPedido.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// POR HACER
+				
+			}
+		});
+		
+		btnDescuento = new JButton("Añadir descuento");
+		btnDescuento.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// POR HACER
+				
+			}
+		});
+		btnBorrarPedido = new JButton("Borrar Pedido");
+		btnBorrarPedido.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -190,7 +219,17 @@ public class VentanaProducto extends JFrame {
 				panelCentroDerecha.setLayout(new GridLayout(2,0));
 				panelCentro.add(panelCentroDerecha);
 				panelCentroDerecha.add(scrollLista);
-				panelCentroDerecha.add(btnEditarPedido);
+				panelCentroDerechaAbajo.add(btnEditarPedido);
+				if(listaPedido == null) {
+					panelCentroDerechaAbajo1.add(lblSumaDinero);
+				}else {
+					lblSumaDinero.setText("TOTAL: "+obtenerDineroTotal(listaPedido)+" €");
+					panelCentroDerechaAbajo1.add(lblSumaDinero);
+				}
+				panelCentroDerechaAbajo.add(panelCentroDerechaAbajo1);
+				panelCentroDerechaAbajo.add(btnBorrarPedido);
+				panelCentroDerechaAbajo.add(btnDescuento);
+				panelCentroDerecha.add(panelCentroDerechaAbajo);
 				
 			}
 		});
@@ -236,8 +275,11 @@ public class VentanaProducto extends JFrame {
 		panelCentroDerecha = new JPanel();
 		panelCentroDerecha.setLayout(new GridLayout(2,0));
 		
+		panelCentroDerechaAbajo = new JPanel();
+		panelCentroDerechaAbajo.setLayout(new GridLayout(2,2));
 		
-		
+		panelCentroDerechaAbajo1 = new JPanel();
+
 		listaPedido = new ArrayList<>();
 		
 		
@@ -269,9 +311,7 @@ public class VentanaProducto extends JFrame {
 			}
 		};
 		
-		
-		String [] columnas = {"CODIGO","NOMBRE","PRECIO"};
-		modeloTablaProductos.setColumnIdentifiers(columnas);
+		estructuratabla();
 		
 		alp = new ArrayList<>();
 	
@@ -366,6 +406,35 @@ public class VentanaProducto extends JFrame {
 		
 	}
 	/**
+	 * Metodo que modifica las columnas de la tabla 
+	 * @param a lista de productos
+	 */
+	public void agregarAtablaFiltro(ArrayList<Producto> a) {
+		for(Producto p : a) {
+			//Icon i = new ImageIcon(""+p.getImagen());
+			Object dataRow[] = {""+p.getNombre(),""+String.valueOf(p.getPrecio())};
+			modeloTablaProductos.addRow(dataRow);
+		}
+		
+	}
+	 
+	/*
+	 * Modifica las columnas ded la tabla
+	 */
+	public void modificarTablafiltro() {
+		String [] columnas = {"NOMBRE","PRECIO"};
+		modeloTablaProductos.setColumnIdentifiers(columnas);
+	}
+	
+	/**
+	 * crea las columnas de la tabla
+	 */
+	public void estructuratabla() {
+		String [] columnas = {"CODIGO","NOMBRE","PRECIO"};
+		modeloTablaProductos.setColumnIdentifiers(columnas);
+	}
+	
+	/**
 	 * Metodo que vacía la tabla
 	 */
 	public void vaciarTabla() {
@@ -405,45 +474,51 @@ public class VentanaProducto extends JFrame {
 	}
 	
 	/**
-	 * Metodo que recorre una lista recursivamente obteniendo los productos que son suplementos
+	 * Metodo que recorre una lista  obteniendo los productos que son suplementos
+	 * @param a lista de productos
+	 */
+	public ArrayList<Producto> OrdenarListaSuplementos(ArrayList<Producto> a) {
+		ArrayList<Producto>al = new ArrayList<>();
+		for(Producto p : a) {
+			if(p instanceof ProductoSuplementos){
+				al.add(p);
+			}
+		}
+		return al;
+	}
+	
+	/**
+	 * MEtodo que recorre una lista  obteniendo los productos que son merchandise
 	 * @param a lista de productos
 	 * @param t tamaño de la lista
 	 */
-	public ArrayList<Producto> OrdenarListaSuplementos(ArrayList<Producto> a, int t) {
+	public ArrayList<Producto> OrdenarListaMerchandise(ArrayList<Producto> a) {
 		ArrayList<Producto>al = new ArrayList<>();
-		
-		return al;
-	}
-	
-	/**
-	 * 
-	 * @param a
-	 * @param t
-	 */
-	public ArrayList<Producto> OrdenarListaMerchandise(ArrayList<Producto> a, int t) {
-		ArrayList<Producto>al = new ArrayList<>();
-		
+		for(Producto p : a) {
+			if(p instanceof ProductoMerchandise){
+				al.add(p);
+			}
+		}
 		return al;
 	}
 	/**
-	 * 
-	 * @param a
-	 * @param t
-	 * @return
+	 * Metodo que ordena alfabeticamente una lista de productos
+	 * @param a lista a ordenar
+	 * @return La lista ordenada alfabeticamente
 	 */
-	public void OrdenarListaAlfabetica(ArrayList<Producto> a,int t){
-		
-		return ;
-	}
-	/**
-	 * 
-	 * @param a
-	 * @param t
-	 */
+	public void OrdenarListaAlfabetica(ArrayList<Producto> a){
+		Collections.sort(a,new Comparator<Producto>() {
+
+			@Override
+			public int compare(Producto o1, Producto o2) {
+				return o1.getNombre().compareTo(o2.getNombre());
+			}
+		} );
+		}
 	
-	
+
 	/**
-	 * Metodo que ordena la lista Ascendentemente po codigo
+	 * Metodo que ordena la lista Ascendentemente por codigo
 	 * @param a lista a ordenar
 	 * @param t tamaño de la lista
 	 */
@@ -460,6 +535,19 @@ public class VentanaProducto extends JFrame {
 				ordenarListaCodigoAscendente(a, t-1);
 			}
 			return;
+	}
+	/**
+	 * Metodo que obtiene el total del dinero
+	 * @param a lista de productos
+	 * @return total dinero a pagar
+	 */
+	
+	public float obtenerDineroTotal(ArrayList<Producto> a) {
+	float dinero = 0;
+	for(Producto p : a) {
+		dinero += p.getPrecio();
+	}
+	return dinero;
 	}
 }
 	
