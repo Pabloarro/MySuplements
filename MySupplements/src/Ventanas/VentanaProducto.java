@@ -64,6 +64,7 @@ public class VentanaProducto extends JFrame {
 	private JButton btnAddDescuento;
 	private static JButton btnCrearDescuento;
 	private static JButton btnAddProductoNuevo;
+	private static JButton btnInicioSesion;
 
 	
 	private JTable tablaProductos;
@@ -186,6 +187,21 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 		
+		btnInicioSesion = new JButton("Iniciar Sesión");
+		btnInicioSesion.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int resp = JOptionPane.showConfirmDialog(null,"¿Es tu primera vez?","Pregunta",JOptionPane.YES_NO_OPTION);
+				if(resp == JOptionPane.YES_OPTION) {
+					new VentanaInicioDeSesion();
+				}else {
+					new VentanaInicioSesion2();
+				}
+				setVisible(false);
+				
+			}
+		});
 		btnAddDescuento = new JButton("Añadir descuento");
 		btnAddDescuento.addActionListener(new ActionListener() {
 			
@@ -336,6 +352,8 @@ public class VentanaProducto extends JFrame {
 		panelSur.add(btnRealizarPedido);
 		panelSur.add(btnCrearDescuento);
 		panelSur.add(btnAddProductoNuevo);
+		panelSur.add(btnInicioSesion);
+		btnInicioSesion.setVisible(false);
 		btnCrearDescuento.setVisible(false);
 		btnAddProductoNuevo.setVisible(false);
 		panelCentro = new JPanel();
@@ -656,6 +674,7 @@ public class VentanaProducto extends JFrame {
 	public static void ModificarVentanaProductoComprar() {
 		btnVerPedido.setVisible(false);
 		btnAdd.setVisible(false);
+		btnInicioSesion.setVisible(true);
 		
 	}
 }

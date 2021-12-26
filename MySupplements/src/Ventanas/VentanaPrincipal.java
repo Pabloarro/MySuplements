@@ -40,7 +40,7 @@ public class VentanaPrincipal {
 	private JPanel panel_mid;
 	private JButton btnAdministrador;
 	private JButton btnComprar;
-	private JButton btnInicioSesion;
+	private  JButton btnInicioSesion;//Cambiar a Pagina de cliente
 	private ArrayList<Administrador> listaAdmins;//lista con los administradores para comprobar al entrar al btnAdmins
 	
 	/**
