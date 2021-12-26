@@ -55,7 +55,16 @@ public class VentanaProducto extends JFrame {
 	private JPanel contentPane,panelNorte,panelSur,panelCentro,panelCentroDerecha,panelCentroDerechaAbajo,panelCentroDerechaAbajo1;
 	private JLabel lblInfo,lblFiltro,lblLogo,lblSumaDinero;
 	private JComboBox<String> comboFiltro;
-	private JButton btnAtras,btnVerPedido,btnAdd,btnRealizarPedido,btnEditarPedido,btnBorrarPedido,btnDescuento;
+	private JButton btnAtras;
+	private static JButton btnVerPedido;
+	private static JButton btnAdd;
+	private JButton btnRealizarPedido;
+	private JButton btnEditarPedido;
+	private JButton btnBorrarPedido;
+	private JButton btnAddDescuento;
+	private static JButton btnCrearDescuento;
+	private static JButton btnAddProductoNuevo;
+
 	
 	private JTable tablaProductos;
 	private DefaultTableModel modeloTablaProductos;
@@ -171,8 +180,8 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 		
-		btnDescuento = new JButton("Añadir descuento");
-		btnDescuento.addActionListener(new ActionListener() {
+		btnAddDescuento = new JButton("Añadir descuento");
+		btnAddDescuento.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -190,6 +199,25 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 		
+		btnCrearDescuento = new JButton("Crear Descuento");
+		btnCrearDescuento.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// POR HACER
+				
+			}
+		});
+		
+		btnAddProductoNuevo = new JButton("Añadir Producto");
+		btnAddProductoNuevo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//POR HACER
+				
+			}
+		});
 		btnAdd = new JButton("Añadir a carrito");
 		btnAdd.addActionListener(new ActionListener() {
 			
@@ -201,14 +229,17 @@ public class VentanaProducto extends JFrame {
 				//AÑADIR A LISTA Y LUEGO EN EL BOTON VER PEDIDO VISUALIZARLO
 				cant++;
 				lblInfo.setText("Productos en carrito: "+cant);
+				btnVerPedido.setEnabled(true);
 				
 			}});
 		
 		btnVerPedido = new JButton("Ver Carrito");
+		btnVerPedido.setEnabled(false);
 		btnVerPedido.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				btnAdd.setVisible(false);
 				lblInfo.setVisible(false);
 				btnAtras.setVisible(true);
 				btnRealizarPedido.setVisible(true);
@@ -228,7 +259,7 @@ public class VentanaProducto extends JFrame {
 				}
 				panelCentroDerechaAbajo.add(panelCentroDerechaAbajo1);
 				panelCentroDerechaAbajo.add(btnBorrarPedido);
-				panelCentroDerechaAbajo.add(btnDescuento);
+				panelCentroDerechaAbajo.add(btnAddDescuento);
 				panelCentroDerecha.add(panelCentroDerechaAbajo);
 				
 			}
@@ -255,6 +286,9 @@ public class VentanaProducto extends JFrame {
 				panelCentroDerecha.remove(lblLogo);;
 			}
 		});
+		btnVerPedido.setVisible(true);
+		btnAdd.setVisible(true);
+		btnCrearDescuento.setVisible(false);
 		
 		panelNorte.setLayout(new GridLayout(1,3));
 		panelNorte.add(lblInfo);
@@ -269,6 +303,10 @@ public class VentanaProducto extends JFrame {
 		panelSur.add(btnVerPedido);
 		panelSur.add(btnAdd);
 		panelSur.add(btnRealizarPedido);
+		panelSur.add(btnCrearDescuento);
+		panelSur.add(btnAddProductoNuevo);
+		btnCrearDescuento.setVisible(false);
+		btnAddProductoNuevo.setVisible(false);
 		panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
 		
@@ -355,19 +393,20 @@ public class VentanaProducto extends JFrame {
 				
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount()>=2) {
-				int pos = tablaProductos.getSelectedRow();
-				String dir = alp.get(pos).getImagen();
-				lblLogo.setIcon(new ImageIcon(VentanaProducto.class.getResource(dir)));
-				
-				panelCentro.setLayout(new GridLayout(1,2));
-				panelCentroDerecha.setLayout(new GridLayout(1,0));
-				panelCentro.add(panelCentroDerecha);
-				panelCentroDerecha.remove(scrollTabla);
-				panelCentroDerecha.remove(btnEditarPedido);
-				panelCentroDerecha.add(lblLogo);
-				btnAtras.setVisible(true);
-				btnAtras.setText("Salir de imagen");
+				if(btnAdd.isVisible())
+					if(e.getClickCount()>=2) {
+					int pos = tablaProductos.getSelectedRow();
+					String dir = alp.get(pos).getImagen();
+					lblLogo.setIcon(new ImageIcon(VentanaProducto.class.getResource(dir)));
+					
+					panelCentro.setLayout(new GridLayout(1,2));
+					panelCentroDerecha.setLayout(new GridLayout(1,0));
+					panelCentro.add(panelCentroDerecha);
+					panelCentroDerecha.remove(scrollTabla);
+					panelCentroDerecha.remove(btnEditarPedido);
+					panelCentroDerecha.add(lblLogo);
+					btnAtras.setVisible(true);
+					btnAtras.setText("Salir de imagen");
 			}}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -548,6 +587,14 @@ public class VentanaProducto extends JFrame {
 		dinero += p.getPrecio();
 	}
 	return dinero;
+	}
+	
+	public static void ModificarVentanaProductoAdministrador() {
+		btnVerPedido.setVisible(false);
+		btnAdd.setVisible(false);
+		btnCrearDescuento.setVisible(true);
+		btnAddProductoNuevo.setVisible(true);
+		
 	}
 }
 	
