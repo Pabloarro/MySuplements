@@ -170,12 +170,18 @@ public class VentanaProducto extends JFrame {
 		 
 		lblLogo = new JLabel();
 		
-		btnEditarPedido = new JButton("Editar Pedido");
+		btnEditarPedido = new JButton("Eliminar Producto");
 		btnEditarPedido.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// POR HACER
+				int pos = listaProductosPedidos.getSelectedIndex();
+				modeloListaProductosPedidos.remove(pos);
+				listaPedido.remove(pos);
+				cant--;
+				lblInfo.setText("Productos en carrito: "+cant);
+
+				
 				
 			}
 		});
@@ -194,8 +200,11 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// POR HACER
-				
+				vaciarLista();
+				listaPedido.clear();
+				JOptionPane.showMessageDialog(null, "Pedido eliminado correctamente", "Eliminar Pedido", JOptionPane.INFORMATION_MESSAGE);
+				cant = 0;
+				lblInfo.setText("Productos en carrito: "+cant);
 			}
 		});
 		
@@ -249,6 +258,8 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				vaciarLista();
+				agregarALista(listaPedido);
 				btnAdd.setVisible(false);
 				lblInfo.setVisible(false);
 				btnAtras.setVisible(true);
@@ -277,6 +288,14 @@ public class VentanaProducto extends JFrame {
 		
 		btnRealizarPedido = new JButton("Realizar Pedido");
 		btnRealizarPedido.setVisible(false);
+		btnRealizarPedido.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// POR HACER
+				
+			}
+		});
 		
 		btnAtras = new JButton("Salir del Carrito");
 		btnAtras.setVisible(false);
@@ -398,6 +417,8 @@ public class VentanaProducto extends JFrame {
 		ordenarListaCodigoAscendente(alp, alp.size());
 		agregarAtabla(alp);
 		
+		
+		
 		tablaProductos = new JTable(modeloTablaProductos);
 		JScrollPane scrollTabla = new JScrollPane(tablaProductos);
 
@@ -455,6 +476,25 @@ public class VentanaProducto extends JFrame {
 		}
 		
 	}
+	
+	/**
+	 * Metodo que añade a la Jlist la lista de productos
+	 * @param a lista de productos
+	 */
+	public void agregarALista(ArrayList<Producto>a) {
+		for(Producto p : a) {
+			modeloListaProductosPedidos.addElement(p);
+		}
+		
+	}
+	
+	/**
+	 * Metodo que vacia la Jlist
+	 */
+	public void vaciarLista() {
+		modeloListaProductosPedidos.clear();
+	}
+	
 	/**
 	 * Metodo que modifica las columnas de la tabla 
 	 * @param a lista de productos
@@ -600,6 +640,9 @@ public class VentanaProducto extends JFrame {
 	return dinero;
 	}
 	
+	/**
+	 * 
+	 */
 	public static void ModificarVentanaProductoAdministrador() {
 		btnVerPedido.setVisible(false);
 		btnAdd.setVisible(false);
@@ -607,7 +650,9 @@ public class VentanaProducto extends JFrame {
 		btnAddProductoNuevo.setVisible(true);
 		
 	}
-	
+	/**
+	 * 
+	 */
 	public static void ModificarVentanaProductoComprar() {
 		btnVerPedido.setVisible(false);
 		btnAdd.setVisible(false);
