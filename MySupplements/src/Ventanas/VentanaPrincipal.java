@@ -198,5 +198,41 @@ public class VentanaPrincipal {
 			new VentanaPerfil();
 		}
 	}
+	/**
+	 * Método que obtiene el siguiente código de suplemento de fichero
+	 */
+	public void ObtenerSiguienteCodigodeProductoSuplemento() {
+		//TODO
+	}
 	
+	/**
+	 * Método que obtiene el siguiente código de merchandise de fichero
+	 */
+	public void ObtenerSiguienteCodigodeProductoMerchandise() {
+		//TODO
+	}
+	/**
+	 * Método que obtiene el siguiente código del pedido de fichero
+	 */
+	public void ObtenerSiguienteCodigodePedido() {
+		//TODO
+	}
+	/**
+	 * Método que guarda el siguiente código de merchandise en fichero
+	 */
+	public void GuardarSiguienteCodigoSuplemento() {
+		//TODO
+	}
+	/**
+	 * Método que guarda el siguiente código de merchandise en fichero
+	 */
+	public void GuardarSiguienteCodigoMerchandise() {
+		//TODO
+	}
+	/**
+	 * Método que guarda el siguiente código de pedido en un fichero
+	 */
+	public void GuardarSiguienteCodigodePedido() {
+		//TODO
+	}
 }

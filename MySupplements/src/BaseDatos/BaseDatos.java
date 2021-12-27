@@ -18,6 +18,8 @@ import Clases.Cliente;
 import Clases.Pedido;
 import Clases.Producto;
 import Clases.ProductoMerchandise;
+import Clases.ProductoSuplementos;
+import Ventanas.VentanaProducto;
 
 public class BaseDatos {
 	private static Connection con;
@@ -133,24 +135,48 @@ public class BaseDatos {
 	
 	//POR HACER
 	
+	/**
+	 * Método que recibe el cliente y devuelve la lista con todos los pedidos de ese cliente
+	 * @param c Cliente del que se quiere obtener la lista
+	 * @return	Devuelve la lista de pedidos del cliente
+	 */
 	public static ArrayList<Pedido> obtenerPedidosdeCliente(Cliente c) {
 		String sent = "SELECT * FROM Pedido WHERE dnic='"+c.getDni()+"'";
 		Statement st=null;
 		ArrayList<Pedido> lc=new ArrayList<>();//necesito obtener los datos del pedido y luego la lista de productos
-		//Arraylist necesito la lista de pedidos //TODO
 		Pedido p =null;
-		try {
+		try {			//Pedidos(cped Integer, fpedido bigint , dnic String , cprod Integer)"
 			ResultSet rs = st.executeQuery(sent);
 			if(rs.next()) {
-				
-			}
+				int codpedido = rs.getInt("cped");
+				long fpedido = rs.getLong("fpedido");
+				p = new Pedido(fpedido, c, obtenerProductosdePedido(codpedido));			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return lc;
 	}
 	
-	
+	/**
+	 * Método que devuelve el producto con el codigo introducido
+	 * @param cod codigo del producto
+	 * @return Devuelve el producto con ese codigo
+	 */
+	public static Producto ObtenerProducto(int cod) {
+		ArrayList<Producto>listaproductos = new ArrayList<>();
+		VentanaProducto.cargarProductosdeFichero(listaproductos);
+		Producto p = new Producto();
+		for(Producto pr : listaproductos) {
+			if(pr.getCod() == cod) {
+				if(pr instanceof ProductoSuplementos) {
+					p = (ProductoSuplementos)pr;	
+				}else {
+					p = (ProductoMerchandise)pr; 
+				}
+			}
+		}
+		return p;
+	}
 	
 	
 	
@@ -160,21 +186,24 @@ public class BaseDatos {
 	 * @return devuelve una lista con los productos del pedido
 	 */
 	
-	//POR HACER
-	/*public static ArrayList<Producto> obtenerProductosdePedido(String codpedido){
+	
+	public static ArrayList<Producto> obtenerProductosdePedido(int codpedido){
 		String sent= "SELECT * FROM Pedidos WHERE cped='"+codpedido+"'";
+		ArrayList<Producto> lp = new ArrayList<>();
 		Statement st=null;
 		try {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(sent);
+			if(rs.next()) {
+				int cod = rs.getInt("cprod");
+				lp.add(ObtenerProducto(cod));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	
-		
-		return null;
+		return lp;
 	}
-	*/
+	
 	
 	
 	

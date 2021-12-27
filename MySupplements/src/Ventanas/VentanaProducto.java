@@ -703,7 +703,7 @@ public class VentanaProducto extends JFrame {
 	 * Método que carga los productos del fichero a una Arraylist
 	 * @param a lista donde se van a cargar los productos
 	 */
-	public void cargarProductosdeFichero(ArrayList<Producto> a) {
+	public static void cargarProductosdeFichero(ArrayList<Producto> a) {
 		BufferedReader br = null;
 		try {
 			br=new BufferedReader(new FileReader("productos.txt"));
