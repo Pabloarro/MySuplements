@@ -136,13 +136,11 @@ public class VentanaInicioDeSesion extends JFrame {
 						try {
 							VentanaPrincipal.clientesesion = BaseDatos.ObtenerCliente(nom);
 						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						JOptionPane.showMessageDialog(null, "Registro realizado con éxito");
 						logger.log(Level.INFO, "Registro realizado ");
-						new VentanaProducto();
-						JOptionPane.showMessageDialog(null,"Presione ALT+Click o el botón 'AÑADIR' para añadir a su carrito el producto");
+						VentanaPrincipal.SesionPerfilOProducto();
 						setVisible(false);
 					}
 					BaseDatos.closeBD();

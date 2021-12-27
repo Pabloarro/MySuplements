@@ -11,16 +11,21 @@ public class Cliente {
 	private float puntos;
 	
 
-	public Cliente() {
+	public Cliente(String nom,String con, String dni, long fechanac) {
 		super();
-	}
+		this.con = con;
+		this.nom = nom;
+		this.dni = dni;
+		this.fechanac = fechanac;
+		this.puntos = 0;//TODO CARGAR LOS PUNTOS DE LA BD
+	}	
 	public Cliente(String nom,String con, String dni, long fechanac,float p) {
 		super();
 		this.con = con;
 		this.nom = nom;
 		this.dni = dni;
 		this.fechanac = fechanac;
-		this.puntos = p;
+		this.puntos = p;//TODO CARGAR LOS PUNTOS DE LA BD
 	}
 	
 	public String getCon() {

@@ -294,4 +294,11 @@ public class BaseDatos {
 		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
 	}
 	
+	public static void modificarCliente(Cliente c) throws SQLException {
+		Statement st = con.createStatement();
+		String sent= "update Cliente set nom="+c.getNom()+",con="+c.getCon()+",fnac="+c.getFechanac()+" where dni="+c.getDni();
+		st.executeUpdate(sent);
+				
+	}
+	
 }

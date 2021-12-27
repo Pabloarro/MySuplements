@@ -41,8 +41,10 @@ public class VentanaPrincipal {
 	private JButton btnAdministrador;
 	private JButton btnComprar;
 	private JButton btnMisPedidos;
-	private  JButton btnInicioSesion;//Cambiar a Pagina de cliente
+	private  JButton btnMiperfil;//Cambiar a Pagina de cliente
 	private ArrayList<Administrador> listaAdmins;//lista con los administradores para comprobar al entrar al btnAdmins
+	static int NumVentana;//Si el int es 0 se abre la ventanaProducto y si el int es 1 se abre la ventanaPerfil
+	
 	
 	/**
 	 * Launch the application.
@@ -122,6 +124,7 @@ public class VentanaPrincipal {
 		btnComprar = new JButton("Comprar");
 		btnComprar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				NumVentana=0;
 				if(VentanaPrincipal.clientesesion == null) {
 					new VentanaProducto();
 					VentanaProducto.ModificarVentanaProductoComprar();
@@ -133,16 +136,22 @@ public class VentanaPrincipal {
 			}
 		});
 		
-		btnInicioSesion = new JButton("Inicio Sesion");
-		btnInicioSesion.addActionListener(new ActionListener() {
+		btnMiperfil = new JButton("Mi perfil");
+		btnMiperfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			int resp = JOptionPane.showConfirmDialog(null,"¿Es tu primera vez?","Pregunta",JOptionPane.YES_NO_OPTION);
-			if(resp == JOptionPane.YES_OPTION) {
-				new VentanaInicioDeSesion();
-			}else {
-				new VentanaInicioSesion2();
-			}
-			frame.setVisible(false);
+			NumVentana=1;
+			if(VentanaPrincipal.clientesesion==null) {
+				int resp = JOptionPane.showConfirmDialog(null,"¿Es tu primera vez?","Pregunta",JOptionPane.YES_NO_OPTION);
+				if(resp == JOptionPane.YES_OPTION) {
+					new VentanaInicioDeSesion();
+				}else {
+					new VentanaInicioSesion2();
+				}
+				frame.setVisible(false);
+				}else {
+					new VentanaPerfil();
+				}
+			
 			}});
 		
 		btnMisPedidos = new JButton();
@@ -163,7 +172,7 @@ public class VentanaPrincipal {
 					.addGap(18)
 					.addComponent(btnComprar, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(btnInicioSesion, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnMiperfil, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(34, Short.MAX_VALUE))
 		);
 		gl_panel_mid.setVerticalGroup(
@@ -171,7 +180,7 @@ public class VentanaPrincipal {
 				.addGroup(gl_panel_mid.createSequentialGroup()
 					.addContainerGap(68, Short.MAX_VALUE)
 					.addGroup(gl_panel_mid.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnInicioSesion, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnMiperfil, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnComprar, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnAdministrador, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
 					.addGap(62))
@@ -180,4 +189,14 @@ public class VentanaPrincipal {
 
 		frame.setVisible(true);
 	}
+	
+	public static void SesionPerfilOProducto() {
+		if(VentanaPrincipal.NumVentana==0) {
+			new VentanaProducto();
+			JOptionPane.showMessageDialog(null,"Presione ALT+Click o el botón 'AÑADIR' para añadir a su carrito el producto");
+		}else {
+			new VentanaPerfil();
+		}
+	}
+	
 }

@@ -113,13 +113,11 @@ public class VentanaInicioSesion2 extends JFrame {
 							Cliente c = BaseDatos.ObtenerCliente(nom);
 							VentanaPrincipal.clientesesion=c;
 						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						JOptionPane.showMessageDialog(null, "Iniciada la sesión correctamente");
 						logger.log(Level.INFO, "Sesión iniciada");
-						new VentanaProducto();
-						JOptionPane.showMessageDialog(null,"Presione ALT+Click o el botón 'AÑADIR' para añadir a su carrito el producto");
+						VentanaPrincipal.SesionPerfilOProducto();
 						setVisible(false);
 					}else if(resul==1) {
 						JOptionPane.showMessageDialog(null, "Contraseña incorrecta");
