@@ -243,7 +243,17 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//TODO
+				/*
+				int cod=Integer.parseInt(JOptionPane.showInputDialog("Introduce el código ")); //comprobar que el codigo no se repite y que sea par o impar 
+				//dependiendo del tipo de producto
 				
+				String nombre = JOptionPane.showInputDialog("Introduce el nombre ");
+				float precio = Float.parseFloat(JOptionPane.showInputDialog("Introduce el precio "));
+				String foto = "/FOTOS/" + JOptionPane.showInputDialog("Introduce el nombre de la imagen + .jpg,.gif,.png ");
+				ProductoMerchandise p = new ProductoMerchandise(cod, precio, nombre, foto,"algodon");
+				alp.add(p);
+				ActualizarFicheroProductos(alp);
+				*/
 			}
 		});
 		btnSalir = new JButton("Salir de la página");

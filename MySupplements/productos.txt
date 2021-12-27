@@ -1,3 +1,3 @@
 1	59.99	Caseina 	/FOTOS/caseina.jpg	50	10	15	360
-2	20	Sudadera con gorro	/FOTOS/sudaderaGorro.jpg	algodón
+2	20.0	Sudadera con gorro	/FOTOS/sudaderaGorro.jpg	algodón
 3	49.99	Proteina en polvo	/FOTOS/proteina.jpg	46	8	18	346
