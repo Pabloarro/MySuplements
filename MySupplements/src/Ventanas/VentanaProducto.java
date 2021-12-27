@@ -296,7 +296,7 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Pedido p = new Pedido(ICONIFIED, null, null, alp)
-				// POR HACER
+				// TODO
 				
 			}
 		});
