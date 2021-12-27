@@ -56,7 +56,7 @@ public class BaseDatos {
 	public static void crearTablas() {
 		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom String, con String, dni String,fnac bigint,puntos String)";
 		Statement st = null;
-		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido String , dnic String , cprod String)";
+		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido bigint , dnic String , cprod String)";
 		try {
 			st = con.createStatement();
 			st.executeUpdate(sent1);
@@ -94,6 +94,41 @@ public class BaseDatos {
 			}
 		}
 	}
+	
+	public static void obtenerCodigopedido() {
+		String sent = "Select * From Pedidos";
+		Statement st =null;
+		ArrayList<Pedido> alpedidos = new ArrayList<>();
+		try {
+			st= con.createStatement();
+			ResultSet rs = st.executeQuery(sent);
+			int cod = rs.getInt("cped");
+			if(rs.next()) {
+				if(cod==rs.getInt("cped")) {
+					long fped= rs.getLong("fpedido");
+					String dni=rs.getString("dnic");
+					String cprod=rs.getString("cprod");
+					Cliente c = ObtenerCliente(dni);
+					//TODO
+				}else {
+					
+				}
+		
+				
+				//TODO
+				
+				//Pedidos(cped Integer, fpedido String , dnic String , cprod String)";
+				
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 	/**
 	 * Metodo que elimina el pedido de la tabla Pedidos de la  base de datos
 	 * @param P Pedido que se desea eliminar
@@ -180,7 +215,7 @@ public class BaseDatos {
 	 */
 	public static void insertarPedido(Pedido p) {
 		for(Producto pr: p.getListaproductos()) {
-			String sent = "INSERT INTO Pedidos VALUES("+p.getCod()+",'"+p.getSdf().format(p.getFec()+"','"+p.getCliente().getDni()+"'"+pr.getCod());
+			String sent = "INSERT INTO Pedidos VALUES("+p.getCod()+",'"+p.getFec()+"','"+p.getCliente().getDni()+"'"+pr.getCod();
 			Statement st = null;
 			try {
 				st = con.createStatement();
@@ -205,7 +240,7 @@ public class BaseDatos {
  * @param ed Fecha de nacimiento del cliente
  */
 	public static void insertarCliente(String nom, String c,String d, long fc) {//nombre,contraseña,dni y fecha de nacimiento
-		String p="0";//puntos del cliente empiezan en 0
+		String p = "0";//puntos del cliente empiezan en 0
 		String sent = "INSERT INTO Cliente VALUES('"+nom+"','"+c+"','"+d+"','"+fc+"','"+p+"')";//la fecha de nacimiento hay que mirar si se mete a la bd como long
 		Statement st = null;
 		try {
@@ -260,28 +295,47 @@ public class BaseDatos {
 		
 		return resul;
 	}
+	public static ArrayList<Cliente> ObtenerListaClientes() throws SQLException {
+		ArrayList<Cliente> lc = new ArrayList<>();
+		Statement st = con.createStatement();
+		String sent = "SELECT * FROM Cliente";
+		ResultSet rs = st.executeQuery(sent);
+		if(rs.next()) {
+			String nom= rs.getString("nom");
+			String con = rs.getString("con");
+			String dni = rs.getString("dni");
+			long fnac = rs.getLong("fnac");
+			float puntos = rs.getFloat("puntos");
+			Cliente c = new Cliente(nom, con, dni, fnac, puntos);
+			lc.add(c);
+		}
+		rs.close();
+		st.close();
+		return lc;
+		//Cliente(nom String, con String, dni String,fnac bigint,puntos String)
+	}
 	
 	/**
 	 * Metodo que obtiene el cliente de la base de datos
 	 * @param nom nombre del cliente
 	 * @return Devuelve el cliente q
 	 */
-	public static Cliente ObtenerCliente(String nom) throws SQLException{
+	public static Cliente ObtenerCliente(String dni) throws SQLException{
 		
-			Statement statement = con.createStatement();
-			String sent = "SELECT * FROM Cliente WHERE nom='"+nom+"'";
-			ResultSet rs = statement.executeQuery(sent);
-			Cliente c = null;
-			if(rs.next()) {
-				String con = rs.getString("con");
-				String dni = rs.getString("dni");
-				long fecha = rs.getLong("fnac");
-				float puntos = rs.getFloat("puntos");
-				 c = new Cliente(nom, con, dni, fecha,puntos);
-			}
-			rs.close();
-			logger.log(Level.INFO, "Cliente obtenido");
-			return c;
+		Statement statement = con.createStatement();
+		String sent = "SELECT * FROM Cliente WHERE dni='"+dni+"'";
+		ResultSet rs = statement.executeQuery(sent);
+		Cliente c = null;
+		if(rs.next()) {
+			String con = rs.getString("con");
+			String nom = rs.getString("nom");
+			long fecha = rs.getLong("fnac");
+			float puntos = rs.getFloat("puntos");
+			 c = new Cliente(nom, con, dni, fecha,puntos);
+		}
+		rs.close();
+		logger.log(Level.INFO, "Cliente obtenido");
+		return c;
 	}
 	/**
 	 * Método que elimina el cliente de la tabla de clientes de la base de datos
@@ -294,6 +348,10 @@ public class BaseDatos {
 		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
 	}
 	
+	/**
+	 * Método que modifica un cliente en la bd
+	 * @param c Cliente que se quiere modificar
+	 */
 	public static void modificarCliente(Cliente c) throws SQLException {
 		Statement st = con.createStatement();
 		String sent= "update Cliente set nom="+c.getNom()+",con="+c.getCon()+",fnac="+c.getFechanac()+" where dni="+c.getDni();

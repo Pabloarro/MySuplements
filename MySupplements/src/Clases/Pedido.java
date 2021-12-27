@@ -14,7 +14,7 @@ import java.util.TreeMap;
 
 public class Pedido {
 	static int cod ;//TODO		/*Hay que hacer que se obtenga de la bd cada vez que se inicie */
-    private Date fec;
+    private long fec;
 	private Cliente cliente;
 	private ArrayList<Producto> Listaproductos;//En la tabla de la bd se introducirán en cada fila un producto del pedido.
 												//Y luego en la clase pedido recogeremos la lista de productos que se han seleccionado
@@ -27,9 +27,9 @@ public class Pedido {
 		
 	}
 
-	public Pedido(int cod, Date fec, Cliente cliente, ArrayList<Producto> alproductos) {
+	public Pedido(long fec, Cliente cliente, ArrayList<Producto> alproductos) {
 		super();
-		Pedido.cod = cod;
+		cod++;
 		this.fec = fec;
 		this.cliente = cliente;
 		this.Listaproductos = alproductos;
@@ -44,11 +44,11 @@ public class Pedido {
 		Pedido.cod = cod;
 	}
 
-	public Date getFec() {
+	public long getFec() {
 		return fec;
 	}
 
-	public void setFec(Date fec) {
+	public void setFec(long fec) {
 		this.fec = fec;
 	}
 
@@ -83,6 +83,10 @@ public class Pedido {
 
 	public void setSdf(SimpleDateFormat sdf) {
 		this.sdf = sdf;
+	}
+	
+	public void obtenerCodigo(){
+		
 	}
 
 }

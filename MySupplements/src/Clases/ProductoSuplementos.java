@@ -20,11 +20,11 @@ public class ProductoSuplementos extends Producto {
 		this.calorias = calorias;
 	}
 	
-	@Override		//crear el toString para ponerlo en el txt POR HACER
-	//TODO
+	@Override
 	public String toString() {
-		return  getNombre()+", Precio: "+getPrecio()+"€ , Proteinas: "+ proteinas+", Grasas: "+grasas+", Hidratos: "+hidratos+", Calorías: "+calorias;
+		return  getNombre()+" Precio: "+getPrecio()+"€	Proteinas: "+proteinas+" Grasas: "+grasas+" Hidratos: "+hidratos+" Calorias: "+calorias;
 	}
+	
 	public int getProteinas() {
 		return proteinas;
 	}

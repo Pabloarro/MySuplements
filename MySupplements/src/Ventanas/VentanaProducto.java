@@ -10,6 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,7 +34,8 @@ import javax.swing.border.EmptyBorder;
 
 import javax.swing.table.DefaultTableModel;
 
-
+import Clases.Listaproductos;
+import Clases.Pedido;
 import Clases.Producto;
 import Clases.ProductoMerchandise;
 import Clases.ProductoSuplementos;
@@ -295,6 +301,7 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//Pedido p = new Pedido(1, System.currentTimeMillis(), º, listaProductosPedido)
 				//Pedido p = new Pedido(ICONIFIED, null, null, alp)
 				// TODO
 				
@@ -389,38 +396,18 @@ public class VentanaProducto extends JFrame {
 		estructuratabla();
 		
 		alp = new ArrayList<>();
+		alp=Listaproductos.getListaProductos();
 			
 		//TODO
 	
-	/*	BufferedReader br = null;
-		try {
-			br=new BufferedReader(new FileReader("productos.txt"));
-			String linea = br.readLine();
-			while(linea!=null) {
-				String [] datos= linea.split("	");
-				int cod=Integer.parseInt(datos[0]);
-					Float pr = Float.valueOf(datos[1]);
-					String nom = datos[2];
-					String url= datos[3];
-					String mat = datos[4];
-					alp.add(new ProductoMerchandise(cod, pr, nom, url, mat));	
-				
-					}
-				} catch (FileNotFoundException e) {
-					
-					e.printStackTrace();
-				} catch (IOException e) {
-				
-				e.printStackTrace();
-				}
-		*/
+
 	
 		//1	59.99	Caseina	/FOTOS/caseina.jpg	50	10	15	360
-		alp.add(new ProductoSuplementos(1,(float) 59.99,"Caseina","/FOTOS/caseina.jpg",50,10,15,360));
-		alp.add(new ProductoSuplementos(3,(float) 49.99,"Proteina en polvo","/FOTOS/proteina.jpg",46,8,18,346));
+		//alp.add(new ProductoSuplementos(1,(float) 59.99,"Caseina","/FOTOS/caseina.jpg",50,10,15,360));
+		//alp.add(new ProductoSuplementos(3,(float) 49.99,"Proteina en polvo","/FOTOS/proteina.jpg",46,8,18,346));
 
 		//2	20	Sudadera con gorro	/FOTOS/sudaderaGorro.jpg	algodón
-		alp.add(new ProductoMerchandise(2,(float) 20,"Sudadera con goro","/FOTOS/sudaderaGorro.jpg", "algodón"));
+		//alp.add(new ProductoMerchandise(2,(float) 20,"Sudadera con goro","/FOTOS/sudaderaGorro.jpg", "algodón"));
 		
 		ordenarListaCodigoAscendente(alp, alp.size());
 		agregarAtabla(alp);
@@ -675,5 +662,7 @@ public class VentanaProducto extends JFrame {
 	public static void ModificarVentanaProductoConPedidos() {	
 		//TODO
 	}
+	
+
 }
 	
