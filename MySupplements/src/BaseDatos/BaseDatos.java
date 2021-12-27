@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import Clases.Cliente;
 import Clases.Pedido;
 import Clases.Producto;
@@ -23,7 +22,9 @@ import Clases.ProductoMerchandise;
 public class BaseDatos {
 	private static Connection con;
 	private static Logger logger = Logger.getLogger( "BaseDatos" );
+	
 	public static void initBD(String nombreBD) {
+		
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -56,7 +57,7 @@ public class BaseDatos {
 	public static void crearTablas() {
 		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom String, con String, dni String,fnac bigint,puntos String)";
 		Statement st = null;
-		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido bigint , dnic String , cprod String)";
+		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido bigint , dnic String , cprod Integer)";
 		try {
 			st = con.createStatement();
 			st.executeUpdate(sent1);
@@ -95,38 +96,7 @@ public class BaseDatos {
 		}
 	}
 	
-	public static void obtenerCodigopedido() {
-		String sent = "Select * From Pedidos";
-		Statement st =null;
-		ArrayList<Pedido> alpedidos = new ArrayList<>();
-		try {
-			st= con.createStatement();
-			ResultSet rs = st.executeQuery(sent);
-			int cod = rs.getInt("cped");
-			if(rs.next()) {
-				if(cod==rs.getInt("cped")) {
-					long fped= rs.getLong("fpedido");
-					String dni=rs.getString("dnic");
-					String cprod=rs.getString("cprod");
-					Cliente c = ObtenerCliente(dni);
-					//TODO
-				}else {
-					
-				}
-		
-				
-				//TODO
-				
-				//Pedidos(cped Integer, fpedido String , dnic String , cprod String)";
-				
-				
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-	}
+
 	
 	
 	/**
@@ -163,11 +133,11 @@ public class BaseDatos {
 	
 	//POR HACER
 	
-/*	public static ArrayList<Pedido> obtenerPedidosdeCliente(Cliente c) {
+	public static ArrayList<Pedido> obtenerPedidosdeCliente(Cliente c) {
 		String sent = "SELECT * FROM Pedido WHERE dnic='"+c.getDni()+"'";
 		Statement st=null;
-		ArrayList<Pedido> AlPedidosClientes=new ArrayList<>();//necesito obtener los datos del pedido y luego la lista de productos
-		
+		ArrayList<Pedido> lc=new ArrayList<>();//necesito obtener los datos del pedido y luego la lista de productos
+		//Arraylist necesito la lista de pedidos //TODO
 		Pedido p =null;
 		try {
 			ResultSet rs = st.executeQuery(sent);
@@ -177,8 +147,8 @@ public class BaseDatos {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
-	}*/
+		return lc;
+	}
 	
 	
 	
@@ -212,26 +182,19 @@ public class BaseDatos {
 	/**
 	 * Metodo que inserta en la tabla de Pedidos los productos en fila
 	 * @param p producto que se inserta en la tabla pedidos
+	 * @throws SQLException 
 	 */
-	public static void insertarPedido(Pedido p) {
+	public static void insertarPedido(Pedido p) throws SQLException {
+		Statement st = null;
+		st= con.createStatement();
 		for(Producto pr: p.getListaproductos()) {
-			String sent = "INSERT INTO Pedidos VALUES("+p.getCod()+",'"+p.getFec()+"','"+p.getCliente().getDni()+"'"+pr.getCod();
-			Statement st = null;
-			try {
-				st = con.createStatement();
-				st.executeUpdate(sent);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					st.close();
-					logger.log(Level.INFO,"Pedido guardado correctamente en la base de datos");
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+			String sent = "INSERT INTO pedidos VALUES('"+p.getCod()+"','"+p.getFec()+"','"+p.getCliente().getDni()+"','"+pr.getCod()+"')";
+			st.executeUpdate(sent);
 			}
+		st.close();	
 		}
-	}
+	
+	
 /**
  * Metodo que inserta el cliente en la tabla de clientes en la base de datos
  * @param nom Nombre del cliente
@@ -332,6 +295,29 @@ public class BaseDatos {
 			long fecha = rs.getLong("fnac");
 			float puntos = rs.getFloat("puntos");
 			 c = new Cliente(nom, con, dni, fecha,puntos);
+		}
+		rs.close();
+		logger.log(Level.INFO, "Cliente obtenido");
+		return c;
+	}
+	
+	/**
+	 * Metodo que obtiene el cliente de la base de datos
+	 * @param nom nombre del cliente
+	 * @param pas contraseña del cliente
+	 * @return Devuelve el cliente q
+	 */
+	public static Cliente ObtenerCliente(String nom,String pas) throws SQLException{
+		
+		Statement statement = con.createStatement();
+		String sent = "SELECT * FROM Cliente WHERE nom='"+nom+"' AND con='"+pas+"'";
+		ResultSet rs = statement.executeQuery(sent);
+		Cliente c = null;
+		if(rs.next()) {
+			String dni = rs.getString("dni");
+			long fecha = rs.getLong("fnac");
+			float puntos = rs.getFloat("puntos");
+			 c = new Cliente(nom, pas, dni, fecha,puntos);
 		}
 		rs.close();
 		logger.log(Level.INFO, "Cliente obtenido");

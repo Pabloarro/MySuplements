@@ -110,7 +110,7 @@ public class VentanaInicioSesion2 extends JFrame {
 					int resul = BaseDatos.existeCliente(nom, con);
 					if(resul == 2) {
 						try {
-							Cliente c = BaseDatos.ObtenerCliente(nom);
+							Cliente c = BaseDatos.ObtenerCliente(nom,con);
 							VentanaPrincipal.clientesesion=c;
 						} catch (SQLException e1) {
 							e1.printStackTrace();

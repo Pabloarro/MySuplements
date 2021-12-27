@@ -15,9 +15,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -34,6 +38,8 @@ import javax.swing.border.EmptyBorder;
 
 import javax.swing.table.DefaultTableModel;
 
+import BaseDatos.BaseDatos;
+import Clases.Cliente;
 import Clases.Listaproductos;
 import Clases.Pedido;
 import Clases.Producto;
@@ -46,9 +52,10 @@ public class VentanaProducto extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane,panelNorte,panelSur,panelCentro,panelCentroDerecha,panelCentroDerechaAbajo,panelCentroDerechaAbajo1;
+	private JPanel contentPane,panelNorte,panelSur,panelCentroDerecha,panelCentroDerechaAbajo,panelCentroDerechaAbajo1;
+	private static JPanel panelCentro;
 	private JLabel lblInfo,lblFiltro,lblLogo,lblSumaDinero;
-	private JComboBox<String> comboFiltro;
+	private static JComboBox<String> comboFiltro;
 	private JButton btnAtras;
 	private static JButton btnVerPedido;
 	private static JButton btnAdd;
@@ -61,10 +68,12 @@ public class VentanaProducto extends JFrame {
 	private static JButton btnInicioSesion;
 
 	
-	private JTable tablaProductos,tablaPedidos;	//TODO
-	private DefaultTableModel modeloTablaProductos,modeloTablaPedidos; //TODO
+	private static JTable tablaInformacion;	//TODO
+	private static DefaultTableModel modeloTablaInformacion;
+	//TODO
 	
-	private ArrayList<Producto>listaProductosPedido,alp;//lista de productos 
+	
+	private ArrayList<Producto>listaProductosPedido,alp;//lista de productos en el carrito,lista de productos.
 	
 	private int cant;
 	
@@ -143,7 +152,7 @@ public class VentanaProducto extends JFrame {
 					ordenarListaCodigoAscendente(alp, alp.size());
 					vaciarTabla();
 					estructuratabla();
-					agregarAtabla(alp);
+					agregarProductosAtabla(alp);
 				}
 				
 			}
@@ -253,7 +262,7 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			
-				int pos = tablaProductos.getSelectedRow();
+				int pos = tablaInformacion.getSelectedRow();
 				listaProductosPedido.add(alp.get(pos));
 				cant++;
 				lblInfo.setText("Productos en carrito: "+cant);
@@ -284,7 +293,9 @@ public class VentanaProducto extends JFrame {
 				if(listaProductosPedido == null) {
 					panelCentroDerechaAbajo1.add(lblSumaDinero);
 				}else {
-					lblSumaDinero.setText("TOTAL: "+obtenerDineroTotal(listaProductosPedido)+" €");
+					DecimalFormat df = new DecimalFormat();
+					df.setMaximumFractionDigits(2);
+					lblSumaDinero.setText("TOTAL: "+df.format(obtenerDineroTotal(listaProductosPedido))+" €");
 					panelCentroDerechaAbajo1.add(lblSumaDinero);
 				}
 				panelCentroDerechaAbajo.add(panelCentroDerechaAbajo1);
@@ -301,9 +312,18 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//TODO		BASEDATOS.REALIZARPEDIDO(PEDIDO)
+				Pedido p = new Pedido(System.currentTimeMillis(), VentanaPrincipal.clientesesion, listaProductosPedido);
+				BaseDatos.initBD("Basedatos.db");
+				try {
+					BaseDatos.insertarPedido(p);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				BaseDatos.closeBD();
 				//Pedido p = new Pedido(1, System.currentTimeMillis(), º, listaProductosPedido)
 				//Pedido p = new Pedido(ICONIFIED, null, null, alp)
-				// TODO
 				
 			}
 		});
@@ -365,65 +385,49 @@ public class VentanaProducto extends JFrame {
 		listaProductosPedido = new ArrayList<>();
 		
 		
-		/* JLIST 
 		
-		modeloListaProductosPedidos = new DefaultListModel<>();
-		listaProductosPedidos = new JList<>(modeloListaProductosPedidos);
-		JScrollPane scrollLista = new JScrollPane(listaProductosPedidos);
-		*/
-		/*
-		listaProductos.setCellRenderer(new DefaultListCellRenderer() {
-			public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean isSelected,boolean cellHasFocus) {
-				Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				Producto p = (Producto) value;
-				if(p.getPrecio()<100) {
-					c.setForeground(Color.RED);
-				}else {
-					c.setForeground(Color.BLACK);
-				}
-				return c;
-			}
-		});*/
 		
 		/*JTABLE*/
 		
-		modeloTablaProductos = new DefaultTableModel() {
+		modeloTablaInformacion = new DefaultTableModel() {
 			public boolean isCellEditable(int row, int col) {
 				return false;
 			}
 		};
 		
+		
 		estructuratabla();
 		
 		alp = new ArrayList<>();
-		alp=Listaproductos.getListaProductos();
+		//alp=Listaproductos.getListaProductos();
 			
 		//TODO
 	
 
 	
 		//1	59.99	Caseina	/FOTOS/caseina.jpg	50	10	15	360
-		//alp.add(new ProductoSuplementos(1,(float) 59.99,"Caseina","/FOTOS/caseina.jpg",50,10,15,360));
-		//alp.add(new ProductoSuplementos(3,(float) 49.99,"Proteina en polvo","/FOTOS/proteina.jpg",46,8,18,346));
+		alp.add(new ProductoSuplementos(1,(float) 59.99,"Caseina","/FOTOS/caseina.jpg",50,10,15,360));
+		alp.add(new ProductoSuplementos(3,(float) 49.99,"Proteina en polvo","/FOTOS/proteina.jpg",46,8,18,346));
 
 		//2	20	Sudadera con gorro	/FOTOS/sudaderaGorro.jpg	algodón
-		//alp.add(new ProductoMerchandise(2,(float) 20,"Sudadera con goro","/FOTOS/sudaderaGorro.jpg", "algodón"));
+		alp.add(new ProductoMerchandise(2,(float) 20,"Sudadera con goro","/FOTOS/sudaderaGorro.jpg", "algodón"));
 		
 		ordenarListaCodigoAscendente(alp, alp.size());
-		agregarAtabla(alp);
+		agregarProductosAtabla(alp);
 		
 		
+	
 		
-		tablaProductos = new JTable(modeloTablaProductos);
-		JScrollPane scrollTabla = new JScrollPane(tablaProductos);
+		tablaInformacion = new JTable(modeloTablaInformacion);
+		JScrollPane scrollTabla = new JScrollPane(tablaInformacion);
 
-		tablaProductos.addMouseListener(new MouseAdapter() {
+		tablaInformacion.addMouseListener(new MouseAdapter() {
 				
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(btnAdd.isVisible())
 					if(e.getClickCount()>=2) {
-					int pos = tablaProductos.getSelectedRow();
+					int pos = tablaInformacion.getSelectedRow();
 					String dir = alp.get(pos).getImagen();
 					lblLogo.setIcon(new ImageIcon(VentanaProducto.class.getResource(dir)));
 					
@@ -463,13 +467,30 @@ public class VentanaProducto extends JFrame {
 	 * @param a lista de los Productos a cargar
 	 */
 	
-	public void agregarAtabla(ArrayList<Producto> a) {
+	public void agregarProductosAtabla(ArrayList<Producto> a) {
 		for(Producto p : a) {
-			//Icon i = new ImageIcon(""+p.getImagen());
 			Object dataRow[] = {""+String.valueOf(p.getCod()),""+p.getNombre(),""+String.valueOf(p.getPrecio())};
-			modeloTablaProductos.addRow(dataRow);
+			modeloTablaInformacion.addRow(dataRow);
 		}
 		
+	}
+	/**
+	 * Método que recibe la lista de pedidos de un cliente y lo añade a la tabla
+	 * @param a
+	 */
+	public static void agregarPedidosAtabla(ArrayList<Pedido> a) {
+		for (Pedido p : a) {
+			float tot = 0;
+			DecimalFormat df = new DecimalFormat();
+			df.setMaximumFractionDigits(2);
+			for(Producto pr : p.getListaproductos()) {
+				tot+=pr.getPrecio();
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+			Date d = new Date(p.getFec());
+			Object dataRow[] = {""+String.valueOf(p.getCod()),""+String.valueOf(sdf.format(d)),""+String.valueOf(df.format(tot))};
+			modeloTablaInformacion.addRow(dataRow);
+		}
 	}
 	
 	/**
@@ -498,17 +519,26 @@ public class VentanaProducto extends JFrame {
 		for(Producto p : a) {
 			//Icon i = new ImageIcon(""+p.getImagen());
 			Object dataRow[] = {""+p.getNombre(),""+String.valueOf(p.getPrecio())};
-			modeloTablaProductos.addRow(dataRow);
+			modeloTablaInformacion.addRow(dataRow);
 		}
 		
 	}
+	
+	/**
+	 * Método que modifica la tabla para insetar el historial de pedidos del cliente
+	 */
+	public void modificartablaPedidos() {
+		String [] columnas = {"CODIGO","FECHA","TOTAL"};
+		modeloTablaInformacion.setColumnIdentifiers(columnas);
+	}
+	
 	 
 	/*
 	 * Modifica las columnas ded la tabla
 	 */
 	public void modificarTablafiltro() {
 		String [] columnas = {"NOMBRE","PRECIO"};
-		modeloTablaProductos.setColumnIdentifiers(columnas);
+		modeloTablaInformacion.setColumnIdentifiers(columnas);
 	}
 	
 	/**
@@ -516,15 +546,15 @@ public class VentanaProducto extends JFrame {
 	 */
 	public void estructuratabla() {
 		String [] columnas = {"CODIGO","NOMBRE","PRECIO"};
-		modeloTablaProductos.setColumnIdentifiers(columnas);
+		modeloTablaInformacion.setColumnIdentifiers(columnas);
 	}
 	
 	/**
 	 * Metodo que vacía la tabla
 	 */
 	public void vaciarTabla() {
-		while(modeloTablaProductos.getRowCount()>0) {
-			modeloTablaProductos.removeRow(0);
+		while(modeloTablaInformacion.getRowCount()>0) {
+			modeloTablaInformacion.removeRow(0);
 		}
 	}
 	
@@ -660,7 +690,12 @@ public class VentanaProducto extends JFrame {
 	 * haya una tabla de Pedidos del cliente
 	 */
 	public static void ModificarVentanaProductoConPedidos() {	
-		//TODO
+		btnVerPedido.setVisible(false);
+		btnAdd.setVisible(false);
+		btnInicioSesion.setVisible(true);
+		comboFiltro.setVisible(false);//TODO
+		
+		
 	}
 	
 

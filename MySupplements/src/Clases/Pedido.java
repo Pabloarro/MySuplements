@@ -60,14 +60,7 @@ public class Pedido {
 		this.cliente = cliente;
 	}
 
-	/*public Producto getProducto() {
-		return producto;
-	}
 
-	public void setProducto(Producto producto) {
-		this.producto = producto;
-	}
-*/
 
 	public ArrayList<Producto> getListaproductos() {
 		return Listaproductos;
