@@ -103,31 +103,37 @@ public class VentanaPrincipal {
 		frame.getContentPane().add(panel_mid, BorderLayout.CENTER);
 		
 		listaAdmins = new ArrayList<>();
+			/*Administrador a = new Administrador("12345678A", "Contrasenia");
+			Administrador a1 = new Administrador("12345679B", "Contra");
+			listaAdmins.add(a);
+			listaAdmins.add(a1);
+			VolcarListaAdmins(listaAdmins);*/
 		CargarListaAdmins(listaAdmins);
 		
 		btnAdministrador = new JButton("Administrador");
 		btnAdministrador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			String id = JOptionPane.showInputDialog("Introduzca su identificación");
-			String con = JOptionPane.showInputDialog("Introduzca su contraseña");
-			for(Administrador ad : listaAdmins) {
-				
+				new VentanaProducto();
+				VentanaProducto.ModificarVentanaProductoAdministrador();
+				frame.setVisible(false);
 				
 				//TODO
 				
-				//POR HACER LA LISTA DE ADMINS QUE ESTARA PREDEFINIDA EN UN FICHERO DE TEXTO
-				/*if(ad.getDni()==id && ad.getContrasenya()==con) {
-					new VentanaProducto();
-					VentanaProducto.ModificarVentanaProductoAdministrador();
-				}else {
-					JOptionPane.showMessageDialog(null, "Lo sentimos, se ha introducido un administrador erróneo");
-				}*/
-				
+			/*String id = JOptionPane.showInputDialog("Introduzca su identificación");
+			String con = JOptionPane.showInputDialog("Introduzca su contraseña");
+			
+			Administrador a = new Administrador(id, con);
+			if(ExisteAdmin(a, listaAdmins)==true) {
 				new VentanaProducto();
 				VentanaProducto.ModificarVentanaProductoAdministrador();
-			}
-				
 				frame.setVisible(false);
+			}else {
+				JOptionPane.showMessageDialog(null, "El usuario o la contraseña son incorrectas ", "Administrador erróneo", JOptionPane.ERROR_MESSAGE);
+				
+			}
+			*/
+				
+				
 			}
 		});
 		
@@ -284,4 +290,16 @@ public class VentanaPrincipal {
 		
 	}
 
+	
+	
+	public boolean ExisteAdmin(Administrador a,ArrayList<Administrador>lad) {
+		for(Administrador ad :lad) {
+			if(a.getDni()==ad.getDni() && a.getContrasenya()==ad.getContrasenya()) {
+				return true;
+				
+			}
+		}
+		return false;
+	}
 }
+
