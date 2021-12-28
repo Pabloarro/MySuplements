@@ -68,7 +68,7 @@ public class VentanaProducto extends JFrame {
 	private JButton btnBorrarPedido;
 	private JButton btnAddDescuento;
 	private static JButton btnCrearDescuento;
-	private static JButton btnAddProductoNuevo;
+	private static JButton btnAddProductoNuevo,btnBorrarProducto;
 	private static JButton btnInicioSesion;
 
 	
@@ -243,23 +243,56 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 		
+		
 		btnAddProductoNuevo = new JButton("Añadir Producto");
 		btnAddProductoNuevo.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO
-				/*
-				int cod=Integer.parseInt(JOptionPane.showInputDialog("Introduce el código ")); //comprobar que el codigo no se repite y que sea par o impar 
-				//dependiendo del tipo de producto
 				
-				String nombre = JOptionPane.showInputDialog("Introduce el nombre ");
-				float precio = Float.parseFloat(JOptionPane.showInputDialog("Introduce el precio "));
-				String foto = "/FOTOS/" + JOptionPane.showInputDialog("Introduce el nombre de la imagen + .jpg,.gif,.png ");
-				ProductoMerchandise p = new ProductoMerchandise(cod, precio, nombre, foto,"algodon");
-				alp.add(p);
+				 String[] opciones = new String[] {"Merchandise", "Suplemento"};
+				    int resp = JOptionPane.showOptionDialog(null, "Selecciona el tipo de producto a añadir", "Añadir producto", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
+				    if(resp==0) {
+						String nombre = JOptionPane.showInputDialog("Introduce el nombre ");
+						float precio = Float.parseFloat(JOptionPane.showInputDialog("Introduce el precio "));
+						String foto = "/FOTOS/" + JOptionPane.showInputDialog("Introduce el nombre de la imagen + .jpg,.gif,.png ");
+						String material = JOptionPane.showInputDialog("Introduce el material ");
+						ProductoMerchandise p = new ProductoMerchandise(VentanaPrincipal.ObtenerSiguienteCodigodeProductoMerchandise(), precio, nombre, foto,material);
+						alp.add(p);
+						ActualizarFicheroProductos(alp);
+						vaciarTabla();
+						agregarProductosAtabla(alp);
+				    }else {
+				    	String nombre = JOptionPane.showInputDialog("Introduce el nombre ");
+						float precio = Float.parseFloat(JOptionPane.showInputDialog("Introduce el precio "));
+						String foto = "/FOTOS/" + JOptionPane.showInputDialog("Introduce el nombre de la imagen + .jpg,.gif,.png ");
+						int prot = Integer.parseInt(JOptionPane.showInputDialog("Introduce los gr de proteinas "));
+						int grasas =Integer.parseInt(JOptionPane.showInputDialog("Introduce los gr de grasas "));
+						int hidratos= Integer.parseInt(JOptionPane.showInputDialog("Introduce los gr de hidratos "));
+						int calorias=Integer.parseInt(JOptionPane.showInputDialog("Introduce las caloirias "));
+						ProductoSuplementos ps = new ProductoSuplementos(VentanaPrincipal.ObtenerSiguienteCodigodeProductoSuplemento(), precio, nombre, foto, prot, grasas, hidratos, calorias);
+						alp.add(ps);
+						ActualizarFicheroProductos(alp);
+						vaciarTabla();
+						agregarProductosAtabla(alp);
+				    }
+			}
+		});
+		
+		btnBorrarProducto = new JButton("Borrar Producto");
+		btnBorrarProducto.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int pos = tablaInformacion.getSelectedRow();
+				Producto P = alp.remove(pos);
 				ActualizarFicheroProductos(alp);
-				*/
+				vaciarTabla();
+				agregarProductosAtabla(alp);
+				JOptionPane.showMessageDialog(null, "Producto eliminado correctamente: \n"+P, "Producto eliminado", JOptionPane.INFORMATION_MESSAGE);
+				
+				
+				
 			}
 		});
 		btnSalir = new JButton("Salir de la página");
@@ -273,6 +306,7 @@ public class VentanaProducto extends JFrame {
 				
 			}
 		});
+		
 		btnAdd = new JButton("Añadir a carrito");
 		btnAdd.addActionListener(new ActionListener() {
 			
@@ -341,6 +375,7 @@ public class VentanaProducto extends JFrame {
 				modeloListaProductosPedidos.clear();
 				listaProductosPedido.clear();
 				lblSumaDinero.setText("TOTAL: " + 0+ "€");
+				lblInfo.setText("Productos en carrito: "+0);
 				
 			}
 		});
@@ -385,6 +420,8 @@ public class VentanaProducto extends JFrame {
 		panelSur.add(btnCrearDescuento);
 		panelSur.add(btnAddProductoNuevo);
 		panelSur.add(btnInicioSesion);
+		panelSur.add(btnBorrarProducto);
+		btnBorrarProducto.setVisible(false);
 		btnInicioSesion.setVisible(false);
 		btnCrearDescuento.setVisible(false);
 		btnAddProductoNuevo.setVisible(false);
@@ -673,6 +710,7 @@ public class VentanaProducto extends JFrame {
 		btnAdd.setVisible(false);
 		btnCrearDescuento.setVisible(true);
 		btnAddProductoNuevo.setVisible(true);
+		btnBorrarProducto.setVisible(true);
 		
 	}
 	/**

@@ -22,7 +22,7 @@ public class ProductoSuplementos extends Producto {
 	
 	@Override
 	public String toString() {
-		return  getNombre()+" Precio: "+getPrecio()+"€	Proteinas: "+proteinas+" Grasas: "+grasas+" Hidratos: "+hidratos+" Calorias: "+calorias;
+		return  getNombre()+" Precio: "+getPrecio()+"€	Proteinas: "+proteinas+"\n Grasas: "+grasas+" Hidratos: "+hidratos+" Calorias: "+calorias;
 	}
 	
 	public int getProteinas() {

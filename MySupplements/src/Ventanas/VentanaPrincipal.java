@@ -47,7 +47,6 @@ public class VentanaPrincipal {
 	private JPanel panel_mid;
 	private JButton btnAdministrador;
 	private JButton btnComprar;
-	private JButton btnMisPedidos;
 	private  JButton btnMiperfil;//Cambiar a Pagina de cliente
 	private ArrayList<Administrador> listaAdmins;//lista con los administradores para comprobar al entrar al btnAdmins
 	static int NumVentana;//Si el int es 0 se abre la ventanaProducto y si el int es 1 se abre la ventanaPerfil
@@ -124,6 +123,7 @@ public class VentanaPrincipal {
 				}else {
 					JOptionPane.showMessageDialog(null, "Lo sentimos, se ha introducido un administrador erróneo");
 				}*/
+				
 				new VentanaProducto();
 				VentanaProducto.ModificarVentanaProductoAdministrador();
 			}
@@ -165,15 +165,6 @@ public class VentanaPrincipal {
 			
 			}});
 		
-		btnMisPedidos = new JButton();
-		btnMisPedidos.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO 
-				
-			}
-		});
 		GroupLayout gl_panel_mid = new GroupLayout(panel_mid);
 		gl_panel_mid.setHorizontalGroup(
 			gl_panel_mid.createParallelGroup(Alignment.LEADING)
@@ -212,28 +203,33 @@ public class VentanaPrincipal {
 	/**
 	 * Método que obtiene el siguiente código de suplemento de fichero
 	 */
-	public void ObtenerSiguienteCodigodeProductoSuplemento() {
-		//TODO
+	public static int ObtenerSiguienteCodigodeProductoSuplemento() {
+		int cod= 0;
+		ArrayList<Producto>lp = new ArrayList<>();
+		VentanaProducto.cargarProductosdeFichero(lp);
+		if(lp.get(lp.size()-1).getCod() % 2 ==0) {
+			cod=lp.get(lp.size()-1).getCod()+1;
+		}else {
+			cod = lp.get(lp.size()-1).getCod()+2;
+		}	
+		return cod;
 	}
 	
 	/**
 	 * Método que obtiene el siguiente código de merchandise de fichero
 	 */
-	public void ObtenerSiguienteCodigodeProductoMerchandise() {
-		//TODO
+	public static int ObtenerSiguienteCodigodeProductoMerchandise() {
+		int cod= 0;
+		ArrayList<Producto>lp = new ArrayList<>();
+		VentanaProducto.cargarProductosdeFichero(lp);
+		if(lp.get(lp.size()-1).getCod() % 2 ==0) {
+			cod=lp.get(lp.size()-1).getCod()+2;
+		}else {
+			cod = lp.get(lp.size()-1).getCod()+1;
+		}	
+		return cod;
+		
 	}
 
-	/**
-	 * Método que guarda el siguiente código de merchandise en fichero
-	 */
-	public void GuardarSiguienteCodigoSuplemento() {
-		//TODO
-	}
-	/**
-	 * Método que guarda el siguiente código de merchandise en fichero
-	 */
-	public void GuardarSiguienteCodigoMerchandise() {
-		//TODO
-	}
 
 }

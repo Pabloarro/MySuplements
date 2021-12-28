@@ -123,6 +123,9 @@ public class VentanaPerfil extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			new VentanaProducto();
 			VentanaProducto.ModificarVentanaProductoConPedidos();
+			int codSuplementoSig = 0;
+			int codMerchandiseSig = 0;
+			//TODO
 			
 		}
 	});
