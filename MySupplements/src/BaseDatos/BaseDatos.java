@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeMap;
@@ -325,7 +326,10 @@ public class BaseDatos {
 	 */
 	public static void modificarClientePuntos(Cliente c) throws SQLException {
 		Statement st = con.createStatement();
-		String sent= "update Cliente set puntos="+c.getPuntos()+" where dni="+c.getDni();
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+		float puntos = Float.parseFloat(df.format(c.getPuntos()));
+		String sent= "update Cliente set puntos="+puntos+" where dni="+c.getDni();
 		st.executeUpdate(sent);
 				
 	}

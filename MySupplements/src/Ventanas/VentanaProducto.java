@@ -43,6 +43,8 @@ import javax.swing.border.EmptyBorder;
 
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.DocumentException;
+
 import BaseDatos.BaseDatos;
 import Clases.Administrador;
 import Clases.Cliente;
@@ -50,6 +52,7 @@ import Clases.Pedido;
 import Clases.Producto;
 import Clases.ProductoMerchandise;
 import Clases.ProductoSuplementos;
+import Clases.Recibo;
 
 public class VentanaProducto extends JFrame {
 
@@ -82,7 +85,7 @@ public class VentanaProducto extends JFrame {
 	private ArrayList<Producto>listaProductosPedido,alp;//lista de productos en el carrito,lista de productos,lista de pedidos de clientesesión.
 	
 	private int cant;
-	private static float puntosAnteriores;
+	public static float puntosAnteriores,puntosGastados;
 	
 	private JList<Producto> listaProductosPedidos;
 	private DefaultListModel<Producto> modeloListaProductosPedidos;
@@ -177,6 +180,7 @@ public class VentanaProducto extends JFrame {
 		
 		
 		puntosAnteriores =0;
+		puntosGastados = 0;
 		
 		lblFiltro = new JLabel();
 		lblFiltro.setText("Filtrar Productos por:");
@@ -419,7 +423,14 @@ public class VentanaProducto extends JFrame {
 				lblSumaDinero.setText("TOTAL: " + 0+ "€");
 				lblInfo.setText("Productos en carrito: "+0);
 				btnAddDescuento.setEnabled(true);
-				
+				int resp = JOptionPane.showConfirmDialog(null,"¿Quieres descargar un recibo?","Pregunta",JOptionPane.YES_NO_OPTION);
+				if(resp==JOptionPane.YES_OPTION) {
+					try {
+						Recibo.generarpdf(VentanaPrincipal.clientesesion, p);
+					} catch (DocumentException | SQLException | IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
 		btnAddDescuento = new JButton("Añadir Promoción");
@@ -431,17 +442,17 @@ public class VentanaProducto extends JFrame {
 				 int resp = JOptionPane.showOptionDialog(null, "Selecciona la promoción a aplicar", "Añadir promoción", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
 				 if(resp==0) {
 					 puntosAnteriores = VentanaPrincipal.clientesesion.getPuntos();
-					float puntos= VentanaPrincipal.clientesesion.getPuntos();
-					Float puntosgastados= Float.parseFloat(JOptionPane.showInputDialog("Cuantos puntos quieres gastar de: "+puntos));
-					if (puntosgastados<=puntos) {
+					float puntos= VentanaPrincipal.clientesesion.getPuntos();//TODO
+					 puntosGastados= Float.parseFloat(JOptionPane.showInputDialog("Cuantos puntos quieres gastar de: "+puntos));
+					if (puntosGastados<=puntos) {
 						float tot =0;
 						for(Producto p : listaProductosPedido) {
 							tot += p.getPrecio();
 						}
 						DecimalFormat df = new DecimalFormat();
 						df.setMaximumFractionDigits(2);
-						tot=tot-(puntosgastados/5);
-						puntos-=puntosgastados;
+						tot=tot-(puntosGastados/5);
+						puntos-=puntosGastados;
 						VentanaPrincipal.clientesesion.setPuntos(puntos);
 						BaseDatos.initBD("Basedatos.db");
 						try {
@@ -450,7 +461,7 @@ public class VentanaProducto extends JFrame {
 							e1.printStackTrace();
 						}
 						BaseDatos.closeBD();
-						
+						//TODO AÑADIR JOPT PARA PREGUNTAR SI QUIERE PDF
 						lblSumaDinero.setText("TOTAL: " + df.format(tot)+ "€");
 						btnAddDescuento.setEnabled(false);
 					}else {
