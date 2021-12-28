@@ -1,6 +1,7 @@
 package Clases;
 
 import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,7 +19,6 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import BaseDatos.BaseDatos;
 import Ventanas.VentanaProducto;
 
 public class Recibo {
@@ -50,11 +50,11 @@ public class Recibo {
 		com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
 		PdfWriter.getInstance(doc, archivo);
 		
-		//Image logo = Image.getInstance("/LOGO/logo_large.png");
+		
 		
 		doc.open();
 		
-		//doc.add(logo);
+		
 		
 		Paragraph parrafo = new Paragraph("Pedido realizado el: "+ sdf.format(d) +"\t Por: "+c.getNom());
 		parrafo.setAlignment(1);

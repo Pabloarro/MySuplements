@@ -398,6 +398,7 @@ public class VentanaProducto extends JFrame {
 				panelCentroDerechaAbajo.add(btnBorrarPedido);
 				panelCentroDerechaAbajo.add(btnAddDescuento);
 				panelCentroDerecha.add(panelCentroDerechaAbajo);
+				comboFiltro.setEnabled(false);
 				
 			}
 		});
@@ -446,7 +447,7 @@ public class VentanaProducto extends JFrame {
 				 int resp = JOptionPane.showOptionDialog(null, "Selecciona la promoción a aplicar", "Añadir promoción", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
 				 if(resp==0) {
 					 puntosAnteriores = VentanaPrincipal.clientesesion.getPuntos();
-					float puntos= VentanaPrincipal.clientesesion.getPuntos();//TODO
+					float puntos= VentanaPrincipal.clientesesion.getPuntos();
 					 puntosGastados= Float.parseFloat(JOptionPane.showInputDialog("Cuantos puntos quieres gastar de: "+puntos));
 					if (puntosGastados<=puntos) {
 						float tot =0;
@@ -465,7 +466,6 @@ public class VentanaProducto extends JFrame {
 							e1.printStackTrace();
 						}
 						BaseDatos.closeBD();
-						//TODO AÑADIR JOPT PARA PREGUNTAR SI QUIERE PDF
 						lblSumaDinero.setText("TOTAL: " + df.format(tot)+ "€");
 						btnAddDescuento.setEnabled(false);
 					}else {
@@ -494,6 +494,7 @@ public class VentanaProducto extends JFrame {
 				lblInfo.setVisible(true);
 				panelCentroDerecha.remove(lblLogo);
 				btnAdd.setVisible(true);
+				comboFiltro.setEnabled(true);
 			}
 		});
 		btnVerPedido.setVisible(true);
@@ -506,6 +507,7 @@ public class VentanaProducto extends JFrame {
 		panelNorte.add(lblInfo);
 		panelNorte.add(lblFiltro);
 		panelNorte.add(comboFiltro);
+		comboFiltro.setEnabled(true);
 		
 		panelSur = new JPanel();
 
