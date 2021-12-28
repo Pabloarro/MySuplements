@@ -44,6 +44,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import BaseDatos.BaseDatos;
+import Clases.Administrador;
 import Clases.Cliente;
 import Clases.Pedido;
 import Clases.Producto;
@@ -58,7 +59,8 @@ public class VentanaProducto extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane,panelNorte,panelSur,panelCentroDerecha,panelCentroDerechaAbajo,panelCentroDerechaAbajo1;
 	private static JPanel panelCentro;
-	private JLabel lblInfo,lblFiltro,lblLogo,lblSumaDinero;
+	private JLabel lblFiltro,lblLogo,lblSumaDinero;
+	private static JLabel lblInfo;
 	private static JComboBox<String> comboFiltro;
 	private JButton btnAtras;
 	private static JButton btnVerPedido;
@@ -68,7 +70,7 @@ public class VentanaProducto extends JFrame {
 	private JButton btnBorrarPedido;
 	private JButton btnAddDescuento;
 	private static JButton btnCrearDescuento;
-	private static JButton btnAddProductoNuevo,btnBorrarProducto;
+	private static JButton btnAddProductoNuevo,btnBorrarProducto,btnAniadirAdmin;
 	private static JButton btnInicioSesion;
 
 	
@@ -295,6 +297,20 @@ public class VentanaProducto extends JFrame {
 				
 			}
 		});
+		
+		btnAniadirAdmin = new JButton("Añadir Admin");
+		btnAniadirAdmin.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String dni = JOptionPane.showInputDialog("Introduce el dni de manera correcta "); //TODO comprobar que el dni está correctamente escrito
+				String nom =JOptionPane.showInputDialog("Introduce la contraseña:");//TODO comprobar que tenga un formato concreto POSIBLE HILO
+				Administrador a = new Administrador(dni, nom);
+				VentanaPrincipal.listaAdmins.add(a);
+				VentanaPrincipal.VolcarListaAdmins(VentanaPrincipal.listaAdmins);
+				
+			}
+		});
 		btnSalir = new JButton("Salir de la página");
 		btnSalir.addActionListener(new ActionListener() {
 			
@@ -404,6 +420,8 @@ public class VentanaProducto extends JFrame {
 		btnCrearDescuento.setVisible(false);
 		
 		panelNorte.setLayout(new GridLayout(1,3));
+		panelNorte.add(btnAniadirAdmin);
+		btnAniadirAdmin.setVisible(false);
 		panelNorte.add(lblInfo);
 		panelNorte.add(lblFiltro);
 		panelNorte.add(comboFiltro);
@@ -711,6 +729,8 @@ public class VentanaProducto extends JFrame {
 		btnCrearDescuento.setVisible(true);
 		btnAddProductoNuevo.setVisible(true);
 		btnBorrarProducto.setVisible(true);
+		lblInfo.setVisible(false);
+		btnAniadirAdmin.setVisible(true);
 		
 	}
 	/**

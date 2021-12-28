@@ -48,7 +48,7 @@ public class VentanaPrincipal {
 	private JButton btnAdministrador;
 	private JButton btnComprar;
 	private  JButton btnMiperfil;//Cambiar a Pagina de cliente
-	private ArrayList<Administrador> listaAdmins;//lista con los administradores para comprobar al entrar al btnAdmins
+	public static ArrayList<Administrador> listaAdmins;//lista con los administradores para comprobar al entrar al btnAdmins
 	static int NumVentana;//Si el int es 0 se abre la ventanaProducto y si el int es 1 se abre la ventanaPerfil
 	
 	
@@ -102,9 +102,8 @@ public class VentanaPrincipal {
 		panel_mid = new JPanel();
 		frame.getContentPane().add(panel_mid, BorderLayout.CENTER);
 		
-		Administrador a1 = new Administrador("12345678A", "password");
 		listaAdmins = new ArrayList<>();
-		listaAdmins.add(a1);
+		CargarListaAdmins(listaAdmins);
 		
 		btnAdministrador = new JButton("Administrador");
 		btnAdministrador.addActionListener(new ActionListener() {
@@ -230,6 +229,59 @@ public class VentanaPrincipal {
 		return cod;
 		
 	}
-
+	
+	/**
+	 * Método que carga la lista de administradores desde un fichero
+	 * @param a lista de administradores a la que se van a cargar del fichero
+	 */
+	public void CargarListaAdmins(ArrayList<Administrador> a) {
+	BufferedReader br =null;
+	try {
+		br= new BufferedReader(new FileReader("Administradores.txt"));
+		String linea = br.readLine();
+		while(linea!=null) {
+			String [] datos= linea.split("\t");
+			String dni = datos[0];
+			String con = datos[1];
+			Administrador ad = new Administrador(dni, con);
+			a.add(ad);
+			linea = br.readLine();
+		}
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}finally {
+		if(br!=null) {
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	}
+	
+	/**
+	 * Metodo que vuelca a fichero una lista de administradores
+	 * @param a lista de administradores a volcar
+	 */
+	public static void VolcarListaAdmins(ArrayList<Administrador>a) {
+		PrintWriter pw = null;
+		try {
+			pw= new PrintWriter("Administradores.txt");
+			for(Administrador ad : a) {
+				pw.println(ad.getDni()+"\t"+ad.getContrasenya());
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}finally {
+			if(pw!=null) {
+				pw.flush();
+				pw.close();
+			}
+		}
+		
+	}
 
 }

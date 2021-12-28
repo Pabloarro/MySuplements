@@ -17,7 +17,7 @@ public class Cliente {
 		this.nom = nom;
 		this.dni = dni;
 		this.fechanac = fechanac;
-		this.puntos = 0;//TODO CARGAR LOS PUNTOS DE LA BD
+		this.puntos = 0;
 	}	
 	public Cliente(String nom,String con, String dni, long fechanac,float p) {
 		super();
@@ -25,7 +25,7 @@ public class Cliente {
 		this.nom = nom;
 		this.dni = dni;
 		this.fechanac = fechanac;
-		this.puntos = p;//TODO CARGAR LOS PUNTOS DE LA BD
+		this.puntos = p;
 	}
 	
 	public String getCon() {
