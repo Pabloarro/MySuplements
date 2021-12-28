@@ -123,9 +123,7 @@ public class VentanaPerfil extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			new VentanaProducto();
 			VentanaProducto.ModificarVentanaProductoConPedidos();
-			int codSuplementoSig = 0;
-			int codMerchandiseSig = 0;
-			//TODO
+				//TODO
 			
 		}
 	});
@@ -156,11 +154,16 @@ public class VentanaPerfil extends JFrame{
 			VentanaPrincipal.clientesesion.setNom(nombre);
 			VentanaPrincipal.clientesesion.setCon(con);;
 			VentanaPrincipal.clientesesion.setFechanac(fechanac);
+			BaseDatos.initBD("Basedatos.db");
 			try {
-				BaseDatos.modificarCliente(VentanaPrincipal.clientesesion);
+				BaseDatos.ObtenerPuntosCliente(VentanaPrincipal.clientesesion);
+				BaseDatos.eliminarCliente(VentanaPrincipal.clientesesion.getDni());
+				BaseDatos.insertarCliente(nombre, con, VentanaPrincipal.clientesesion.getDni(), fechanac);
+				BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+			BaseDatos.closeBD();
 		}
 	});
 	

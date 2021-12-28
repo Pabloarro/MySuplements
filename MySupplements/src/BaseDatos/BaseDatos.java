@@ -76,56 +76,7 @@ public class BaseDatos {
 			}
 		}
 	}
-	/**
-	 * Metodo que elimina un producto de un Pedido de la tabla Pedidos de la base de datos
-	 * @param pr Producto que se desea eliminar
-	 */
-	public static void eliminarProductodePedido(Producto pr) {
-		String sent = "DELETE FROM Pedidos WHERE cprod ='"+pr.getCod()+"'";
-		Statement st = null;
-		try {
-			st=con.createStatement();
-			st.executeUpdate(sent);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				st.close();
-				logger.log(Level.INFO,"Producto"+pr.getNombre()+"con un precio de "+pr.getPrecio()+"€ elimidao correctamente de su pedido");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 
-	
-	
-	/**
-	 * Metodo que elimina el pedido de la tabla Pedidos de la  base de datos
-	 * @param P Pedido que se desea eliminar
-	 */
-	public static void eliminarPedido(Pedido P) {
-		String sent = "DELETE * FROM Pedidos WHERE cped='"+P.getCod()+"'";
-		Statement st = null;
-		try {
-			st=con.createStatement();
-			st.executeUpdate(sent);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				st.close();
-				logger.log(Level.INFO,"Pedido eliminado correctamente de la base de datos");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		}
-	
-	
-	
-	
 	
 	/**
 	 * Metodo que obtiene una lista de los pedidos 
@@ -176,8 +127,8 @@ public class BaseDatos {
 				}
 			}				//TODO
 		}
-		System.out.println("Obtenerproducto");
-		System.out.println(p);
+		//System.out.println("Obtenerproducto");
+		//System.out.println(p);
 		return p;
 	}
 	
@@ -198,17 +149,15 @@ public class BaseDatos {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(sent);
 			if(rs.next()) {
-				int cod = rs.getInt("cprod");		//TODO
-				System.out.println("obtenerProductosdepedido");
-				System.out.println(ObtenerProducto(cod));
-				lp.add(ObtenerProducto(cod));
-			}
+				int cod = rs.getInt("cprod"); //TODO
+				lp.add(ObtenerProducto(cod));	
+				}
+			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return lp;
-		
+		return lp;	
 	}
 	
 	
@@ -365,20 +314,38 @@ public class BaseDatos {
 	 */
 	public static void eliminarCliente(String dni) throws SQLException {
 		Statement stmnt = con.createStatement();
-		String s = "DELETE FROM CLIENTE WHERE ID = " + dni;
+		String s = "DELETE FROM CLIENTE WHERE dni = " + dni;
 		stmnt.executeUpdate(s);
 		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
 	}
 	
 	/**
-	 * Método que modifica un cliente en la bd
+	 * Método que modifica  los puntos de un cliente en la bd
 	 * @param c Cliente que se quiere modificar
 	 */
-	public static void modificarCliente(Cliente c) throws SQLException {
+	public static void modificarClientePuntos(Cliente c) throws SQLException {
 		Statement st = con.createStatement();
-		String sent= "update Cliente set nom="+c.getNom()+",con="+c.getCon()+",fnac="+c.getFechanac()+" where dni="+c.getDni();
+		String sent= "update Cliente set puntos="+c.getPuntos()+" where dni="+c.getDni();
 		st.executeUpdate(sent);
 				
+	}
+	
+	/**
+	 * Método que obtiene los puntos del cliente
+	 * @param c cliente del que se quieren obtener los puntos
+	 */
+	public static void ObtenerPuntosCliente(Cliente c) throws SQLException {
+		Statement st = con.createStatement();
+		String sent = "Select * from cliente where dni="+c.getDni();
+		ResultSet rs = st.executeQuery(sent);
+		if(rs.next()) {
+			float puntos = rs.getFloat("puntos");
+			c.setPuntos(puntos);
+			
+			
+		}
+		
+		
 	}
 	
 }

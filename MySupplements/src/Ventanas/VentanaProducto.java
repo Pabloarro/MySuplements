@@ -82,6 +82,7 @@ public class VentanaProducto extends JFrame {
 	private ArrayList<Producto>listaProductosPedido,alp;//lista de productos en el carrito,lista de productos,lista de pedidos de clientesesión.
 	
 	private int cant;
+	private static float puntosAnteriores;
 	
 	private JList<Producto> listaProductosPedidos;
 	private DefaultListModel<Producto> modeloListaProductosPedidos;
@@ -174,6 +175,9 @@ public class VentanaProducto extends JFrame {
 		 cant = 0;
 		lblInfo.setText("Productos en carrito: "+cant);
 		
+		
+		puntosAnteriores =0;
+		
 		lblFiltro = new JLabel();
 		lblFiltro.setText("Filtrar Productos por:");
 		
@@ -192,9 +196,23 @@ public class VentanaProducto extends JFrame {
 				listaProductosPedido.remove(pos);
 				cant--;
 				lblInfo.setText("Productos en carrito: "+cant);
-
-				
-				
+				if(!btnAddDescuento.isEnabled()) {
+					VentanaPrincipal.clientesesion.setPuntos(puntosAnteriores);
+					BaseDatos.initBD("Basedatos.db");
+					try {
+						BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					BaseDatos.closeBD();
+				}
+				if(listaProductosPedido != null) {
+					DecimalFormat df = new DecimalFormat();
+					df.setMaximumFractionDigits(2);
+					lblSumaDinero.setText("TOTAL: "+df.format(obtenerDineroTotal(listaProductosPedido))+" €");
+					btnAddDescuento.setEnabled(true);
+				}
+	
 			}
 		});
 		
@@ -213,15 +231,7 @@ public class VentanaProducto extends JFrame {
 				
 			}
 		});
-		btnAddDescuento = new JButton("Añadir descuento");
-		btnAddDescuento.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//TODO
-				
-			}
-		});
+
 		btnBorrarPedido = new JButton("Borrar Pedido");
 		btnBorrarPedido.addActionListener(new ActionListener() {
 			
@@ -232,6 +242,18 @@ public class VentanaProducto extends JFrame {
 				JOptionPane.showMessageDialog(null, "Pedido eliminado correctamente", "Eliminar Pedido", JOptionPane.INFORMATION_MESSAGE);
 				cant = 0;
 				lblInfo.setText("Productos en carrito: "+cant);
+				if(!btnAddDescuento.isEnabled()) {
+					VentanaPrincipal.clientesesion.setPuntos(puntosAnteriores);
+					BaseDatos.initBD("Basedatos.db");
+					try {
+						BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					BaseDatos.closeBD();
+					btnAddDescuento.setEnabled(true);
+				}
+				
 			}
 		});
 		
@@ -241,8 +263,9 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//TODO
-				
+			
 			}
+			
 		});
 		
 		
@@ -292,7 +315,7 @@ public class VentanaProducto extends JFrame {
 				vaciarTabla();
 				agregarProductosAtabla(alp);
 				JOptionPane.showMessageDialog(null, "Producto eliminado correctamente: \n"+P, "Producto eliminado", JOptionPane.INFORMATION_MESSAGE);
-				
+			
 				
 				
 			}
@@ -381,9 +404,12 @@ public class VentanaProducto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			
 				Pedido p = new Pedido(System.currentTimeMillis(), VentanaPrincipal.clientesesion, listaProductosPedido);
+				VentanaPrincipal.clientesesion.setPuntos(calcularPuntosPedido(p));
+				
 				BaseDatos.initBD("Basedatos.db");
 				try {
 					BaseDatos.insertarPedido(p);
+					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -392,9 +418,49 @@ public class VentanaProducto extends JFrame {
 				listaProductosPedido.clear();
 				lblSumaDinero.setText("TOTAL: " + 0+ "€");
 				lblInfo.setText("Productos en carrito: "+0);
+				btnAddDescuento.setEnabled(true);
 				
 			}
 		});
+		btnAddDescuento = new JButton("Añadir Promoción");
+		btnAddDescuento.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 String[] opciones = new String[] {"Puntos", "Descuento"};
+				 int resp = JOptionPane.showOptionDialog(null, "Selecciona la promoción a aplicar", "Añadir promoción", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
+				 if(resp==0) {
+					 puntosAnteriores = VentanaPrincipal.clientesesion.getPuntos();
+					float puntos= VentanaPrincipal.clientesesion.getPuntos();
+					Float puntosgastados= Float.parseFloat(JOptionPane.showInputDialog("Cuantos puntos quieres gastar de: "+puntos));
+					if (puntosgastados<=puntos) {
+						float tot =0;
+						for(Producto p : listaProductosPedido) {
+							tot += p.getPrecio();
+						}
+						DecimalFormat df = new DecimalFormat();
+						df.setMaximumFractionDigits(2);
+						tot=tot-(puntosgastados/5);
+						puntos-=puntosgastados;
+						VentanaPrincipal.clientesesion.setPuntos(puntos);
+						BaseDatos.initBD("Basedatos.db");
+						try {
+							BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+						BaseDatos.closeBD();
+						
+						lblSumaDinero.setText("TOTAL: " + df.format(tot)+ "€");
+						btnAddDescuento.setEnabled(false);
+					}else {
+						JOptionPane.showMessageDialog(null, "No tienes esos puntos","Puntos incorrectos",JOptionPane.ERROR_MESSAGE);
+					}
+			}else {
+				//TODO
+				//DESCUENTOS
+			}
+			}});
 		
 		btnAtras = new JButton("Salir del Carrito");
 		btnAtras.setVisible(false);
@@ -779,12 +845,8 @@ public class VentanaProducto extends JFrame {
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 			Date d = new Date(p.getFec());
-			Object dataRow[] = {""+String.valueOf(p.getCod()),""+sdf.format(d),""+String.valueOf(tot),};
+			Object dataRow[] = {""+String.valueOf(p.getCod()),""+sdf.format(d),""+String.valueOf(tot)};
 			modeloTablaInformacion.addRow(dataRow);
-			
-			
-			System.out.println("pedido de pcliente");
-			System.out.println(p);
 		}
 		//TODO
 	}
@@ -863,6 +925,19 @@ public class VentanaProducto extends JFrame {
 			}
 		}
 		
+	}
+	
+	/**
+	 * Método que calcula los puntos del pedido realizado,por cada euro obtienen 1 punto 
+	 * @param p Pedido realizado
+	 * @return Puntos obtenidos por el pedido realizado
+	 */
+	public float calcularPuntosPedido(Pedido p) {
+		float punt=0;
+		for(Producto producto : p.getListaproductos()) {
+			punt +=producto.getPrecio();
+		}
+		return punt;
 	}
 }
 	

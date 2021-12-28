@@ -8,7 +8,7 @@ public class Cliente {
 	private String dni;
 	private String con;
 	private long fechanac;
-	private float puntos;
+	private float puntos;	//por cada euro  obtienen un punto que equivale a 0,2€
 	
 
 	public Cliente(String nom,String con, String dni, long fechanac) {
