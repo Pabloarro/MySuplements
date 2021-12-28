@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -427,6 +429,8 @@ public class VentanaProducto extends JFrame {
 				if(resp==JOptionPane.YES_OPTION) {
 					try {
 						Recibo.generarpdf(VentanaPrincipal.clientesesion, p);
+						Logger log= Logger.getLogger("");
+						log.log(Level.INFO,"Pdf generado correctamente");
 					} catch (DocumentException | SQLException | IOException e1) {
 						e1.printStackTrace();
 					}
