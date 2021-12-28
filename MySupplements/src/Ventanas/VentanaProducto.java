@@ -724,6 +724,9 @@ public class VentanaProducto extends JFrame {
 			Object dataRow[] = {""+String.valueOf(p.getCod()),""+sdf.format(d),""+String.valueOf(tot),};
 			modeloTablaInformacion.addRow(dataRow);
 			
+			
+			System.out.println("pedido de pcliente");
+			System.out.println(p);
 		}
 		//TODO
 	}

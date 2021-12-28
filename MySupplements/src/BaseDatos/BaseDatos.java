@@ -174,8 +174,10 @@ public class BaseDatos {
 				}else {
 					p = (ProductoMerchandise)pr; 
 				}
-			}
+			}				//TODO
 		}
+		System.out.println("Obtenerproducto");
+		System.out.println(p);
 		return p;
 	}
 	
@@ -196,13 +198,17 @@ public class BaseDatos {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(sent);
 			if(rs.next()) {
-				int cod = rs.getInt("cprod");
+				int cod = rs.getInt("cprod");		//TODO
+				System.out.println("obtenerProductosdepedido");
+				System.out.println(ObtenerProducto(cod));
 				lp.add(ObtenerProducto(cod));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return lp;
+		
 	}
 	
 	

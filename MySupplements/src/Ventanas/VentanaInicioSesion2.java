@@ -112,6 +112,8 @@ public class VentanaInicioSesion2 extends JFrame {
 						try {
 							Cliente c = BaseDatos.ObtenerCliente(nom,con);
 							VentanaPrincipal.clientesesion=c;
+							System.out.println("clientesesion");
+							System.out.println(VentanaPrincipal.clientesesion);
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
