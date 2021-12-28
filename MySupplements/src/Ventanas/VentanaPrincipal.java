@@ -3,11 +3,13 @@ package Ventanas;
 import java.awt.EventQueue;
 
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Clases.Administrador;
 import Clases.Cliente;
+import Clases.Pedido;
 import Clases.Producto;
 import Clases.ProductoMerchandise;
 
@@ -18,10 +20,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowAdapter;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.GroupLayout;
@@ -55,6 +62,7 @@ public class VentanaPrincipal {
 			public void run() {
 				try {
 					VentanaPrincipal window = new VentanaPrincipal();
+					Pedido.ObtenerSiguienteCodigodePedido();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -66,6 +74,7 @@ public class VentanaPrincipal {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
+		
 		frame = new JFrame();
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		frame.setBounds(100, 100, 558, 380);
@@ -73,6 +82,8 @@ public class VentanaPrincipal {
 		
 		panelLogo = new JPanel();
 		frame.getContentPane().add(panelLogo, BorderLayout.NORTH);
+		
+				
 		
 		lblLOGO = new JLabel("");
 		lblLOGO.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/LOGO/logo_small.png")));
@@ -131,7 +142,7 @@ public class VentanaPrincipal {
 				}else {
 					new VentanaProducto();
 				}
-				
+				Pedido.ObtenerSiguienteCodigodePedido();
 				frame.setVisible(false);
 			}
 		});
@@ -211,12 +222,7 @@ public class VentanaPrincipal {
 	public void ObtenerSiguienteCodigodeProductoMerchandise() {
 		//TODO
 	}
-	/**
-	 * Método que obtiene el siguiente código del pedido de fichero
-	 */
-	public void ObtenerSiguienteCodigodePedido() {
-		//TODO
-	}
+
 	/**
 	 * Método que guarda el siguiente código de merchandise en fichero
 	 */
@@ -229,10 +235,5 @@ public class VentanaPrincipal {
 	public void GuardarSiguienteCodigoMerchandise() {
 		//TODO
 	}
-	/**
-	 * Método que guarda el siguiente código de pedido en un fichero
-	 */
-	public void GuardarSiguienteCodigodePedido() {
-		//TODO
-	}
+
 }

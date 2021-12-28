@@ -141,11 +141,12 @@ public class BaseDatos {
 	 * @return	Devuelve la lista de pedidos del cliente
 	 */
 	public static ArrayList<Pedido> obtenerPedidosdeCliente(Cliente c) {
-		String sent = "SELECT * FROM Pedido WHERE dnic='"+c.getDni()+"'";
+		String sent = "SELECT * FROM Pedidos WHERE dnic='"+c.getDni()+"'";
 		Statement st=null;
 		ArrayList<Pedido> lc=new ArrayList<>();//necesito obtener los datos del pedido y luego la lista de productos
 		Pedido p =null;
-		try {			//Pedidos(cped Integer, fpedido bigint , dnic String , cprod Integer)"
+		try {		
+			st= con.createStatement();//Pedidos(cped Integer, fpedido bigint , dnic String , cprod Integer)"
 			ResultSet rs = st.executeQuery(sent);
 			if(rs.next()) {
 				int codpedido = rs.getInt("cped");

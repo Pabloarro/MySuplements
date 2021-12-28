@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 
 
+
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -11,6 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -73,7 +77,7 @@ public class VentanaProducto extends JFrame {
 	//TODO
 	
 	
-	private ArrayList<Producto>listaProductosPedido,alp;//lista de productos en el carrito,lista de productos.
+	private ArrayList<Producto>listaProductosPedido,alp;//lista de productos en el carrito,lista de productos,lista de pedidos de clientesesión.
 	
 	private int cant;
 	
@@ -102,12 +106,14 @@ public class VentanaProducto extends JFrame {
 	public VentanaProducto() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		setTitle("PRODUCTOS");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 600, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
+		
 		
 		panelNorte = new JPanel();
 		contentPane.add(panelNorte, BorderLayout.NORTH);
@@ -262,6 +268,7 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
+				Pedido.GuardarSiguienteCodigodePedido();
 				new VentanaPrincipal();
 				
 			}
@@ -322,18 +329,18 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO		BASEDATOS.REALIZARPEDIDO(PEDIDO)
+			
 				Pedido p = new Pedido(System.currentTimeMillis(), VentanaPrincipal.clientesesion, listaProductosPedido);
 				BaseDatos.initBD("Basedatos.db");
 				try {
 					BaseDatos.insertarPedido(p);
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				BaseDatos.closeBD();
-				//Pedido p = new Pedido(1, System.currentTimeMillis(), º, listaProductosPedido)
-				//Pedido p = new Pedido(ICONIFIED, null, null, alp)
+				modeloListaProductosPedidos.clear();
+				listaProductosPedido.clear();
+				lblSumaDinero.setText("TOTAL: " + 0+ "€");
 				
 			}
 		});
@@ -395,8 +402,7 @@ public class VentanaProducto extends JFrame {
 		listaProductosPedido = new ArrayList<>();
 		
 		
-		
-		
+			
 		/*JTABLE*/
 		
 		modeloTablaInformacion = new DefaultTableModel() {
@@ -525,19 +531,12 @@ public class VentanaProducto extends JFrame {
 		
 	}
 	
-	/**
-	 * Método que modifica la tabla para insetar el historial de pedidos del cliente
-	 */
-	public void modificartablaPedidos() {
-		String [] columnas = {"CODIGO","FECHA","TOTAL"};
-		modeloTablaInformacion.setColumnIdentifiers(columnas);
-	}
-	
+
 	 
 	/*
 	 * Modifica las columnas ded la tabla
 	 */
-	public void modificarTablafiltro() {
+	public  void modificarTablafiltro() {
 		String [] columnas = {"NOMBRE","PRECIO"};
 		modeloTablaInformacion.setColumnIdentifiers(columnas);
 	}
@@ -553,7 +552,7 @@ public class VentanaProducto extends JFrame {
 	/**
 	 * Metodo que vacía la tabla
 	 */
-	public void vaciarTabla() {
+	public static void vaciarTabla() {
 		while(modeloTablaInformacion.getRowCount()>0) {
 			modeloTablaInformacion.removeRow(0);
 		}
@@ -691,12 +690,42 @@ public class VentanaProducto extends JFrame {
 	 * haya una tabla de Pedidos del cliente
 	 */
 	public static void ModificarVentanaProductoConPedidos() {	
+		vaciarTabla();
 		btnVerPedido.setVisible(false);
 		btnAdd.setVisible(false);
 		btnInicioSesion.setVisible(true);
-		comboFiltro.setVisible(false);//TODO
+		comboFiltro.setVisible(false);
+		AniadirPedidosClienteATabla();
+	
+	}
+	
+	/**
+	 * Método que modifica la tabla para insetar el historial de pedidos del cliente
+	 */
+	public static void modificartablaPedidos() {
+		String [] columnas = {"CODIGO","FECHA","TOTAL"};
+		modeloTablaInformacion.setColumnIdentifiers(columnas);
+	} 
+	
+	public static void AniadirPedidosClienteATabla() {
 		
-		
+		modificartablaPedidos();
+		ArrayList<Pedido> pcliente = new ArrayList<>();
+		BaseDatos.initBD("Basedatos.db");
+		pcliente = BaseDatos.obtenerPedidosdeCliente(VentanaPrincipal.clientesesion);
+		BaseDatos.closeBD();
+		for(Pedido p : pcliente) {
+			float tot = 0;
+			for(Producto pr : p.getListaproductos()) {
+				tot+=pr.getPrecio();
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+			Date d = new Date(p.getFec());
+			Object dataRow[] = {""+String.valueOf(p.getCod()),""+sdf.format(d),""+String.valueOf(tot),};
+			modeloTablaInformacion.addRow(dataRow);
+			
+		}
+		//TODO
 	}
 	
 	/**

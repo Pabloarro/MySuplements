@@ -121,7 +121,8 @@ public class VentanaPerfil extends JFrame{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO añadir una ventana con una JList con todos los pedidos y al seleccionar el pedido se desglose en un textfield
+			new VentanaProducto();
+			VentanaProducto.ModificarVentanaProductoConPedidos();
 			
 		}
 	});
