@@ -134,7 +134,8 @@ public class VentanaInicioDeSesion extends JFrame {
 					BaseDatos.crearTablas();
 						BaseDatos.insertarCliente(nom, con,dni,f);
 						try {
-							VentanaPrincipal.clientesesion = BaseDatos.ObtenerCliente(nom);
+							VentanaPrincipal.clientesesion = new Cliente(nom, con, dni, f);
+							BaseDatos.ObtenerPuntosCliente(VentanaPrincipal.clientesesion);
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}

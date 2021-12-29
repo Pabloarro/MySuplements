@@ -58,9 +58,9 @@ public class BaseDatos {
 	 * 
 	 */
 	public static void crearTablas() {
-		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom String, con String, dni String,fnac bigint,puntos String)";
+		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom varchar(50), con varchar(50), dni varchar(9),fnac bigint,puntos String)";
 		Statement st = null;
-		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido bigint , dnic String , cprod Integer)";
+		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido bigint , dnic varchar(9) , cprod Integer)";
 		try {
 			st = con.createStatement();
 			st.executeUpdate(sent1);
@@ -315,7 +315,7 @@ public class BaseDatos {
 	 */
 	public static void eliminarCliente(String dni) throws SQLException {
 		Statement stmnt = con.createStatement();
-		String s = "DELETE FROM CLIENTE WHERE dni = " + dni;
+		String s = "DELETE FROM CLIENTE WHERE dni = '"+dni+"'";
 		stmnt.executeUpdate(s);
 		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
 	}
@@ -329,7 +329,7 @@ public class BaseDatos {
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(2);
 		float puntos = Float.parseFloat(df.format(c.getPuntos()));
-		String sent= "update Cliente set puntos="+puntos+" where dni="+c.getDni();
+		String sent= "update Cliente set puntos="+puntos+" where dni='"+c.getDni()+"'";
 		st.executeUpdate(sent);
 				
 	}
@@ -340,7 +340,7 @@ public class BaseDatos {
 	 */
 	public static void ObtenerPuntosCliente(Cliente c) throws SQLException {
 		Statement st = con.createStatement();
-		String sent = "Select * from cliente where dni="+c.getDni();
+		String sent = "Select * from cliente where dni='"+c.getDni()+"'";
 		ResultSet rs = st.executeQuery(sent);
 		if(rs.next()) {
 			float puntos = rs.getFloat("puntos");

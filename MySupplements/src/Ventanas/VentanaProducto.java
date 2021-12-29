@@ -422,7 +422,6 @@ public class VentanaProducto extends JFrame {
 				}
 				BaseDatos.closeBD();
 				modeloListaProductosPedidos.clear();
-				listaProductosPedido.clear();
 				lblSumaDinero.setText("TOTAL: " + 0+ "€");
 				lblInfo.setText("Productos en carrito: "+0);
 				btnAddDescuento.setEnabled(true);
@@ -434,8 +433,9 @@ public class VentanaProducto extends JFrame {
 						log.log(Level.INFO,"Pdf generado correctamente");
 					} catch (DocumentException | SQLException | IOException e1) {
 						e1.printStackTrace();
-					}
-				}
+					}}
+				
+				listaProductosPedido.clear();
 			}
 		});
 		btnAddDescuento = new JButton("Añadir Promoción");
@@ -445,36 +445,40 @@ public class VentanaProducto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				 String[] opciones = new String[] {"Puntos", "Descuento"};
 				 int resp = JOptionPane.showOptionDialog(null, "Selecciona la promoción a aplicar", "Añadir promoción", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
-				 if(resp==0) {
-					 puntosAnteriores = VentanaPrincipal.clientesesion.getPuntos();
-					float puntos= VentanaPrincipal.clientesesion.getPuntos();
-					 puntosGastados= Float.parseFloat(JOptionPane.showInputDialog("Cuantos puntos quieres gastar de: "+puntos));
-					if (puntosGastados<=puntos) {
-						float tot =0;
-						for(Producto p : listaProductosPedido) {
-							tot += p.getPrecio();
+				 if(VentanaPrincipal.clientesesion.getPuntos()!=0) {
+					 if(resp==0) {
+						 puntosAnteriores = VentanaPrincipal.clientesesion.getPuntos();
+						float puntos= VentanaPrincipal.clientesesion.getPuntos();
+						 puntosGastados= Float.parseFloat(JOptionPane.showInputDialog("Cuantos puntos quieres gastar de: "+puntos));
+						if (puntosGastados<=puntos) {
+							float tot =0;
+							for(Producto p : listaProductosPedido) {
+								tot += p.getPrecio();
+							}
+							DecimalFormat df = new DecimalFormat();
+							df.setMaximumFractionDigits(2);
+							tot=tot-(puntosGastados/5);
+							puntos-=puntosGastados;
+							VentanaPrincipal.clientesesion.setPuntos(puntos);
+							BaseDatos.initBD("Basedatos.db");
+							try {
+								BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+							BaseDatos.closeBD();
+							lblSumaDinero.setText("TOTAL: " + df.format(tot)+ "€");
+							btnAddDescuento.setEnabled(false);
+						}else {
+							JOptionPane.showMessageDialog(null, "No tienes esos puntos","Puntos incorrectos",JOptionPane.ERROR_MESSAGE);
 						}
-						DecimalFormat df = new DecimalFormat();
-						df.setMaximumFractionDigits(2);
-						tot=tot-(puntosGastados/5);
-						puntos-=puntosGastados;
-						VentanaPrincipal.clientesesion.setPuntos(puntos);
-						BaseDatos.initBD("Basedatos.db");
-						try {
-							BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
-						} catch (SQLException e1) {
-							e1.printStackTrace();
-						}
-						BaseDatos.closeBD();
-						lblSumaDinero.setText("TOTAL: " + df.format(tot)+ "€");
-						btnAddDescuento.setEnabled(false);
 					}else {
-						JOptionPane.showMessageDialog(null, "No tienes esos puntos","Puntos incorrectos",JOptionPane.ERROR_MESSAGE);
+						//TODO
+						//DESCUENTOS
 					}
-			}else {
-				//TODO
-				//DESCUENTOS
-			}
+					}else {
+						JOptionPane.showMessageDialog(null, "Lo sentimos pero no dispone de puntos", "Sin puntos", JOptionPane.ERROR_MESSAGE);
+					}
 			}});
 		
 		btnAtras = new JButton("Salir del Carrito");

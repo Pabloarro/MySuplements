@@ -2,6 +2,7 @@ package Clases;
 
 import java.io.File;
 
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JFileChooser;
-import javax.swing.text.Document;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
@@ -49,10 +49,8 @@ public class Recibo {
 		
 		com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
 		PdfWriter.getInstance(doc, archivo);
-		
-		
-		
 		doc.open();
+		
 		
 		
 		
@@ -62,13 +60,18 @@ public class Recibo {
 		
 		doc.add(new Paragraph("Pedido con código : "+p.getCod()));
 		doc.add(new Paragraph("Con productos:"));
-		float tot = 0;
+		
+		float tot=0;
+		
+		//TODO añadir una tabla para mostrar los productos pedidos.
 		for(Producto pr : p.getListaproductos()) {
 			tot+=pr.getPrecio();
 			if(pr instanceof ProductoSuplementos) {
-				doc.add(new Paragraph(""+(ProductoSuplementos)pr));
+				ProductoSuplementos ps = (ProductoSuplementos)pr;
+				doc.add(new Paragraph(""+ps));
 			}else {
-				doc.add(new Paragraph(""+(ProductoMerchandise)pr));
+				ProductoMerchandise pm = (ProductoMerchandise)pr;
+				doc.add(new Paragraph(""+pm));
 			}
 		}
 		
@@ -76,12 +79,16 @@ public class Recibo {
 		doc.add(new Paragraph("Total sin descuentos : " +tot+"€"));
 		
 		doc.add(new Paragraph("Puntos utilizados : "+VentanaProducto.puntosGastados));
-		tot=tot-(VentanaProducto.puntosGastados/5);
-		doc.add(new Paragraph("Precio final : "+tot+"€"));
 		
-		float punt = tot/5;
-		doc.add(new Paragraph("Puntos acumulados para la siguiente compra : "+ punt));
-		doc.add(new Paragraph("Puntos Totales : "+c.getPuntos()));	
+		float totFinal=tot-(VentanaProducto.puntosGastados/5);
+		
+		doc.add(new Paragraph("Precio final : "+totFinal+"€"));
+		
+		doc.add(new Paragraph("Puntos acumulados para la siguiente compra : "+ tot));
+		
+		doc.add(new Paragraph("Puntos Totales Actuales : "+c.getPuntos()));	
+		
+		doc.close();
 }
 	
 }
