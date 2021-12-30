@@ -1,5 +1,6 @@
 package Clases;
 
+import java.awt.Toolkit;
 import java.io.File;
 
 
@@ -19,6 +20,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import Ventanas.VentanaPrincipal;
 import Ventanas.VentanaProducto;
 
 public class Recibo {
@@ -37,33 +39,37 @@ public class Recibo {
 	 * @param p Pedido realizado.
 	 */
 	public static void generarpdf(Cliente c,Pedido p) throws DocumentException, SQLException, MalformedURLException, IOException {
-		/*JFileChooser guardar = new JFileChooser();
-		guardar.showSaveDialog(null);
-		guardar.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
-		guardar.setDialogTitle("Recibo"+p.getCod()+".pdf");
-		*/
+
+		JFileChooser jfc = new JFileChooser();
+        int Resul = jfc.showSaveDialog(null);
+        if (Resul==JFileChooser.APPROVE_OPTION){
+            String direc = jfc.getSelectedFile().getPath();
+        
+        
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		Date d = new Date(p.getFec());
 		
-		FileOutputStream archivo = new FileOutputStream("Recibo"+p.getCod()+".pdf");
-		
+		//FileOutputStream archivo = new FileOutputStream("Recibo"+p.getCod()+".pdf");
+		FileOutputStream archivo = new FileOutputStream(direc+".pdf");
+
 		com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
 		PdfWriter.getInstance(doc, archivo);
 		doc.open();
 		
-		
-		
+		//TODO Tratar de añadir una imagen
 		
 		Paragraph parrafo = new Paragraph("Pedido realizado el: "+ sdf.format(d) +"\t Por: "+c.getNom());
 		parrafo.setAlignment(1);
 		doc.add(parrafo);
 		
+		doc.add(new Paragraph(""));
 		doc.add(new Paragraph("Pedido con código : "+p.getCod()));
 		doc.add(new Paragraph("Con productos:"));
 		
 		float tot=0;
 		
 		//TODO añadir una tabla para mostrar los productos pedidos.
+		
 		for(Producto pr : p.getListaproductos()) {
 			tot+=pr.getPrecio();
 			if(pr instanceof ProductoSuplementos) {
@@ -90,5 +96,5 @@ public class Recibo {
 		
 		doc.close();
 }
-	
+	}
 }

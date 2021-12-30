@@ -149,7 +149,7 @@ public class VentanaInicioDeSesion extends JFrame {
 			
 		});
 		
-		
+		//TODO Hilo que compruebe que la contraseña tiene un formato establecido y hasta que no lo tenga no desbloquee el boton de registrarse
 		setVisible(true);
 	}
 
