@@ -64,8 +64,8 @@ public class VentanaProducto extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane,panelNorte,panelSur,panelCentroDerecha,panelCentroDerechaAbajo,panelCentroDerechaAbajo1;
 	private static JPanel panelCentro;
-	private JLabel lblFiltro,lblLogo,lblSumaDinero;
-	private static JLabel lblInfo;
+	private JLabel lblLogo,lblSumaDinero;
+	private static JLabel lblInfo,lblFiltro;
 	private static JComboBox<String> comboFiltro;
 	private JButton btnAtras;
 	private static JButton btnVerPedido;
@@ -411,12 +411,12 @@ public class VentanaProducto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			
 				Pedido p = new Pedido(System.currentTimeMillis(), VentanaPrincipal.clientesesion, listaProductosPedido);
-				VentanaPrincipal.clientesesion.setPuntos(calcularPuntosPedido(p));
+				VentanaPrincipal.clientesesion.setPuntos(VentanaPrincipal.clientesesion.getPuntos()+ calcularPuntosPedido(p));//TODO
 				
 				BaseDatos.initBD("Basedatos.db");
 				try {
 					BaseDatos.insertarPedido(p);
-					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
+					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);//TODO
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -841,6 +841,8 @@ public class VentanaProducto extends JFrame {
 		btnInicioSesion.setVisible(true);
 		comboFiltro.setVisible(false);
 		AniadirPedidosClienteATabla();
+		lblInfo.setVisible(false);
+		lblFiltro.setVisible(false);
 	
 	}
 	

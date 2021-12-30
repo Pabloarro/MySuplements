@@ -113,7 +113,8 @@ public class VentanaPrincipal {
 		btnAdministrador = new JButton("Administrador");
 		btnAdministrador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new VentanaProducto();
+				VentanaProducto v =  new VentanaProducto();
+				v.setTitle("ADMINISTRADOR");
 				VentanaProducto.ModificarVentanaProductoAdministrador();
 				frame.setVisible(false);
 				

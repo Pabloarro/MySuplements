@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -18,6 +19,7 @@ import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
 import BaseDatos.BaseDatos;
+import Clases.Producto;
 
 public class VentanaPerfil extends JFrame{
 	private JPanel panelArriba, panelCentro,panelAbajo,panel1;
@@ -121,9 +123,18 @@ public class VentanaPerfil extends JFrame{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new VentanaProducto();
+			VentanaProducto v = new VentanaProducto();
+			v.setTitle("PEDIDOS");
+			ArrayList<Producto> p = new ArrayList<>();
+			BaseDatos.initBD("Basedatos.db");
+			p=BaseDatos.obtenerProductosdePedido(6);
+			BaseDatos.closeBD();
 			VentanaProducto.ModificarVentanaProductoConPedidos();
-				//TODO
+			setVisible(false);	
+			for(Producto pr:p) {
+				System.out.println(""+pr);
+			}
+			//TODO
 			
 		}
 	});

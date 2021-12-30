@@ -149,6 +149,7 @@ public class VentanaInicioDeSesion extends JFrame {
 			
 		});
 		
+		
 		setVisible(true);
 	}
 

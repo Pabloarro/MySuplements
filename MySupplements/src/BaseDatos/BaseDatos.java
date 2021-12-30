@@ -95,7 +95,7 @@ public class BaseDatos {
 	public static ArrayList<Pedido> obtenerPedidosdeCliente(Cliente c) {
 		String sent = "SELECT * FROM Pedidos WHERE dnic='"+c.getDni()+"'";
 		Statement st=null;
-		ArrayList<Pedido> lc=new ArrayList<>();//necesito obtener los datos del pedido y luego la lista de productos
+		ArrayList<Pedido> lp=new ArrayList<>();//necesito obtener los datos del pedido y luego la lista de productos
 		Pedido p =null;
 		try {		
 			st= con.createStatement();//Pedidos(cped Integer, fpedido bigint , dnic String , cprod Integer)"
@@ -103,11 +103,21 @@ public class BaseDatos {
 			if(rs.next()) {
 				int codpedido = rs.getInt("cped");
 				long fpedido = rs.getLong("fpedido");
-				p = new Pedido(fpedido, c, obtenerProductosdePedido(codpedido));			}
+				p = new Pedido(fpedido, c, obtenerProductosdePedido(codpedido));			
+				lp.add(p);
+			}
+			rs.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return lc;
+			e.printStackTrace();//TODO
+		}finally {
+			try {
+				st.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}			
+		
+		return lp;
 	}
 	
 	/**
@@ -143,20 +153,27 @@ public class BaseDatos {
 	
 	
 	public static ArrayList<Producto> obtenerProductosdePedido(int codpedido){
-		String sent= "SELECT * FROM Pedidos WHERE cped='"+codpedido+"'";
+		String sent= "SELECT *  FROM Pedidos WHERE cped='"+codpedido+"'";
 		ArrayList<Producto> lp = new ArrayList<>();
+		
 		Statement st=null;
 		try {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(sent);
 			if(rs.next()) {
-				int cod = rs.getInt("cprod"); //TODO
+				int cod = rs.getInt("cprod"); //TODO solo me lee la primera linea de la tabla
 				lp.add(ObtenerProducto(cod));	
 				}
-			
-			
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				st.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return lp;	
 	}
@@ -283,6 +300,7 @@ public class BaseDatos {
 			 c = new Cliente(nom, con, dni, fecha,puntos);
 		}
 		rs.close();
+		statement.close();
 		logger.log(Level.INFO, "Cliente obtenido");
 		return c;
 	}
@@ -293,7 +311,7 @@ public class BaseDatos {
 	 * @param pas contraseña del cliente
 	 * @return Devuelve el cliente q
 	 */
-	public static Cliente ObtenerCliente(String nom,String pas) throws SQLException{
+	public static Cliente ObtenerClienteNomCon(String nom,String pas) throws SQLException{
 		
 		Statement statement = con.createStatement();
 		String sent = "SELECT * FROM Cliente WHERE nom='"+nom+"' AND con='"+pas+"'";
@@ -306,6 +324,7 @@ public class BaseDatos {
 			 c = new Cliente(nom, pas, dni, fecha,puntos);
 		}
 		rs.close();
+		statement.close();
 		logger.log(Level.INFO, "Cliente obtenido");
 		return c;
 	}
@@ -317,8 +336,10 @@ public class BaseDatos {
 		Statement stmnt = con.createStatement();
 		String s = "DELETE FROM CLIENTE WHERE dni = '"+dni+"'";
 		stmnt.executeUpdate(s);
-		logger.log(Level.INFO, "EL cliente ha sido eliminado de la base de datos");
+		logger.log(Level.INFO, "El cliente ha sido eliminado de la base de datos");
+		stmnt.close();
 	}
+	
 	
 	/**
 	 * Método que modifica  los puntos de un cliente en la bd
@@ -328,10 +349,9 @@ public class BaseDatos {
 		Statement st = con.createStatement();
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(2);
-		float puntos = Float.parseFloat(df.format(c.getPuntos()));
-		String sent= "update Cliente set puntos="+puntos+" where dni='"+c.getDni()+"'";
-		st.executeUpdate(sent);
-				
+		String sent= "update Cliente set puntos='"+df.format(c.getPuntos())+"' where dni='"+c.getDni()+"'";
+		st.executeUpdate(sent);	
+		st.close();		
 	}
 	
 	/**
@@ -345,10 +365,10 @@ public class BaseDatos {
 		if(rs.next()) {
 			float puntos = rs.getFloat("puntos");
 			c.setPuntos(puntos);
-			
-			
+	
 		}
-		
+		rs.close();
+		st.close();
 		
 	}
 	
