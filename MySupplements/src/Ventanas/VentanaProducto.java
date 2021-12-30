@@ -411,12 +411,11 @@ public class VentanaProducto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			
 				Pedido p = new Pedido(System.currentTimeMillis(), VentanaPrincipal.clientesesion, listaProductosPedido);
-				VentanaPrincipal.clientesesion.setPuntos(VentanaPrincipal.clientesesion.getPuntos()+ calcularPuntosPedido(p));//TODO
-				
+				VentanaPrincipal.clientesesion.setPuntos(VentanaPrincipal.clientesesion.getPuntos()+ calcularPuntosPedido(p));
 				BaseDatos.initBD("Basedatos.db");
 				try {
 					BaseDatos.insertarPedido(p);
-					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);//TODO
+					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
