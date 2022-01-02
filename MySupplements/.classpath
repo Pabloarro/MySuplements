@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="C:/Users/ALAR/Desktop/jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ALAR/Desktop/sqlite-jdbc-3.32.3.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ALAR/Desktop/itextpdf-5.5.9.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

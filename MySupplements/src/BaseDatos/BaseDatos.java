@@ -340,6 +340,18 @@ public class BaseDatos {
 		stmnt.close();
 	}
 	
+	/**
+	 * Metodo que cuenta el numero de clientes en la bd
+	 * @return int con el número de productos de la bd
+	 */
+	public static int ContarClientes() throws SQLException {
+		Statement st = con.createStatement();
+		String sent = "select count(*) from Cliente";
+		ResultSet rs = st.executeQuery(sent);
+		int resul = rs.getInt(1);
+		rs.close();
+		return resul;
+	}
 	
 	/**
 	 * Método que modifica  los puntos de un cliente en la bd
