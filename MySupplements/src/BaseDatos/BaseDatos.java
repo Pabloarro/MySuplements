@@ -88,6 +88,60 @@ public class BaseDatos {
 	//POR HACER
 	
 	/**
+	 * Metodo que devuelve la lista de pedidos pero sin los productos
+	 * @return Lista de pedidos
+	 */
+	public static void obtenerInicialesPedidos(ArrayList<Pedido>listapedidos) throws SQLException{
+		
+		String sent = "SELECT cped,fpedido,dnic FROM Pedidos ";
+		Statement st = null;
+		st=con.createStatement();
+		ResultSet rs = st.executeQuery(sent);//TODO
+		while(rs.next()) {
+			int Codpedido= rs.getInt("cped");
+			long fecha= rs.getLong("fpedido");
+			String dni = rs.getString("dnic");
+			Cliente c = BaseDatos.ObtenerCliente(dni);
+			Pedido p = new Pedido(Codpedido, fecha, c, new ArrayList<>());
+			for(Pedido pe : listapedidos) {
+				//if(listapedidos)
+			//TODO
+			}
+			
+			
+			//TODO si pongo un if next solo me lee los primeros productos
+			//y si pongo un while me lee solo el producto ultimo y mal
+			}
+		rs.close();
+		st.close();
+		
+		
+		
+		
+	}
+	
+	/**
+	 * Metodo que comprueba si existe un pedido en la lista de pedidos
+	 * @param lp lista de pedidos
+	 * @param cod codigo del pedido
+	 * @return 1 si ya existe el pedido y 0 si no existe el pedido
+	 */
+	public static int existePedido(ArrayList<Pedido> lp,int cod) {
+		int resul = 0;
+		for(Pedido p : lp) {
+			if(p.getCod()==cod) {
+				resul=1;
+				break;
+			}
+		}
+		return resul;
+	}
+	
+	
+	
+	
+
+	/**
 	 * Método que recibe el cliente y devuelve la lista con todos los pedidos de ese cliente
 	 * @param c Cliente del que se quiere obtener la lista
 	 * @return	Devuelve la lista de pedidos del cliente
@@ -100,15 +154,15 @@ public class BaseDatos {
 		try {		
 			st= con.createStatement();//Pedidos(cped Integer, fpedido bigint , dnic String , cprod Integer)"
 			ResultSet rs = st.executeQuery(sent);
-			if(rs.next()) {
+			while(rs.next()) {
 				int codpedido = rs.getInt("cped");
 				long fpedido = rs.getLong("fpedido");
-				p = new Pedido(fpedido, c, obtenerProductosdePedido(codpedido));			
-				lp.add(p);
+						
+				
 			}
 			rs.close();
 		} catch (SQLException e) {
-			e.printStackTrace();//TODO
+			e.printStackTrace();
 		}finally {
 			try {
 				st.close();
@@ -136,7 +190,7 @@ public class BaseDatos {
 				}else {
 					p = (ProductoMerchandise)pr; 
 				}
-			}				//TODO
+			}				//TODO Sale bien
 		}
 		//System.out.println("Obtenerproducto");
 		//System.out.println(p);
@@ -160,8 +214,8 @@ public class BaseDatos {
 		try {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(sent);
-			if(rs.next()) {
-				int cod = rs.getInt("cprod"); //TODO solo me lee la primera linea de la tabla
+			while(rs.next()) {
+				int cod = rs.getInt("cprod");//TODO HECHO
 				lp.add(ObtenerProducto(cod));	
 				}
 			rs.close();
@@ -171,7 +225,7 @@ public class BaseDatos {
 			try {
 				st.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -191,7 +245,7 @@ public class BaseDatos {
 		Statement st = null;
 		st= con.createStatement();
 		for(Producto pr: p.getListaproductos()) {
-			String sent = "INSERT INTO pedidos VALUES('"+p.getCod()+"','"+p.getFec()+"','"+p.getCliente().getDni()+"','"+pr.getCod()+"')";
+			String sent = "INSERT INTO pedidos VALUES('"+p.getCodpe()+"','"+p.getFec()+"','"+p.getCliente().getDni()+"','"+pr.getCod()+"')";
 			st.executeUpdate(sent);
 			}
 		st.close();	
