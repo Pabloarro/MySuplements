@@ -12,6 +12,7 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -23,7 +24,8 @@ import Clases.Producto;
 
 public class VentanaPerfil extends JFrame{
 	private JPanel panelArriba, panelCentro,panelAbajo,panel1;
-	private JButton btnAtras,btnModificar,btnGuardar,btnHistorial;
+	private JButton btnAtras,btnModificar,btnGuardar;
+	public static JButton btnHistorial;
 	private JLabel lblTitulo,lblNom,lblCon,lblDni,lblFechanac;
 	private JTextField txtNom,txtCon,txtDni,txtFechanac;
 	private JDateChooser calendario;
@@ -125,16 +127,8 @@ public class VentanaPerfil extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			VentanaProducto v = new VentanaProducto();
 			v.setTitle("PEDIDOS");
-			ArrayList<Producto> p = new ArrayList<>();
-			BaseDatos.initBD("Basedatos.db");
-			p=BaseDatos.obtenerProductosdePedido(6);
-			BaseDatos.closeBD();
-			VentanaProducto.ModificarVentanaProductoConPedidos();
+			v.ModificarVentanaProductoConPedidos();
 			setVisible(false);	
-			for(Producto pr:p) {
-				System.out.println(""+pr);
-			}
-			//TODO
 			
 		}
 	});

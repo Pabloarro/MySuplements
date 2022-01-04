@@ -118,7 +118,7 @@ public class VentanaPrincipal {
 				VentanaProducto.ModificarVentanaProductoAdministrador();
 				frame.setVisible(false);
 				
-				//TODO
+				//TODO comprobar que el adminmistrador existe en el fichero de administradores
 				
 			/*String id = JOptionPane.showInputDialog("Introduzca su identificación");
 			String con = JOptionPane.showInputDialog("Introduzca su contraseña");
@@ -198,6 +198,10 @@ public class VentanaPrincipal {
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Metodo que hace que al iniciar sesión ya sea desde la ventana de productos o desde el botón mi perfil
+	 * se abra depende de por donde hayas iniciado sesión una ventana u otra
+	 */
 	public static void SesionPerfilOProducto() {
 		if(VentanaPrincipal.NumVentana==0) {
 			new VentanaProducto();
@@ -292,12 +296,17 @@ public class VentanaPrincipal {
 	}
 
 	
-	
+	/**
+	 * Metodo que comprueba si el administrador introducido existe
+	 * @param a Administrador introducido
+	 * @param lad lista de todos los administradores
+	 * @return devuelve true si existe y  false si no existe
+	 */
 	public boolean ExisteAdmin(Administrador a,ArrayList<Administrador>lad) {
 		for(Administrador ad :lad) {
 			if(a.getDni()==ad.getDni() && a.getContrasenya()==ad.getContrasenya()) {
 				return true;
-				
+				//TODO hay que comprobar que esto funciona para usarlo al darle click al btn admin
 			}
 		}
 		return false;

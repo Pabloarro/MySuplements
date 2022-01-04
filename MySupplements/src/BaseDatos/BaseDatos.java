@@ -93,7 +93,7 @@ public class BaseDatos {
 		String sent = "SELECT cped,fpedido,dnic FROM Pedidos ";
 		Statement st = null;
 		st=con.createStatement();
-		ResultSet rs = st.executeQuery(sent);//TODO
+		ResultSet rs = st.executeQuery(sent);
 		while(rs.next()) {
 			int Codpedido= rs.getInt("cped");
 			long fecha= rs.getLong("fpedido");
@@ -119,37 +119,37 @@ public class BaseDatos {
 		rs.close();
 		st.close();
 }
-	
-/**
- * Metodo que limpia la lista cargada de la tabla de la base de datos para que no se repitan los pedidos
- * y que añade la lista de productos de cada pedido
- * @param lista lista de pedidos sin limpiar todavia
- */
-	public static void FiltrarlistaBd(ArrayList<Pedido> lista) {
-		
-	
-		
-	}
-	
-	
-	
 
 	/**
 	 * Método que recibe el cliente y devuelve la lista con todos los pedidos de ese cliente
 	 * @param c Cliente del que se quiere obtener la lista
 	 * @return	Devuelve la lista de pedidos del cliente
 	 */
-	public static ArrayList<Pedido> obtenerPedidosdeCliente(Cliente c) {
-		String sent = "SELECT * FROM Pedidos WHERE dnic='"+c.getDni()+"'";
+	public static void obtenerPedidosdeCliente(Cliente c,ArrayList<Pedido> lp) {
+		String sent = "SELECT cped,fpedido FROM Pedidos WHERE dnic='"+c.getDni()+"'";
 		Statement st=null;
-		ArrayList<Pedido> lp=new ArrayList<>();//necesito obtener los datos del pedido y luego la lista de productos
-		Pedido p =null;
 		try {		
 			st= con.createStatement();//Pedidos(cped Integer, fpedido bigint , dnic String , cprod Integer)"
 			ResultSet rs = st.executeQuery(sent);
 			while(rs.next()) {
 				int codpedido = rs.getInt("cped");
-				long fpedido = rs.getLong("fpedido");	
+				long fpedido = rs.getLong("fpedido");
+				boolean enc = false;
+				int pos = 0;
+				while(!enc && pos<lp.size()) {
+					if(lp.get(pos).getCodpe() == codpedido) {
+						enc = true;
+					}else {
+						pos++;
+					}
+				}
+				if(!enc) {
+					Pedido p = new Pedido(codpedido, fpedido, c, new ArrayList<>());
+					lp.add(p);
+				}
+				for(Pedido pedido : lp) {
+					pedido.setListaproductos(BaseDatos.obtenerProductosdePedido(pedido.getCodpe()));
+				}
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -161,7 +161,7 @@ public class BaseDatos {
 				e.printStackTrace();
 			}
 		}
-		return lp;
+		
 	}
 	
 	/**
@@ -180,7 +180,7 @@ public class BaseDatos {
 				}else {
 					p = (ProductoMerchandise)pr; 
 				}
-			}				//TODO Sale bien
+			}				
 		}
 		//System.out.println("Obtenerproducto");
 		//System.out.println(p);
@@ -205,7 +205,7 @@ public class BaseDatos {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(sent);
 			while(rs.next()) {
-				int cod = rs.getInt("cprod");//TODO HECHO
+				int cod = rs.getInt("cprod");
 				lp.add(ObtenerProducto(cod));	
 				}
 			rs.close();

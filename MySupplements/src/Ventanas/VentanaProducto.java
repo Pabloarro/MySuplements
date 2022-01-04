@@ -41,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import javax.swing.table.DefaultTableModel;
@@ -74,14 +75,15 @@ public class VentanaProducto extends JFrame {
 	private JButton btnEditarPedido;
 	private JButton btnBorrarPedido;
 	private JButton btnAddDescuento;
-	private static JButton btnCrearDescuento;
 	private static JButton btnAddProductoNuevo,btnBorrarProducto,btnAniadirAdmin;
 	private static JButton btnInicioSesion;
+	private static JButton btnRepetirPedido,btnVerInforDePedido;
+	
 
 	
-	private static JTable tablaInformacion;	//TODO
+	private static JTable tablaInformacion;	
 	private static DefaultTableModel modeloTablaInformacion;
-	//TODO
+	
 	
 	
 	private ArrayList<Producto>listaProductosPedido,alp;//lista de productos en el carrito,lista de productos,lista de pedidos de clientesesión.
@@ -192,6 +194,38 @@ public class VentanaProducto extends JFrame {
 		 
 		lblLogo = new JLabel();
 		
+		btnRepetirPedido = new JButton("Repetir pedido");
+		btnRepetirPedido.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO crear un nuevo pedido, añadiendole al constructor la fecha y el cliente y la lista de productos del pedido
+				//de la lista de pedidos de la base de datos ,preguntar se quiere usar puntos y luego modifocar los puntos e insertar un nuevo pedido a la bd
+				//,preguntar si quiere un recibo para que se descargue el pdf y, finalmente actualizar la tabla de pedidos con el pedido nuevo realizado.
+				
+			}
+		});
+		
+		
+		btnVerInforDePedido = new JButton("Ver Pedido realizado");
+		btnVerInforDePedido.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnRepetirPedido.setVisible(true);
+				
+				//TODO hay que hacer que aparezca un panel a la derecha con la info del pedido
+				//y que aparezca la opción de repetir pedido 
+				// para obtener la lista de pedidos de clientes hay un método en la base de datos
+				
+				
+			}
+		});
+		
+		
+		
+		
+		
 		btnEditarPedido = new JButton("Eliminar Producto");
 		btnEditarPedido.addActionListener(new ActionListener() {
 			
@@ -262,18 +296,7 @@ public class VentanaProducto extends JFrame {
 				
 			}
 		});
-		
-		btnCrearDescuento = new JButton("Crear Descuento");
-		btnCrearDescuento.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//TODO
-			
-			}
-			
-		});
-		
+				
 		
 		btnAddProductoNuevo = new JButton("Añadir Producto");
 		btnAddProductoNuevo.addActionListener(new ActionListener() {
@@ -332,8 +355,8 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String dni = JOptionPane.showInputDialog("Introduce el dni de manera correcta "); //TODO comprobar que el dni está correctamente escrito
-				String nom =JOptionPane.showInputDialog("Introduce la contraseña:");//TODO comprobar que tenga un formato concreto POSIBLE HILO
+				String dni = JOptionPane.showInputDialog("Introduce el dni de manera correcta "); 
+				String nom =JOptionPane.showInputDialog("Introduce la contraseña:");
 				Administrador a = new Administrador(dni, nom);
 				VentanaPrincipal.listaAdmins.add(a);
 				VentanaPrincipal.VolcarListaAdmins(VentanaPrincipal.listaAdmins);
@@ -442,10 +465,7 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				 String[] opciones = new String[] {"Puntos", "Descuento"};
-				 int resp = JOptionPane.showOptionDialog(null, "Selecciona la promoción a aplicar", "Añadir promoción", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
 				 if(VentanaPrincipal.clientesesion.getPuntos()!=0) {
-					 if(resp==0) {
 						 puntosAnteriores = VentanaPrincipal.clientesesion.getPuntos();
 						float puntos= VentanaPrincipal.clientesesion.getPuntos();
 						 puntosGastados= Float.parseFloat(JOptionPane.showInputDialog("Cuantos puntos quieres gastar de: "+puntos));
@@ -470,13 +490,9 @@ public class VentanaProducto extends JFrame {
 							btnAddDescuento.setEnabled(false);
 						}else {
 							JOptionPane.showMessageDialog(null, "No tienes esos puntos","Puntos incorrectos",JOptionPane.ERROR_MESSAGE);
-						}
-					}else {
-						//TODO
-						//DESCUENTOS
-					}
-					}else {
-						JOptionPane.showMessageDialog(null, "Lo sentimos pero no dispone de puntos", "Sin puntos", JOptionPane.ERROR_MESSAGE);
+							}
+				}else {
+					JOptionPane.showMessageDialog(null, "Lo sentimos pero no dispone de puntos", "Sin puntos", JOptionPane.ERROR_MESSAGE);
 					}
 			}});
 		
@@ -487,6 +503,10 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(btnRepetirPedido.isVisible()) {
+					btnAtras.setText("Atras");
+					//TODO retroceder de la descripcion del pedido a la tabla completa del historial de pedidos
+				}
 				panelCentro.setLayout(new GridLayout(1,1));
 				panelCentroDerecha.remove(scrollLista);
 				panelCentro.remove(panelCentroDerecha);
@@ -502,7 +522,6 @@ public class VentanaProducto extends JFrame {
 		});
 		btnVerPedido.setVisible(true);
 		btnAdd.setVisible(true);
-		btnCrearDescuento.setVisible(false);
 		
 		panelNorte.setLayout(new GridLayout(1,3));
 		panelNorte.add(btnAniadirAdmin);
@@ -521,13 +540,15 @@ public class VentanaProducto extends JFrame {
 		panelSur.add(btnVerPedido);
 		panelSur.add(btnAdd);
 		panelSur.add(btnRealizarPedido);
-		panelSur.add(btnCrearDescuento);
 		panelSur.add(btnAddProductoNuevo);
 		panelSur.add(btnInicioSesion);
 		panelSur.add(btnBorrarProducto);
+		panelSur.add(btnRepetirPedido);
+		panelSur.add(btnVerInforDePedido);
+		btnVerInforDePedido.setVisible(false);
+		btnRepetirPedido.setVisible(false);		
 		btnBorrarProducto.setVisible(false);
 		btnInicioSesion.setVisible(false);
-		btnCrearDescuento.setVisible(false);
 		btnAddProductoNuevo.setVisible(false);
 		panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
@@ -573,7 +594,7 @@ public class VentanaProducto extends JFrame {
 				
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(btnAdd.isVisible())
+				if(btnAdd.isVisible()) {
 					if(e.getClickCount()>=2) {
 					int pos = tablaInformacion.getSelectedRow();
 					String dir = alp.get(pos).getImagen();
@@ -587,11 +608,14 @@ public class VentanaProducto extends JFrame {
 					panelCentroDerecha.add(lblLogo);
 					btnAtras.setVisible(true);
 					btnAtras.setText("Salir de imagen");
-			}}
+			}}}
+			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if(btnAdd.isVisible()) {
 				panelCentro.setLayout(new GridLayout(1,1));
 				panelCentro.add(scrollTabla);
+				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -600,8 +624,6 @@ public class VentanaProducto extends JFrame {
 				}				
 			}
 		});
-
-	
 		
 		panelCentro.setLayout(new GridLayout(1,1));
 		panelCentro.add(scrollTabla);
@@ -812,7 +834,6 @@ public class VentanaProducto extends JFrame {
 	public static void ModificarVentanaProductoAdministrador() {
 		btnVerPedido.setVisible(false);
 		btnAdd.setVisible(false);
-		btnCrearDescuento.setVisible(true);
 		btnAddProductoNuevo.setVisible(true);
 		btnBorrarProducto.setVisible(true);
 		lblInfo.setVisible(false);
@@ -837,12 +858,12 @@ public class VentanaProducto extends JFrame {
 		vaciarTabla();
 		btnVerPedido.setVisible(false);
 		btnAdd.setVisible(false);
-		btnInicioSesion.setVisible(true);
+		btnInicioSesion.setVisible(false);
 		comboFiltro.setVisible(false);
 		AniadirPedidosClienteATabla();
 		lblInfo.setVisible(false);
 		lblFiltro.setVisible(false);
-	
+		btnVerInforDePedido.setVisible(true);
 	}
 	
 	/**
@@ -853,24 +874,29 @@ public class VentanaProducto extends JFrame {
 		modeloTablaInformacion.setColumnIdentifiers(columnas);
 	} 
 	
+	/**
+	 * Metodo que añade los pedidos del cliente que está en la sesión a la tabla.
+	 */
 	public static void AniadirPedidosClienteATabla() {
 		
 		modificartablaPedidos();
 		ArrayList<Pedido> pcliente = new ArrayList<>();
 		BaseDatos.initBD("Basedatos.db");
-		pcliente = BaseDatos.obtenerPedidosdeCliente(VentanaPrincipal.clientesesion);
+		BaseDatos.obtenerPedidosdeCliente(VentanaPrincipal.clientesesion,pcliente);
 		BaseDatos.closeBD();
 		for(Pedido p : pcliente) {
 			float tot = 0;
 			for(Producto pr : p.getListaproductos()) {
 				tot+=pr.getPrecio();
 			}
+			DecimalFormat df = new DecimalFormat();
+			df.setMaximumFractionDigits(2);
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 			Date d = new Date(p.getFec());
-			Object dataRow[] = {""+String.valueOf(p.getCod()),""+sdf.format(d),""+String.valueOf(tot)};
+			Object dataRow[] = {""+String.valueOf(p.getCodpe()),""+sdf.format(d),""+df.format(tot)+"€"};
 			modeloTablaInformacion.addRow(dataRow);
 		}
-		//TODO
+		
 	}
 	
 	/**
