@@ -17,7 +17,6 @@ public class Producto implements Comparable<Producto>{
 	}
 	public Producto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public int getCod() {

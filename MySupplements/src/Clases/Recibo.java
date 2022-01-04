@@ -66,7 +66,7 @@ public class Recibo {
 			
 			
 			float tot=0;
-			//Columnas nombre producto ,precio
+			//Columnas nombre de producto ,precio
 			
 			float[] anchuraColumnas= {5f,2f};
 			

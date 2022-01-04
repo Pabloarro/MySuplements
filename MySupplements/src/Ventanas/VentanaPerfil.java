@@ -115,7 +115,7 @@ public class VentanaPerfil extends JFrame{
 			txtDni.setText(String.valueOf(VentanaPrincipal.clientesesion.getDni()));
 
 			Date fechanac = new Date(VentanaPrincipal.clientesesion.getFechanac());
-			calendario.setDate(fechanac);//TODO AÑADIR UN CALENDARIO CON SDF
+			calendario.setDate(fechanac);
 		}
 	});
 	

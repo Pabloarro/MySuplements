@@ -151,6 +151,7 @@ public class VentanaInicioDeSesion extends JFrame {
 		
 		//TODO Hilo que compruebe que el dni tiene un formato establecido y
 		//TODO hasta que no lo tenga no desbloquee el boton de registrarse
+		//TODO formato de 8 números y una mayúscula
 		setVisible(true);
 	}
 

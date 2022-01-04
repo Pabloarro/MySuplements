@@ -120,6 +120,7 @@ public class VentanaPrincipal {
 				
 				//TODO comprobar que el adminmistrador existe en el fichero de administradores
 				
+				
 			/*String id = JOptionPane.showInputDialog("Introduzca su identificación");
 			String con = JOptionPane.showInputDialog("Introduzca su contraseña");
 			
@@ -307,6 +308,7 @@ public class VentanaPrincipal {
 			if(a.getDni()==ad.getDni() && a.getContrasenya()==ad.getContrasenya()) {
 				return true;
 				//TODO hay que comprobar que esto funciona para usarlo al darle click al btn admin
+				//mirar en el método de la base de datos de obtenerpedidosdecliente
 			}
 		}
 		return false;
