@@ -20,7 +20,7 @@ import Ventanas.VentanaPrincipal;
 
 public class Pedido {
 	static int cod;	
-	private int codpe;//TODO		/*Hay que hacer que se obtenga de la bd cada vez que se inicie */
+	private int codpe;	/*Hay que hacer que se obtenga de la bd cada vez que se inicie */
     private long fec;
 	private Cliente cliente;
 	private ArrayList<Producto> Listaproductos;//En la tabla de la bd se introducirán en cada fila un producto del pedido.
@@ -99,8 +99,7 @@ public class Pedido {
 		this.sdf = sdf;
 	}
 	
-	
-	
+
 	
 	@Override
 	public String toString() {
@@ -118,7 +117,6 @@ public class Pedido {
 			pw.println(getCod());
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			if(pw!=null) {

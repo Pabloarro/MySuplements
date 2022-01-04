@@ -26,6 +26,11 @@ public class BaseDatos {
 	private static Connection con;
 	private static Logger logger = Logger.getLogger( "BaseDatos" );
 	
+	
+	/**
+	 * Metodo que abre la conexión con la base de datos
+	 * @param nombreBD nombre del fichero de la base de datos
+	 */
 	public static void initBD(String nombreBD) {
 		
 		
@@ -42,7 +47,9 @@ public class BaseDatos {
 	
 	
 	
-	
+	/**
+	 * Método que cierra la conexión con la base de datos
+	 */
 
 	public static void closeBD() {
 		if(con!=null) {
@@ -55,7 +62,7 @@ public class BaseDatos {
 		}
 	}
 	/**
-	 * 
+	 * Método que crea las tablas en la base de datos si no se han creado previamente
 	 */
 	public static void crearTablas() {
 		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom varchar(50), con varchar(50), dni varchar(9),fnac bigint,puntos String)";
@@ -75,24 +82,14 @@ public class BaseDatos {
 					e.printStackTrace();
 				}
 			}
-		}
-	}
-
+		}}
 	
-	/**
-	 * Metodo que obtiene una lista de los pedidos 
-	 * @param c Cliente del que se quieren obtener sus pedidos
-	 * @return Devuelve la lista de pedidos del Cliente
-	 */
-	
-	//POR HACER
-	
+		
 	/**
 	 * Metodo que devuelve la lista de pedidos pero sin los productos
 	 * @return Lista de pedidos
 	 */
-	public static void obtenerInicialesPedidos(ArrayList<Pedido>listapedidos) throws SQLException{
-		
+	public static void obtenerPedidos(ArrayList<Pedido>listapedidos) throws SQLException{
 		String sent = "SELECT cped,fpedido,dnic FROM Pedidos ";
 		Statement st = null;
 		st=con.createStatement();
@@ -102,41 +99,37 @@ public class BaseDatos {
 			long fecha= rs.getLong("fpedido");
 			String dni = rs.getString("dnic");
 			Cliente c = BaseDatos.ObtenerCliente(dni);
-			Pedido p = new Pedido(Codpedido, fecha, c, new ArrayList<>());
-			for(Pedido pe : listapedidos) {
-				//if(listapedidos)
-			//TODO
+			boolean enc = false;
+			int pos = 0;
+			while(!enc && pos<listapedidos.size()) {
+				if(listapedidos.get(pos).getCodpe() == Codpedido) {
+					enc = true;
+				}else {
+					pos++;
+				}
 			}
-			
-			
-			//TODO si pongo un if next solo me lee los primeros productos
-			//y si pongo un while me lee solo el producto ultimo y mal
+			if(!enc) {
+				Pedido p = new Pedido(Codpedido, fecha, c, new ArrayList<>());
+				listapedidos.add(p);
 			}
+		}	
+		for(Pedido pedido : listapedidos) {
+			pedido.setListaproductos(BaseDatos.obtenerProductosdePedido(pedido.getCodpe()));
+		}
 		rs.close();
 		st.close();
+}
+	
+/**
+ * Metodo que limpia la lista cargada de la tabla de la base de datos para que no se repitan los pedidos
+ * y que añade la lista de productos de cada pedido
+ * @param lista lista de pedidos sin limpiar todavia
+ */
+	public static void FiltrarlistaBd(ArrayList<Pedido> lista) {
 		
-		
-		
+	
 		
 	}
-	
-	/**
-	 * Metodo que comprueba si existe un pedido en la lista de pedidos
-	 * @param lp lista de pedidos
-	 * @param cod codigo del pedido
-	 * @return 1 si ya existe el pedido y 0 si no existe el pedido
-	 */
-	public static int existePedido(ArrayList<Pedido> lp,int cod) {
-		int resul = 0;
-		for(Pedido p : lp) {
-			if(p.getCod()==cod) {
-				resul=1;
-				break;
-			}
-		}
-		return resul;
-	}
-	
 	
 	
 	
@@ -156,9 +149,7 @@ public class BaseDatos {
 			ResultSet rs = st.executeQuery(sent);
 			while(rs.next()) {
 				int codpedido = rs.getInt("cped");
-				long fpedido = rs.getLong("fpedido");
-						
-				
+				long fpedido = rs.getLong("fpedido");	
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -169,8 +160,7 @@ public class BaseDatos {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}			
-		
+		}
 		return lp;
 	}
 	
@@ -355,7 +345,6 @@ public class BaseDatos {
 		}
 		rs.close();
 		statement.close();
-		logger.log(Level.INFO, "Cliente obtenido");
 		return c;
 	}
 	
