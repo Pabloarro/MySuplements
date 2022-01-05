@@ -36,7 +36,7 @@ public class VentanaPerfil extends JFrame{
 	//PROPIEDADES DE LA VENTANA
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
 	setBounds(200, 200, 400, 400);
-	
+	setLocationRelativeTo(null);
 	//creacion de los paneles
 	panelArriba= new JPanel();
 	panelCentro = new JPanel(new GridLayout(2,4));

@@ -78,7 +78,7 @@ public class VentanaPrincipal {
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		frame.setBounds(100, 100, 558, 380);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		frame.setLocationRelativeTo(null);
 		panelLogo = new JPanel();
 		frame.getContentPane().add(panelLogo, BorderLayout.NORTH);
 		
@@ -142,10 +142,10 @@ public class VentanaPrincipal {
 				}else {
 					new VentanaInicioSesion2();
 				}
-				frame.setVisible(false);
 				}else {
 					new VentanaPerfil();
 				}
+			frame.setVisible(false);
 			
 			}});
 		

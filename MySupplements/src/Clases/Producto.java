@@ -50,6 +50,10 @@ public class Producto implements Comparable<Producto>{
 		
 		return p.getNombre().compareTo(this.getNombre());
 	}
+	@Override
+	public String toString() {
+		return ""+nombre+"\t"+"Precio: "+precio;
+	}
 	
 
 	

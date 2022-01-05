@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +43,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
 import javax.swing.table.DefaultTableModel;
@@ -68,7 +70,7 @@ public class VentanaProducto extends JFrame {
 	private JLabel lblLogo,lblSumaDinero;
 	private static JLabel lblInfo,lblFiltro;
 	private static JComboBox<String> comboFiltro;
-	private JButton btnAtras;
+	private static JButton btnAtras;
 	private static JButton btnVerPedido;
 	private static JButton btnAdd;
 	private JButton btnRealizarPedido,btnSalir;
@@ -77,9 +79,10 @@ public class VentanaProducto extends JFrame {
 	private JButton btnAddDescuento;
 	private static JButton btnAddProductoNuevo,btnBorrarProducto,btnAniadirAdmin;
 	private static JButton btnInicioSesion;
-	private static JButton btnRepetirPedido,btnVerInforDePedido,btnDescargarRecibo;
+	private static JButton btnRepetirPedido,btnDescargarRecibo,btnVerInfoPedido,btnRetroceder;
 	private static int opc=0;
-
+	
+	private static JTextArea textArea;
 	
 	private static JTable tablaInformacion;	
 	private static DefaultTableModel modeloTablaInformacion;
@@ -117,13 +120,12 @@ public class VentanaProducto extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		setTitle("PRODUCTOS");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 600, 300);
+		setBounds(100, 100, 700, 450);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
-		
 		
 		panelNorte = new JPanel();
 		contentPane.add(panelNorte, BorderLayout.NORTH);
@@ -194,16 +196,13 @@ public class VentanaProducto extends JFrame {
 		 
 		lblLogo = new JLabel();
 		
-		btnRepetirPedido = new JButton("Repetir pedido");
+		btnRepetirPedido = new JButton("REPETIR PEDIDO");
 		btnRepetirPedido.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int pos = tablaInformacion.getSelectedRow();
-				BaseDatos.initBD("Basedatos.db");
-				ArrayList<Pedido>pedidos = new ArrayList<>();
-				BaseDatos.obtenerPedidosdeCliente(VentanaPrincipal.clientesesion, pedidos);
-				BaseDatos.closeBD();
+				ArrayList<Pedido>pedidos= obtenerlistapedidosCliente();
 				listaProductosPedido=pedidos.get(pos).getListaproductos();
 				int resp = JOptionPane.showConfirmDialog(null,"¿Quieres usar tus puntos?","Pregunta",JOptionPane.YES_NO_OPTION);
 				if(resp==JOptionPane.YES_OPTION) {
@@ -213,22 +212,72 @@ public class VentanaProducto extends JFrame {
 				}else {
 					btnRealizarPedido.doClick();
 				}
+				setVisible(false);
 				VentanaProducto v = new VentanaProducto();
 				v.setTitle("PEDIDOS");
 				v.ModificarVentanaProductoConPedidos();
 			}
 		});
 		
-		
-		btnVerInforDePedido = new JButton("Ver Pedido realizado");
-		btnVerInforDePedido.addActionListener(new ActionListener() {
+		btnRetroceder = new JButton("ATRAS");
+		btnRetroceder.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panelCentro.setLayout(new GridLayout(1,1));
+				panelCentro.remove(panelCentroDerecha);
+				btnRetroceder.setVisible(false);
+				btnVerInfoPedido.setVisible(true);
+				btnRepetirPedido.setVisible(false);
+				btnDescargarRecibo.setVisible(false);
+				
+			}
+		});
+		btnVerInfoPedido = new JButton("VER PEDIDO");
+		btnVerInfoPedido.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				btnRepetirPedido.setVisible(true);
 				btnDescargarRecibo.setVisible(true);
-				btnAtras.setVisible(true);
+				btnRetroceder.setVisible(true);
+				textArea =  new JTextArea();
+				JScrollPane scroll = new JScrollPane(textArea);
+				scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+				scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+				int pos = tablaInformacion.getSelectedRow();
+				ArrayList<Pedido> pedidos = obtenerlistapedidosCliente();
+				Pedido p = pedidos.get(pos);
+				textArea.append("pedido con código: "+p.getCodpe()+"\n");
+				textArea.append("\n");
+				float tot=0;
+				for (Producto pr : p.getListaproductos()) {
+					tot+=pr.getPrecio();
+					textArea.append(""+pr);
+					textArea.append("\n");
+
+					
+				}
+				DecimalFormat df = new DecimalFormat();
+				df.setMaximumFractionDigits(2);
+				textArea.append("\n");
+
+				textArea.append("Puntos Usados: "+p.getPuntosUsados()+"\n");
+				textArea.append("\n");
+
+				textArea.append("Total sin descuento: "+df.format(tot)+"€"+"\n");
+				textArea.append("\n");
+
+				textArea.append("Total con descuento: "+df.format(tot-(p.getPuntosUsados()/5))+"€"+"\n");
 				
+				textArea.setEditable(false);
+				
+				
+				panelCentroDerecha= new JPanel();
+				panelCentroDerecha.add(scroll);
+				panelCentro.setLayout(new GridLayout(0,2));
+				panelCentro.add(panelCentroDerecha);
+				btnVerInfoPedido.setVisible(false);
 				//TODO hay que hacer que aparezca un panel a la derecha con la info del pedido
 				//y que aparezca la opción de repetir pedido 
 				// para obtener la lista de pedidos de clientes hay un método en la base de datos
@@ -236,17 +285,16 @@ public class VentanaProducto extends JFrame {
 				
 			}
 		});
+
 		
 		
-		btnDescargarRecibo = new JButton("Descargar recibo");
+		btnDescargarRecibo = new JButton("DESCARGAR PDF");
 		btnDescargarRecibo.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int pos = tablaInformacion.getSelectedRow();
-				ArrayList<Pedido> listapedidos = new ArrayList<>();
-				BaseDatos.initBD("Basedatos.db");
-				BaseDatos.obtenerPedidosdeCliente(VentanaPrincipal.clientesesion, listapedidos);
+				ArrayList<Pedido> listapedidos =obtenerlistapedidosCliente();
 				try {
 					Recibo.generarpdf(VentanaPrincipal.clientesesion,listapedidos.get(pos));
 				} catch (DocumentException | SQLException | IOException e1) {
@@ -259,7 +307,7 @@ public class VentanaProducto extends JFrame {
 		});
 		
 		
-		btnEditarPedido = new JButton("Eliminar Producto");
+		btnEditarPedido = new JButton("ELIMINAR PRODUCTO");
 		btnEditarPedido.addActionListener(new ActionListener() {
 			
 			@Override
@@ -289,7 +337,7 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 		
-		btnInicioSesion = new JButton("Iniciar Sesión");
+		btnInicioSesion = new JButton("INICIAR SESIÓN");
 		btnInicioSesion.addActionListener(new ActionListener() {
 			
 			@Override
@@ -305,7 +353,7 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 
-		btnBorrarPedido = new JButton("Borrar Pedido");
+		btnBorrarPedido = new JButton("BORRAR PEDIDO");
 		btnBorrarPedido.addActionListener(new ActionListener() {
 			
 			@Override
@@ -331,7 +379,7 @@ public class VentanaProducto extends JFrame {
 		});
 				
 		
-		btnAddProductoNuevo = new JButton("Añadir Producto");
+		btnAddProductoNuevo = new JButton("AÑADIR PRODUCTO");
 		btnAddProductoNuevo.addActionListener(new ActionListener() {
 			
 			@Override
@@ -366,7 +414,7 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 		
-		btnBorrarProducto = new JButton("Borrar Producto");
+		btnBorrarProducto = new JButton("BORRAR PRODUCTO");
 		btnBorrarProducto.addActionListener(new ActionListener() {
 			
 			@Override
@@ -383,7 +431,7 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 		
-		btnAniadirAdmin = new JButton("Añadir Admin");
+		btnAniadirAdmin = new JButton("AÑADIR ADMIN");
 		btnAniadirAdmin.addActionListener(new ActionListener() {
 			
 			@Override
@@ -394,7 +442,7 @@ public class VentanaProducto extends JFrame {
 				
 			}
 		});
-		btnSalir = new JButton("Salir de la página");
+		btnSalir = new JButton("SALIR DE PAGINA");
 		btnSalir.addActionListener(new ActionListener() {
 			
 			@Override
@@ -406,7 +454,7 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 		
-		btnAdd = new JButton("Añadir a carrito");
+		btnAdd = new JButton("AÑADIR A CARRITO");
 		btnAdd.addActionListener(new ActionListener() {
 			
 			@Override
@@ -420,7 +468,7 @@ public class VentanaProducto extends JFrame {
 				
 			}});
 		
-		btnVerPedido = new JButton("Ver Carrito");
+		btnVerPedido = new JButton("VER CARRITO");
 		btnVerPedido.setEnabled(false);
 		btnVerPedido.addActionListener(new ActionListener() {
 			
@@ -457,7 +505,7 @@ public class VentanaProducto extends JFrame {
 			}
 		});
 		
-		btnRealizarPedido = new JButton("Realizar Pedido");
+		btnRealizarPedido = new JButton("REALIZAR PEDIDO");
 		btnRealizarPedido.setVisible(false);
 		btnRealizarPedido.addActionListener(new ActionListener() {
 			
@@ -468,7 +516,7 @@ public class VentanaProducto extends JFrame {
 				BaseDatos.initBD("Basedatos.db");
 				try {
 					BaseDatos.insertarPedido(p);
-					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);//TODO
+					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -494,7 +542,7 @@ public class VentanaProducto extends JFrame {
 					btnAtras.doClick();
 			}
 		});
-		btnAddDescuento = new JButton("Añadir Promoción");
+		btnAddDescuento = new JButton("AÑADIR PUNTOS");
 		btnAddDescuento.addActionListener(new ActionListener() {
 			
 			@Override
@@ -534,17 +582,13 @@ public class VentanaProducto extends JFrame {
 					}
 			}});
 		
-		btnAtras = new JButton("Salir del Carrito");
+		btnAtras = new JButton("QUITAR CARRITO");
 		btnAtras.setVisible(false);
 		
 		btnAtras.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(btnRepetirPedido.isVisible()) {
-					btnAtras.setText("Atras");				
-					//TODO retroceder de la descripcion del pedido a la tabla completa del historial de pedidos
-				}
 				panelCentro.setLayout(new GridLayout(1,1));
 				panelCentroDerecha.remove(scrollLista);
 				panelCentro.remove(panelCentroDerecha);
@@ -582,9 +626,11 @@ public class VentanaProducto extends JFrame {
 		panelSur.add(btnInicioSesion);
 		panelSur.add(btnBorrarProducto);
 		panelSur.add(btnRepetirPedido);
-		panelSur.add(btnVerInforDePedido);
 		panelSur.add(btnDescargarRecibo);
-		btnVerInforDePedido.setVisible(false);
+		panelSur.add(btnVerInfoPedido);
+		panelSur.add(btnRetroceder);
+		btnRetroceder.setVisible(false);
+		btnVerInfoPedido.setVisible(false);
 		btnRepetirPedido.setVisible(false);		
 		btnDescargarRecibo.setVisible(false);
 		btnBorrarProducto.setVisible(false);
@@ -634,7 +680,7 @@ public class VentanaProducto extends JFrame {
 				
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(btnAdd.isVisible()) {
+				if(btnAdd.isVisible() || btnInicioSesion.isVisible()) {
 					if(e.getClickCount()>=2) {
 					int pos = tablaInformacion.getSelectedRow();
 					String dir = alp.get(pos).getImagen();
@@ -648,7 +694,9 @@ public class VentanaProducto extends JFrame {
 					panelCentroDerecha.add(lblLogo);
 					btnAtras.setVisible(true);
 					btnAtras.setText("Salir de imagen");
-			}}}
+					}
+				}
+			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -901,12 +949,14 @@ public class VentanaProducto extends JFrame {
 		btnInicioSesion.setVisible(false);
 		comboFiltro.setVisible(false);
 		AniadirPedidosClienteATabla();
-		
 		lblInfo.setVisible(false);
 		lblFiltro.setVisible(false);
-		btnVerInforDePedido.setVisible(true);
 		btnDescargarRecibo.setVisible(false);
+		btnAdd.setVisible(false);
+		btnVerInfoPedido.setVisible(true);
+		
 	}
+	
 	
 	/**
 	 * Método que modifica la tabla para insetar el historial de pedidos del cliente
@@ -1029,5 +1079,14 @@ public class VentanaProducto extends JFrame {
 		}
 		return punt;
 	}
+	
+	public ArrayList<Pedido> obtenerlistapedidosCliente(){
+		ArrayList<Pedido> listapedidos = new ArrayList<>();
+		BaseDatos.initBD("Basedatos.db");
+		BaseDatos.obtenerPedidosdeCliente(VentanaPrincipal.clientesesion, listapedidos);
+		return listapedidos;
+		
+	}
 }
+
 	
