@@ -23,7 +23,9 @@ public class Pedido {
 	private int codpe;	/*Hay que hacer que se obtenga de la bd cada vez que se inicie */
     private long fec;
 	private Cliente cliente;
-	private ArrayList<Producto> Listaproductos;//En la tabla de la bd se introducirán en cada fila un producto del pedido.
+	private ArrayList<Producto> Listaproductos;
+	private float puntosUsados;
+	//En la tabla de la bd se introducirán en cada fila un producto del pedido.
 												//Y luego en la clase pedido recogeremos la lista de productos que se han seleccionado
 
     	
@@ -31,22 +33,24 @@ public class Pedido {
 
 
 //Cuando se crea un pedido nuevo
-	public Pedido(long fec, Cliente cliente, ArrayList<Producto> alproductos) {
+	public Pedido(long fec, Cliente cliente, ArrayList<Producto> alproductos,float puntosus) {
 		super();
 		cod++;
 		this.codpe=cod;
 		this.fec = fec;
 		this.cliente = cliente;
 		this.Listaproductos = alproductos;
+		this.puntosUsados=puntosus;
 
 	}
-	//Cuando se carga en pedido ya realizado de la base de datos
-	public Pedido(int co,long fec, Cliente cliente, ArrayList<Producto> alproductos) {
+	//Cuando se carga el pedido ya realizado de la base de datos
+	public Pedido(int co,long fec, Cliente cliente, ArrayList<Producto> alproductos,float puntosus) {
 		super();
 		this.codpe = co;
 		this.fec = fec;
 		this.cliente = cliente;
 		this.Listaproductos = alproductos;
+		this.puntosUsados=puntosus;
 
 	}
 	//este es el codigo para crear un nuevo pedido
@@ -59,6 +63,13 @@ public class Pedido {
 	}
 
 	
+	
+	public float getPuntosUsados() {
+		return puntosUsados;
+	}
+	public void setPuntosUsados(float puntosUsados) {
+		this.puntosUsados = puntosUsados;
+	}
 	public int getCodpe() {
 		return codpe;
 	}

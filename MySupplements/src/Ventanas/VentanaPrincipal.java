@@ -103,39 +103,16 @@ public class VentanaPrincipal {
 		frame.getContentPane().add(panel_mid, BorderLayout.CENTER);
 		
 		listaAdmins = new ArrayList<>();
-			/*Administrador a = new Administrador("12345678A", "Contrasenia");
-			Administrador a1 = new Administrador("12345679B", "Contra");
-			listaAdmins.add(a);
-			listaAdmins.add(a1);
-			VolcarListaAdmins(listaAdmins);*/
 		CargarListaAdmins(listaAdmins);
 		
 		btnAdministrador = new JButton("Administrador");
 		btnAdministrador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VentanaProducto v =  new VentanaProducto();
-				v.setTitle("ADMINISTRADOR");
-				VentanaProducto.ModificarVentanaProductoAdministrador();
+				VentanaInicioSesion2 v2= new VentanaInicioSesion2();
+				v2.ModificarSesionAdmin();
+				v2.setTitle("INICIAR SESIÓN");
 				frame.setVisible(false);
-				
-				//TODO comprobar que el adminmistrador existe en el fichero de administradores
-				
-				
-			/*String id = JOptionPane.showInputDialog("Introduzca su identificación");
-			String con = JOptionPane.showInputDialog("Introduzca su contraseña");
-			
-			Administrador a = new Administrador(id, con);
-			if(ExisteAdmin(a, listaAdmins)==true) {
-				new VentanaProducto();
-				VentanaProducto.ModificarVentanaProductoAdministrador();
-				frame.setVisible(false);
-			}else {
-				JOptionPane.showMessageDialog(null, "El usuario o la contraseña son incorrectas ", "Administrador erróneo", JOptionPane.ERROR_MESSAGE);
-				
-			}
-			*/
-				
-				
+								
 			}
 		});
 		
@@ -296,22 +273,5 @@ public class VentanaPrincipal {
 		
 	}
 
-	
-	/**
-	 * Metodo que comprueba si el administrador introducido existe
-	 * @param a Administrador introducido
-	 * @param lad lista de todos los administradores
-	 * @return devuelve true si existe y  false si no existe
-	 */
-	public boolean ExisteAdmin(Administrador a,ArrayList<Administrador>lad) {
-		for(Administrador ad :lad) {
-			if(a.getDni()==ad.getDni() && a.getContrasenya()==ad.getContrasenya()) {
-				return true;
-				//TODO hay que comprobar que esto funciona para usarlo al darle click al btn admin
-				//mirar en el método de la base de datos de obtenerpedidosdecliente
-			}
-		}
-		return false;
-	}
 }
 

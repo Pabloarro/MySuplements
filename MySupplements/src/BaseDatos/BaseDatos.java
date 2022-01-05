@@ -67,7 +67,7 @@ public class BaseDatos {
 	public static void crearTablas() {
 		String sent1 = "CREATE TABLE IF NOT EXISTS Cliente(nom varchar(50), con varchar(50), dni varchar(9),fnac bigint,puntos String)";
 		Statement st = null;
-		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido bigint , dnic varchar(9) , cprod Integer)";
+		String sent2 = "CREATE TABLE IF NOT EXISTS Pedidos(cped Integer, fpedido bigint , dnic varchar(9) , cprod Integer,pusados String)";
 		try {
 			st = con.createStatement();
 			st.executeUpdate(sent1);
@@ -90,7 +90,7 @@ public class BaseDatos {
 	 * @return Lista de pedidos
 	 */
 	public static void obtenerPedidos(ArrayList<Pedido>listapedidos) throws SQLException{
-		String sent = "SELECT cped,fpedido,dnic FROM Pedidos ";
+		String sent = "SELECT cped,fpedido,dnic,pusados FROM Pedidos ";
 		Statement st = null;
 		st=con.createStatement();
 		ResultSet rs = st.executeQuery(sent);
@@ -98,6 +98,7 @@ public class BaseDatos {
 			int Codpedido= rs.getInt("cped");
 			long fecha= rs.getLong("fpedido");
 			String dni = rs.getString("dnic");
+			Float puntos = rs.getFloat("pusados");
 			Cliente c = BaseDatos.ObtenerCliente(dni);
 			boolean enc = false;
 			int pos = 0;
@@ -109,7 +110,7 @@ public class BaseDatos {
 				}
 			}
 			if(!enc) {
-				Pedido p = new Pedido(Codpedido, fecha, c, new ArrayList<>());
+				Pedido p = new Pedido(Codpedido, fecha, c, new ArrayList<>(),puntos);
 				listapedidos.add(p);
 			}
 		}	
@@ -126,7 +127,7 @@ public class BaseDatos {
 	 * @return	Devuelve la lista de pedidos del cliente
 	 */
 	public static void obtenerPedidosdeCliente(Cliente c,ArrayList<Pedido> lp) {
-		String sent = "SELECT cped,fpedido FROM Pedidos WHERE dnic='"+c.getDni()+"'";
+		String sent = "SELECT cped,fpedido,pusados FROM Pedidos WHERE dnic='"+c.getDni()+"'";
 		Statement st=null;
 		try {		
 			st= con.createStatement();//Pedidos(cped Integer, fpedido bigint , dnic String , cprod Integer)"
@@ -134,6 +135,7 @@ public class BaseDatos {
 			while(rs.next()) {
 				int codpedido = rs.getInt("cped");
 				long fpedido = rs.getLong("fpedido");
+				Float puntos = rs.getFloat("pusados");
 				boolean enc = false;
 				int pos = 0;
 				while(!enc && pos<lp.size()) {
@@ -144,7 +146,7 @@ public class BaseDatos {
 					}
 				}
 				if(!enc) {
-					Pedido p = new Pedido(codpedido, fpedido, c, new ArrayList<>());
+					Pedido p = new Pedido(codpedido, fpedido, c, new ArrayList<>(),puntos);
 					lp.add(p);
 				}
 				for(Pedido pedido : lp) {
@@ -235,7 +237,7 @@ public class BaseDatos {
 		Statement st = null;
 		st= con.createStatement();
 		for(Producto pr: p.getListaproductos()) {
-			String sent = "INSERT INTO pedidos VALUES('"+p.getCodpe()+"','"+p.getFec()+"','"+p.getCliente().getDni()+"','"+pr.getCod()+"')";
+			String sent = "INSERT INTO pedidos VALUES('"+p.getCodpe()+"','"+p.getFec()+"','"+p.getCliente().getDni()+"','"+pr.getCod()+"','"+p.getPuntosUsados()+"')";
 			st.executeUpdate(sent);
 			}
 		st.close();	

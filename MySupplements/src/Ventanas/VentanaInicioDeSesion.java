@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import com.toedter.calendar.JDateChooser;
 
 import BaseDatos.BaseDatos;
+import Clases.Administrador;
 import Clases.Cliente;
 
 import java.awt.GridLayout;
@@ -33,18 +34,19 @@ public class VentanaInicioDeSesion extends JFrame {
 	
 	private JPanel contentPane;
 	private JPanel panelSur;
-	private JPanel panelCentro;
-	private JLabel lblNombre;
-	private JTextField textNombre;
-	private JLabel lblContrasenia;
-	private JPasswordField textContrasenia;
-	private JLabel lbldni;
-	private JTextField textdni;
-	private JLabel lblFNac;
+	private static JPanel panelCentro;
+	private  JLabel lblNombre;
+	private  JTextField textNombre;
+	private static JLabel lblContrasenia;
+	private static JPasswordField textContrasenia;
+	private static JLabel lbldni;
+	private static JTextField textdni;
+	private static JLabel lblFNac;
 	private JButton btnRegistro;
 	private JDateChooser calendario;
 	private SimpleDateFormat sdf;
 	private static Logger logger = Logger.getLogger( "VentanaInicioDeSesion" );
+	private static int NuevoUserOAdmin;
 	/**
 	 * Launch the application.
 	 */
@@ -65,6 +67,7 @@ public class VentanaInicioDeSesion extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInicioDeSesion() {
+		NuevoUserOAdmin=0;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		BaseDatos.initBD("Basedatos.db");
 		BaseDatos.crearTablas();
@@ -121,31 +124,41 @@ public class VentanaInicioDeSesion extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nom = textNombre.getText();
-				String con = textContrasenia.getText();
 				String dni = textdni.getText();
-				Date fecha = calendario.getDate();
-				if(nom.equals("") || con.equals("") || dni.equals("") || fecha==null) {
-					JOptionPane.showMessageDialog(null, "Tienes que rellenar todos los campos");
-				}else {
-					long f = fecha.getTime();
-					String puntos="0";
-					BaseDatos.initBD("BaseDatos.db");
-					BaseDatos.crearTablas();
-						BaseDatos.insertarCliente(nom, con,dni,f);
-						try {
-							VentanaPrincipal.clientesesion = new Cliente(nom, con, dni, f);
-							BaseDatos.ObtenerPuntosCliente(VentanaPrincipal.clientesesion);
-						} catch (SQLException e1) {
-							e1.printStackTrace();
+				String con = textContrasenia.getText();
+				if(NuevoUserOAdmin==0) {
+					String nom = textNombre.getText();
+					Date fecha = calendario.getDate();
+					if(nom.equals("") || con.equals("") || dni.equals("") || fecha==null) {
+						JOptionPane.showMessageDialog(null, "Tienes que rellenar todos los campos");
+					}else {
+						long f = fecha.getTime();
+						String puntos="0";
+						BaseDatos.initBD("BaseDatos.db");
+						BaseDatos.crearTablas();
+							BaseDatos.insertarCliente(nom, con,dni,f);
+							try {
+								VentanaPrincipal.clientesesion = new Cliente(nom, con, dni, f);
+								BaseDatos.ObtenerPuntosCliente(VentanaPrincipal.clientesesion);
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+							JOptionPane.showMessageDialog(null, "Registro realizado con éxito");
+							logger.log(Level.INFO, "Registro realizado ");
+							VentanaPrincipal.SesionPerfilOProducto();
+							setVisible(false);
 						}
-						JOptionPane.showMessageDialog(null, "Registro realizado con éxito");
-						logger.log(Level.INFO, "Registro realizado ");
-						VentanaPrincipal.SesionPerfilOProducto();
-						setVisible(false);
-					}
-					BaseDatos.closeBD();
+						BaseDatos.closeBD();
+				}else {
+					Administrador a = new Administrador(dni, con);
+					VentanaPrincipal.listaAdmins.add(a);
+					VentanaPrincipal.VolcarListaAdmins(VentanaPrincipal.listaAdmins);
+					JOptionPane.showMessageDialog(null, "ADMINISTRADOR AÑADIDO CORRECTAMENTE", "NUEVO ADMIN", JOptionPane.INFORMATION_MESSAGE);
+					setVisible(false);
 				}
+					
+			
+			}
 			
 		});
 		
@@ -154,5 +167,13 @@ public class VentanaInicioDeSesion extends JFrame {
 		//TODO formato de 8 números y una mayúscula
 		setVisible(true);
 	}
-
+public static void modificarRegistroAdmin() {
+	NuevoUserOAdmin=1;
+	panelCentro.removeAll();
+	panelCentro.setLayout(new GridLayout(0, 2));
+	panelCentro.add(lbldni);
+	panelCentro.add(textdni);
+	panelCentro.add(lblContrasenia);
+	panelCentro.add(textContrasenia);
+}
 }

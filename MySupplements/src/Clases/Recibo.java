@@ -109,17 +109,17 @@ public class Recibo {
 			tabla.addCell(celda2);
 			
 			tabla.addCell("Puntos utilizados");
-			tabla.addCell(""+VentanaProducto.puntosGastados);
+			tabla.addCell(""+p.getPuntosUsados());
 			
 			tabla.addCell("Valor de puntos utilizados");
 		
-			tabla.addCell(""+df.format(VentanaProducto.puntosGastados/5)+"€");
+			tabla.addCell(""+df.format(p.getPuntosUsados()/5)+"€");
 			
 			tabla.addCell(celda1);
 			tabla.addCell(celda2);
 			
 			tabla.addCell("Precio final ");
-			float totFinal=tot-(VentanaProducto.puntosGastados/5);
+			float totFinal=tot-(p.getPuntosUsados()/5);
 			tabla.addCell(""+df.format(totFinal)+"€");
 			
 			

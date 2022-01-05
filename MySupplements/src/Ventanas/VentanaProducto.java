@@ -77,8 +77,8 @@ public class VentanaProducto extends JFrame {
 	private JButton btnAddDescuento;
 	private static JButton btnAddProductoNuevo,btnBorrarProducto,btnAniadirAdmin;
 	private static JButton btnInicioSesion;
-	private static JButton btnRepetirPedido,btnVerInforDePedido;
-	
+	private static JButton btnRepetirPedido,btnVerInforDePedido,btnDescargarRecibo;
+	private static int opc=0;
 
 	
 	private static JTable tablaInformacion;	
@@ -89,7 +89,7 @@ public class VentanaProducto extends JFrame {
 	private ArrayList<Producto>listaProductosPedido,alp;//lista de productos en el carrito,lista de productos,lista de pedidos de clientesesión.
 	
 	private int cant;
-	public static float puntosAnteriores,puntosGastados;
+	public static float puntosAnteriores,puntosGastados=0;
 	
 	private JList<Producto> listaProductosPedidos;
 	private DefaultListModel<Producto> modeloListaProductosPedidos;
@@ -199,10 +199,23 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO crear un nuevo pedido, añadiendole al constructor la fecha y el cliente y la lista de productos del pedido
-				//de la lista de pedidos de la base de datos ,preguntar se quiere usar puntos y luego modifocar los puntos e insertar un nuevo pedido a la bd
-				//,preguntar si quiere un recibo para que se descargue el pdf y, finalmente actualizar la tabla de pedidos con el pedido nuevo realizado.
-				
+				int pos = tablaInformacion.getSelectedRow();
+				BaseDatos.initBD("Basedatos.db");
+				ArrayList<Pedido>pedidos = new ArrayList<>();
+				BaseDatos.obtenerPedidosdeCliente(VentanaPrincipal.clientesesion, pedidos);
+				BaseDatos.closeBD();
+				listaProductosPedido=pedidos.get(pos).getListaproductos();
+				int resp = JOptionPane.showConfirmDialog(null,"¿Quieres usar tus puntos?","Pregunta",JOptionPane.YES_NO_OPTION);
+				if(resp==JOptionPane.YES_OPTION) {
+					opc=1;
+					btnAddDescuento.doClick();
+					
+				}else {
+					btnRealizarPedido.doClick();
+				}
+				VentanaProducto v = new VentanaProducto();
+				v.setTitle("PEDIDOS");
+				v.ModificarVentanaProductoConPedidos();
 			}
 		});
 		
@@ -213,6 +226,8 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				btnRepetirPedido.setVisible(true);
+				btnDescargarRecibo.setVisible(true);
+				btnAtras.setVisible(true);
 				
 				//TODO hay que hacer que aparezca un panel a la derecha con la info del pedido
 				//y que aparezca la opción de repetir pedido 
@@ -223,7 +238,25 @@ public class VentanaProducto extends JFrame {
 		});
 		
 		
-		
+		btnDescargarRecibo = new JButton("Descargar recibo");
+		btnDescargarRecibo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int pos = tablaInformacion.getSelectedRow();
+				ArrayList<Pedido> listapedidos = new ArrayList<>();
+				BaseDatos.initBD("Basedatos.db");
+				BaseDatos.obtenerPedidosdeCliente(VentanaPrincipal.clientesesion, listapedidos);
+				try {
+					Recibo.generarpdf(VentanaPrincipal.clientesesion,listapedidos.get(pos));
+				} catch (DocumentException | SQLException | IOException e1) {
+					e1.printStackTrace();
+				}
+				BaseDatos.closeBD();
+				
+				
+			}
+		});
 		
 		
 		btnEditarPedido = new JButton("Eliminar Producto");
@@ -355,11 +388,9 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String dni = JOptionPane.showInputDialog("Introduce el dni de manera correcta "); 
-				String nom =JOptionPane.showInputDialog("Introduce la contraseña:");
-				Administrador a = new Administrador(dni, nom);
-				VentanaPrincipal.listaAdmins.add(a);
-				VentanaPrincipal.VolcarListaAdmins(VentanaPrincipal.listaAdmins);
+			new VentanaInicioDeSesion();
+			VentanaInicioDeSesion.modificarRegistroAdmin();
+			
 				
 			}
 		});
@@ -432,21 +463,17 @@ public class VentanaProducto extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			
-				Pedido p = new Pedido(System.currentTimeMillis(), VentanaPrincipal.clientesesion, listaProductosPedido);
+				Pedido p = new Pedido(System.currentTimeMillis(), VentanaPrincipal.clientesesion, listaProductosPedido,puntosGastados);
 				VentanaPrincipal.clientesesion.setPuntos(VentanaPrincipal.clientesesion.getPuntos()+ calcularPuntosPedido(p));
 				BaseDatos.initBD("Basedatos.db");
 				try {
 					BaseDatos.insertarPedido(p);
-					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
+					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);//TODO
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 				BaseDatos.closeBD();
-				modeloListaProductosPedidos.clear();
-				lblSumaDinero.setText("TOTAL: " + 0+ "€");
-				lblInfo.setText("Productos en carrito: "+0);
-				btnAddDescuento.setEnabled(true);
+			
 				int resp = JOptionPane.showConfirmDialog(null,"¿Quieres descargar un recibo?","Pregunta",JOptionPane.YES_NO_OPTION);
 				if(resp==JOptionPane.YES_OPTION) {
 					try {
@@ -458,6 +485,13 @@ public class VentanaProducto extends JFrame {
 					}}
 				
 				listaProductosPedido.clear();
+				if(opc==0) {
+					modeloListaProductosPedidos.clear();
+					lblSumaDinero.setText("TOTAL: " + 0+ "€");
+					lblInfo.setText("Productos en carrito: "+0);
+					btnAddDescuento.setEnabled(true);
+				}
+					btnAtras.doClick();
 			}
 		});
 		btnAddDescuento = new JButton("Añadir Promoción");
@@ -469,7 +503,7 @@ public class VentanaProducto extends JFrame {
 						 puntosAnteriores = VentanaPrincipal.clientesesion.getPuntos();
 						float puntos= VentanaPrincipal.clientesesion.getPuntos();
 						 puntosGastados= Float.parseFloat(JOptionPane.showInputDialog("Cuantos puntos quieres gastar de: "+puntos));
-						if (puntosGastados<=puntos) {
+						 if (puntosGastados<=puntos) {
 							float tot =0;
 							for(Producto p : listaProductosPedido) {
 								tot += p.getPrecio();
@@ -486,8 +520,12 @@ public class VentanaProducto extends JFrame {
 								e1.printStackTrace();
 							}
 							BaseDatos.closeBD();
-							lblSumaDinero.setText("TOTAL: " + df.format(tot)+ "€");
-							btnAddDescuento.setEnabled(false);
+							if(opc==0) {
+								lblSumaDinero.setText("TOTAL: " + df.format(tot)+ "€");
+								btnAddDescuento.setEnabled(false);
+							}else {
+								btnRealizarPedido.doClick();
+							}
 						}else {
 							JOptionPane.showMessageDialog(null, "No tienes esos puntos","Puntos incorrectos",JOptionPane.ERROR_MESSAGE);
 							}
@@ -504,7 +542,7 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(btnRepetirPedido.isVisible()) {
-					btnAtras.setText("Atras");
+					btnAtras.setText("Atras");				
 					//TODO retroceder de la descripcion del pedido a la tabla completa del historial de pedidos
 				}
 				panelCentro.setLayout(new GridLayout(1,1));
@@ -545,8 +583,10 @@ public class VentanaProducto extends JFrame {
 		panelSur.add(btnBorrarProducto);
 		panelSur.add(btnRepetirPedido);
 		panelSur.add(btnVerInforDePedido);
+		panelSur.add(btnDescargarRecibo);
 		btnVerInforDePedido.setVisible(false);
 		btnRepetirPedido.setVisible(false);		
+		btnDescargarRecibo.setVisible(false);
 		btnBorrarProducto.setVisible(false);
 		btnInicioSesion.setVisible(false);
 		btnAddProductoNuevo.setVisible(false);
@@ -861,9 +901,11 @@ public class VentanaProducto extends JFrame {
 		btnInicioSesion.setVisible(false);
 		comboFiltro.setVisible(false);
 		AniadirPedidosClienteATabla();
+		
 		lblInfo.setVisible(false);
 		lblFiltro.setVisible(false);
 		btnVerInforDePedido.setVisible(true);
+		btnDescargarRecibo.setVisible(false);
 	}
 	
 	/**
