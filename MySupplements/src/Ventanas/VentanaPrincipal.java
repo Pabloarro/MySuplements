@@ -25,9 +25,13 @@ import java.awt.event.WindowListener;
 import java.awt.event.WindowAdapter;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
@@ -103,8 +107,12 @@ public class VentanaPrincipal {
 		frame.getContentPane().add(panel_mid, BorderLayout.CENTER);
 		
 		listaAdmins = new ArrayList<>();
-		CargarListaAdmins(listaAdmins);
-		
+		CargarListaAdmins();
+		/**
+		 * Lista de administradores:
+		 * 12345678A  password
+		 * 12345677F  password
+		 */
 		btnAdministrador = new JButton("Administrador");
 		btnAdministrador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -219,56 +227,47 @@ public class VentanaPrincipal {
 		
 	}
 	
-	/**
-	 * Método que carga la lista de administradores desde un fichero
-	 * @param a lista de administradores a la que se van a cargar del fichero
-	 */
-	public void CargarListaAdmins(ArrayList<Administrador> a) {
-	BufferedReader br =null;
-	try {
-		br= new BufferedReader(new FileReader("Administradores.txt"));
-		String linea = br.readLine();
-		while(linea!=null) {
-			String [] datos= linea.split("\t");
-			String dni = datos[0];
-			String con = datos[1];
-			Administrador ad = new Administrador(dni, con);
-			a.add(ad);
-			linea = br.readLine();
-		}
-	} catch (FileNotFoundException e) {
-		e.printStackTrace();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}finally {
-		if(br!=null) {
-			try {
-				br.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	}
-	
+
 	/**
 	 * Metodo que vuelca a fichero una lista de administradores
 	 * @param a lista de administradores a volcar
 	 */
-	public static void VolcarListaAdmins(ArrayList<Administrador>a) {
-		PrintWriter pw = null;
+	public static void VolcarListaAdmins(ArrayList<Administrador> a) {
+		ObjectOutputStream oos= null;
 		try {
-			pw= new PrintWriter("Administradores.txt");
-			for(Administrador ad : a) {
-				pw.println(ad.getDni()+"\t"+ad.getContrasenya());
-			}
-		} catch (FileNotFoundException e) {
+			oos= new ObjectOutputStream(new FileOutputStream("Administradores.dat"));
+			oos.writeObject(a);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}finally {
-			if(pw!=null) {
-				pw.flush();
-				pw.close();
+			if (oos!=null) {
+				try {
+					oos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				try {
+					oos.flush();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+		}		
+	}
+	
+	/**
+	 * Método que carga la lista de administradores desde un fichero
+	 * @param a lista de administradores a la que se van a cargar del fichero
+	 */
+	public  void CargarListaAdmins() {
+		ObjectInputStream ois = null;
+		try {
+			ois= new ObjectInputStream(new FileInputStream("Administradores.dat"));
+			listaAdmins=(ArrayList<Administrador>) ois.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 		
 	}

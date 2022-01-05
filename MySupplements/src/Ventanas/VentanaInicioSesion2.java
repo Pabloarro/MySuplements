@@ -108,9 +108,7 @@ public class VentanaInicioSesion2 extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 					String nom = textNombre.getText();
-					System.out.println(nom);
 					String con = textContrasenia.getText();
-					System.out.println(con);
 					if(nom.equals("") || con.equals("")) {
 						JOptionPane.showMessageDialog(null, "Tienes que rellenar todos los campos");
 						logger.log(Level.INFO, "Parte de los datos introducidos son nulos");
@@ -122,8 +120,6 @@ public class VentanaInicioSesion2 extends JFrame {
 								try {
 									Cliente c = BaseDatos.ObtenerClienteNomCon(nom,con);
 									VentanaPrincipal.clientesesion=c;
-									System.out.println("clientesesion");
-									System.out.println(VentanaPrincipal.clientesesion);
 								} catch (SQLException e1) {
 									e1.printStackTrace();
 								}
