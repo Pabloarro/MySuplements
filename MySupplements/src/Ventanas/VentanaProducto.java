@@ -31,6 +31,8 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -278,9 +280,7 @@ public class VentanaProducto extends JFrame {
 				panelCentro.setLayout(new GridLayout(0,2));
 				panelCentro.add(panelCentroDerecha);
 				btnVerInfoPedido.setVisible(false);
-				//TODO hay que hacer que aparezca un panel a la derecha con la info del pedido
-				//y que aparezca la opción de repetir pedido 
-				// para obtener la lista de pedidos de clientes hay un método en la base de datos
+				//TODO falta hacer que funcione el scroll
 				
 				
 			}
@@ -298,6 +298,10 @@ public class VentanaProducto extends JFrame {
 				try {
 					Recibo.generarpdf(VentanaPrincipal.clientesesion,listapedidos.get(pos));
 				} catch (DocumentException | SQLException | IOException e1) {
+					e1.printStackTrace();
+				} catch (AddressException e1) {
+					e1.printStackTrace();
+				} catch (MessagingException e1) {
 					e1.printStackTrace();
 				}
 				BaseDatos.closeBD();
@@ -529,6 +533,10 @@ public class VentanaProducto extends JFrame {
 						Logger log= Logger.getLogger("");
 						log.log(Level.INFO,"Pdf generado correctamente");
 					} catch (DocumentException | SQLException | IOException e1) {
+						e1.printStackTrace();
+					} catch (AddressException e1) {
+						e1.printStackTrace();
+					} catch (MessagingException e1) {
 						e1.printStackTrace();
 					}}
 				
