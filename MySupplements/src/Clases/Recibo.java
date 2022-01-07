@@ -29,6 +29,8 @@ import javax.swing.JOptionPane;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -153,12 +155,20 @@ public class Recibo {
 	 * @param p Pedido
 	 * @param doc documento
 	 */
-	public static void crearDocumento(Cliente c,Pedido p,Document doc) throws DocumentException {
+	public static void crearDocumento(Cliente c,Pedido p,Document doc) throws DocumentException, MalformedURLException, IOException {
 
 		//Abrir el documento
 		doc.open();
+		String direc = "C:/Users/ALAR/git/MySuplements/MySupplements/src/LOGO/logo_icon_small.png";
+	    Image img = Image.getInstance(direc);
+	    
+	    //img.scaleToFit(PageSize.A4);
 		
-
+		doc.add(img);
+		doc.add(new Paragraph(" "));
+		doc.add(new Paragraph("	"));
+		doc.add(new Paragraph("	"));
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		Date d = new Date(p.getFec());
 		//TODO Tratar de añadir una imagen
