@@ -238,19 +238,16 @@ public class VentanaPrincipal {
 			oos= new ObjectOutputStream(new FileOutputStream("Administradores.dat"));
 			oos.writeObject(a);
 		} catch (IOException e) {
-			e.printStackTrace();
-		}finally {
+			JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR", "ERROR", JOptionPane.ERROR_MESSAGE);		}finally {
 			if (oos!=null) {
 				try {
 					oos.close();
 				} catch (IOException e) {
-					e.printStackTrace();
-				}
+					JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR", "ERROR", JOptionPane.ERROR_MESSAGE);				}
 				try {
 					oos.flush();
 				} catch (IOException e) {
-					e.printStackTrace();
-				}
+					JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR", "ERROR", JOptionPane.ERROR_MESSAGE);				}
 			}
 		}		
 	}
@@ -265,9 +262,9 @@ public class VentanaPrincipal {
 			ois= new ObjectInputStream(new FileInputStream("Administradores.dat"));
 			listaAdmins=(ArrayList<Administrador>) ois.readObject();
 		} catch (IOException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR", "ERROR", JOptionPane.ERROR_MESSAGE);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}

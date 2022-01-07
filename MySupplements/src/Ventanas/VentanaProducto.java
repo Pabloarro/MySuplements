@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -16,7 +17,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,12 +34,14 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -122,7 +127,7 @@ public class VentanaProducto extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		setTitle("PRODUCTOS");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 700, 450);
+		setBounds(100, 100, 750, 550);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -227,7 +232,7 @@ public class VentanaProducto extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				panelCentro.setLayout(new GridLayout(1,1));
-				panelCentro.remove(panelCentroDerecha);
+				panelCentro.remove(1);
 				btnRetroceder.setVisible(false);
 				btnVerInfoPedido.setVisible(true);
 				btnRepetirPedido.setVisible(false);
@@ -243,14 +248,20 @@ public class VentanaProducto extends JFrame {
 				btnRepetirPedido.setVisible(true);
 				btnDescargarRecibo.setVisible(true);
 				btnRetroceder.setVisible(true);
+				
+				
 				textArea =  new JTextArea();
 				JScrollPane scroll = new JScrollPane(textArea);
 				scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 				scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+				
+				
 				int pos = tablaInformacion.getSelectedRow();
 				ArrayList<Pedido> pedidos = obtenerlistapedidosCliente();
 				Pedido p = pedidos.get(pos);
-				textArea.append("pedido con código: "+p.getCodpe()+"\n");
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+				Date d = new Date(p.getFec());
+				textArea.append("Pedido con código: "+p.getCodpe()+"\t"+"Realizado el:"+sdf.format(d)+"\n");
 				textArea.append("\n");
 				float tot=0;
 				for (Producto pr : p.getListaproductos()) {
@@ -273,14 +284,15 @@ public class VentanaProducto extends JFrame {
 				textArea.append("Total con descuento: "+df.format(tot-(p.getPuntosUsados()/5))+"€"+"\n");
 				
 				textArea.setEditable(false);
+								
 				
-				
-				panelCentroDerecha= new JPanel();
-				panelCentroDerecha.add(scroll);
 				panelCentro.setLayout(new GridLayout(0,2));
-				panelCentro.add(panelCentroDerecha);
+				
+
+				panelCentro.add(scroll);
+				
 				btnVerInfoPedido.setVisible(false);
-				//TODO falta hacer que funcione el scroll
+				
 				
 				
 			}
@@ -298,11 +310,11 @@ public class VentanaProducto extends JFrame {
 				try {
 					Recibo.generarpdf(VentanaPrincipal.clientesesion,listapedidos.get(pos));
 				} catch (DocumentException | SQLException | IOException e1) {
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR", "ERROR", JOptionPane.ERROR_MESSAGE);
 				} catch (AddressException e1) {
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR CON LA DIRECCIÓN", "ERROR", JOptionPane.ERROR_MESSAGE);
 				} catch (MessagingException e1) {
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR CON EL MENSAJE", "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 				BaseDatos.closeBD();
 				
@@ -327,7 +339,7 @@ public class VentanaProducto extends JFrame {
 					try {
 						BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
 					} catch (SQLException e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR CON LA BASE DA DATOS", "ERROR", JOptionPane.ERROR_MESSAGE);
 					}
 					BaseDatos.closeBD();
 				}
@@ -373,7 +385,7 @@ public class VentanaProducto extends JFrame {
 					try {
 						BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
 					} catch (SQLException e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR CON LA BASE DE DATOS", "ERROR", JOptionPane.ERROR_MESSAGE);
 					}
 					BaseDatos.closeBD();
 					btnAddDescuento.setEnabled(true);
@@ -394,7 +406,16 @@ public class VentanaProducto extends JFrame {
 				    if(resp==0) {
 						String nombre = JOptionPane.showInputDialog("Introduce el nombre ");
 						float precio = Float.parseFloat(JOptionPane.showInputDialog("Introduce el precio "));
-						String foto = "/FOTOS/" + JOptionPane.showInputDialog("Introduce el nombre de la imagen + .jpg,.gif,.png ");
+						
+						
+						//String foto = "/FOTOS/" + JOptionPane.showInputDialog("Introduce el nombre de la imagen + .jpg,.gif,.png ");
+						String foto=null;
+						JFileChooser jfc = new JFileChooser();
+					        int Resul = jfc.showSaveDialog(null);
+					        if (Resul==JFileChooser.APPROVE_OPTION){
+					            foto = jfc.getSelectedFile().getPath();
+					            
+					        }
 						String material = JOptionPane.showInputDialog("Introduce el material ");
 						ProductoMerchandise p = new ProductoMerchandise(VentanaPrincipal.ObtenerSiguienteCodigodeProductoMerchandise(), precio, nombre, foto,material);
 						alp.add(p);
@@ -404,7 +425,15 @@ public class VentanaProducto extends JFrame {
 				    }else {
 				    	String nombre = JOptionPane.showInputDialog("Introduce el nombre ");
 						float precio = Float.parseFloat(JOptionPane.showInputDialog("Introduce el precio "));
-						String foto = "/FOTOS/" + JOptionPane.showInputDialog("Introduce el nombre de la imagen + .jpg,.gif,.png ");
+						//String foto = "/FOTOS/" + JOptionPane.showInputDialog("Introduce el nombre de la imagen + .jpg,.gif,.png ");
+						
+						String foto=null;
+						JFileChooser jfc = new JFileChooser();
+					        int Resul = jfc.showSaveDialog(null);
+					        if (Resul==JFileChooser.APPROVE_OPTION){
+					            foto = jfc.getSelectedFile().getPath();
+					            
+					        }
 						int prot = Integer.parseInt(JOptionPane.showInputDialog("Introduce los gr de proteinas "));
 						int grasas =Integer.parseInt(JOptionPane.showInputDialog("Introduce los gr de grasas "));
 						int hidratos= Integer.parseInt(JOptionPane.showInputDialog("Introduce los gr de hidratos "));
@@ -522,7 +551,7 @@ public class VentanaProducto extends JFrame {
 					BaseDatos.insertarPedido(p);
 					BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR CON LA BASE DE DATOS", "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 				BaseDatos.closeBD();
 			
@@ -533,11 +562,11 @@ public class VentanaProducto extends JFrame {
 						Logger log= Logger.getLogger("");
 						log.log(Level.INFO,"Pdf generado correctamente");
 					} catch (DocumentException | SQLException | IOException e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR", "ERROR", JOptionPane.ERROR_MESSAGE);
 					} catch (AddressException e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR CON LA DIRECCIÓN", "ERROR", JOptionPane.ERROR_MESSAGE);
 					} catch (MessagingException e1) {
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR CON EL ENVÍO DEL MENSAJE", "ERROR", JOptionPane.ERROR_MESSAGE);
 					}}
 				
 				listaProductosPedido.clear();
@@ -573,7 +602,7 @@ public class VentanaProducto extends JFrame {
 							try {
 								BaseDatos.modificarClientePuntos(VentanaPrincipal.clientesesion);
 							} catch (SQLException e1) {
-								e1.printStackTrace();
+								JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
 							}
 							BaseDatos.closeBD();
 							if(opc==0) {
@@ -589,7 +618,7 @@ public class VentanaProducto extends JFrame {
 					JOptionPane.showMessageDialog(null, "Lo sentimos pero no dispone de puntos", "Sin puntos", JOptionPane.ERROR_MESSAGE);
 					}
 			}});
-		
+
 		btnAtras = new JButton("QUITAR CARRITO");
 		btnAtras.setVisible(false);
 		
@@ -602,12 +631,16 @@ public class VentanaProducto extends JFrame {
 				panelCentro.remove(panelCentroDerecha);
 				btnAtras.setVisible(false);
 				btnRealizarPedido.setVisible(false);
-				btnVerPedido.setEnabled(true);
 				btnAdd.setEnabled(true);
 				lblInfo.setVisible(true);
 				panelCentroDerecha.remove(lblLogo);
-				btnAdd.setVisible(true);
+				if(VentanaPrincipal.clientesesion!=null) {
+					btnAdd.setVisible(true);
+				}
 				comboFiltro.setEnabled(true);
+				if (listaProductosPedidos.getModel().getSize()!=0) {
+					btnVerPedido.setEnabled(true);
+				}
 			}
 		});
 		btnVerPedido.setVisible(true);
@@ -637,6 +670,7 @@ public class VentanaProducto extends JFrame {
 		panelSur.add(btnDescargarRecibo);
 		panelSur.add(btnVerInfoPedido);
 		panelSur.add(btnRetroceder);
+		
 		btnRetroceder.setVisible(false);
 		btnVerInfoPedido.setVisible(false);
 		btnRepetirPedido.setVisible(false);		
@@ -692,15 +726,25 @@ public class VentanaProducto extends JFrame {
 					if(e.getClickCount()>=2) {
 					int pos = tablaInformacion.getSelectedRow();
 					String dir = alp.get(pos).getImagen();
-					lblLogo.setIcon(new ImageIcon(VentanaProducto.class.getResource(dir)));
+					
+					BufferedImage img = null;
+					
+					    try {
+							img = ImageIO.read(new File(dir));
+						} catch (IOException e1) {
+							JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR", "ERROR", JOptionPane.ERROR_MESSAGE);
+						}
+					Image dimg = img.getScaledInstance(350,550, Image.SCALE_AREA_AVERAGING);
+					
+					lblLogo.setIcon(new ImageIcon(dimg));
+					panelCentroDerecha = new JPanel();
+					panelCentroDerecha.add(lblLogo);
 					
 					panelCentro.setLayout(new GridLayout(1,2));
-					panelCentroDerecha.setLayout(new GridLayout(1,0));
 					panelCentro.add(panelCentroDerecha);
-					panelCentroDerecha.remove(scrollTabla);
-					panelCentroDerecha.remove(btnEditarPedido);
-					panelCentroDerecha.add(lblLogo);
-					btnAtras.setVisible(true);
+					
+					
+					btnAtras.setVisible(true);					
 					btnAtras.setText("Salir de imagen");
 					}
 				}

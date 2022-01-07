@@ -98,7 +98,7 @@ public class Recibo {
 		String contra="";//LA CONTRASEÑA DEL CORREO ESTÁ QUITADA PARA QUE NO SE VEA EN EL GITHUB
 		
 		
-		String correoDestinatario=JOptionPane.showInputDialog(null,"Introduzca su correo completo por favor");//joptionpane
+		String correoDestinatario=JOptionPane.showInputDialog(null,"Introduzca su correo completo por favor");
 		
 		Properties p = new Properties();
 			p.put("mail.smtp.host", "smtp.gmail.com");
