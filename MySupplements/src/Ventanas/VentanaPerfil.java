@@ -116,6 +116,43 @@ public class VentanaPerfil extends JFrame{
 
 			Date fechanac = new Date(VentanaPrincipal.clientesesion.getFechanac());
 			calendario.setDate(fechanac);
+			
+			//HILO QUE COMPRUEBA EL FORMATO DE LA CONTRASEÑA QUE SE VA A MODIFICAR
+			Runnable r = new Runnable() {
+				
+				@Override
+				public void run() {
+				
+					String patCon = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+					//La contaseña debe ser de al menos 8 carácteres,con al menos un digito ,una mayúscula,un carácter especial y sin espacios ni tabulaciones
+					while(true) {
+						if(txtCon.getText().matches(patCon)) {
+							btnGuardar.setEnabled(true);
+							try {
+								Thread.sleep(6500);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}else 	{
+							
+								btnGuardar.setEnabled(false);
+							JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos:8 carácteres,un dígito,una mayúscula y sin espacios ni tabulaciones", "FORMATO ERRÓNEO/INCOMPLETO", JOptionPane.ERROR_MESSAGE);
+							try {
+								Thread.sleep(13000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+
+						}
+							
+							
+						}
+					
+				}
+			};
+
+			Thread t = new Thread(r);
+			t.start();
 		}
 	});
 	

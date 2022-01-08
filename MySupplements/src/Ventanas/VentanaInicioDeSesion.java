@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -163,9 +164,40 @@ public class VentanaInicioDeSesion extends JFrame {
 			
 		});
 		
-		//TODO Hilo que compruebe que el dni tiene un formato establecido y
-		//TODO hasta que no lo tenga no desbloquee el boton de registrarse
-		//TODO formato de 8 números y una mayúscula
+		//HILO QUE COMPRUEBA EL FORMATO DE LA CONTRASEÑA Y DEL DNI QUE EL NUEVO CLIENTE INSERTA AL REGISTRARSE
+		Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				//PATRÓN DEL DNI ES DE NUMEROS DE 7-8 Y UNA LETRA MAYÚSCULA
+				String patdni = "[0-9]{7,8}[A-Z]";
+				String patCon = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+				//La contaseña debe ser de al menos 8 carácteres,con al menos un digito ,una mayúscula,uncarácter especial y sin espacios ni tabulaciones
+				while(true) {
+					if(textdni.getText().matches(patdni) && textContrasenia.getText().matches(patCon)) {
+						btnRegistro.setEnabled(true);
+						
+					}else 	{
+						btnRegistro.setEnabled(false);
+						JOptionPane.showMessageDialog(null, "El dni deben ser de 7-8 números y una letra mayúscula", "FORMATO ERRÓNEO/INCOMPLETO", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos:8 carácteres,un dígito,una mayúscula y sin espacios ni tabulaciones", "FORMATO ERRÓNEO/INCOMPLETO", JOptionPane.ERROR_MESSAGE);
+
+						try {
+							Thread.sleep(13000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+						
+						
+					}
+				
+			}
+		};
+
+		Thread t = new Thread(r);
+		t.start();
 		setVisible(true);
 	}
 public static void modificarRegistroAdmin() {
