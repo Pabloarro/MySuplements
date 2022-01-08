@@ -4,12 +4,16 @@ package Clases;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -38,6 +42,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.sun.mail.smtp.SMTPTransport;
 
+import Ventanas.VentanaPrincipal;
 import Ventanas.VentanaProducto;
 
 public class Recibo {
@@ -148,6 +153,42 @@ public class Recibo {
 		
 	}
 	
+	/**
+	 * Método que genera un zip con todos los recibosde los pedidos del Cliente
+	 * @param c Cliente actual
+	 * @param listapedidos lista de pedidos del cliente
+	 */
+	public static void ZipRecibosUsuario(Cliente c,ArrayList<Pedido>listapedidos) throws IOException, DocumentException {
+		 JFileChooser jfc = new JFileChooser();
+	        int Resul = jfc.showSaveDialog(null);
+	        if (Resul==JFileChooser.APPROVE_OPTION){
+	            String direc = jfc.getSelectedFile().getPath();
+	           
+	            direc+=".zip";
+	            
+	            
+	            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	            ZipOutputStream zos = new ZipOutputStream(baos);
+	            
+	            for(Pedido p: listapedidos) {
+	            	zos.putNextEntry(new ZipEntry("Pedido"+p.getCodpe()+".pdf"));
+	            
+	            	Document doc = new Document();
+	            	PdfWriter writer= PdfWriter.getInstance(doc, zos);
+	            	writer.setCloseStream(false);
+	            	
+	            	crearDocumento(c, p, doc);
+	            	
+	            	zos.closeEntry();
+	            }
+	        zos.finish();
+	        zos.close();
+	        
+	        baos.writeTo(new FileOutputStream(direc));
+	        }
+		
+	}
+	
 	
 	/**
 	 * Método que crea el documento
@@ -171,14 +212,13 @@ public class Recibo {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		Date d = new Date(p.getFec());
-		//TODO Tratar de añadir una imagen
 		
 		Paragraph parrafo = new Paragraph("Pedido realizado el: "+ sdf.format(d) +"\t Por: "+c.getNom());
 		parrafo.setAlignment(1);
 		doc.add(parrafo);
 		
 		doc.add(new Paragraph(" "));
-		doc.add(new Paragraph("Pedido con código : "+p.getCod()));
+		doc.add(new Paragraph("Pedido con código : "+p.getCodpe()));
 		doc.add(new Paragraph(" "));
 		doc.add(new Paragraph("Con productos:"));
 		doc.add(new Paragraph(" "));

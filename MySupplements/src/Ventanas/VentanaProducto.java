@@ -82,7 +82,7 @@ public class VentanaProducto extends JFrame {
 	private JButton btnEditarPedido;
 	private JButton btnBorrarPedido;
 	private JButton btnAddDescuento;
-	private static JButton btnAddProductoNuevo, btnBorrarProducto, btnAniadirAdmin;
+	private static JButton btnAddProductoNuevo, btnBorrarProducto, btnAniadirAdmin,btnZipRecibos;
 	private static JButton btnInicioSesion;
 	private static JButton btnRepetirPedido, btnDescargarRecibo, btnVerInfoPedido, btnRetroceder;
 	private static int opc = 0;
@@ -221,6 +221,22 @@ public class VentanaProducto extends JFrame {
 				VentanaProducto v = new VentanaProducto();
 				v.setTitle("PEDIDOS");
 				v.ModificarVentanaProductoConPedidos();
+			}
+		});
+		
+		btnZipRecibos = new JButton("DESCARGAR ZIP");
+		btnZipRecibos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ArrayList<Pedido> pedidoscliente = obtenerlistapedidosCliente();
+				try {
+					Recibo.ZipRecibosUsuario(VentanaPrincipal.clientesesion, pedidoscliente);
+				} catch (IOException | DocumentException e1) {
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 
@@ -664,6 +680,8 @@ public class VentanaProducto extends JFrame {
 		panelNorte.add(lblInfo);
 		panelNorte.add(lblFiltro);
 		panelNorte.add(comboFiltro);
+		panelNorte.add(btnZipRecibos);
+		btnZipRecibos.setVisible(false);
 		comboFiltro.setEnabled(true);
 
 		panelSur = new JPanel();
@@ -1026,6 +1044,7 @@ public class VentanaProducto extends JFrame {
 		btnDescargarRecibo.setVisible(false);
 		btnAdd.setVisible(false);
 		btnVerInfoPedido.setVisible(true);
+		btnZipRecibos.setVisible(true);
 
 	}
 

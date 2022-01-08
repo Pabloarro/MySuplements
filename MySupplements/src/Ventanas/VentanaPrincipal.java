@@ -29,11 +29,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.awt.event.ActionEvent;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -63,12 +65,22 @@ public class VentanaPrincipal {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				Properties p = new Properties();
+				p.setProperty("Idioma", "Castellano");
+				p.setProperty("Email", "mysupplements.info@gmail.com");
+				try {
+					p.store(new FileWriter("Propiedades.properties"), "Propiedades");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}		
+				
 				try {
 					VentanaPrincipal window = new VentanaPrincipal();
 					Pedido.ObtenerSiguienteCodigodePedido();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			
 			}
 		});
 	}
