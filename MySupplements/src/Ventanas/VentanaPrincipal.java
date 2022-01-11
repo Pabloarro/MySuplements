@@ -122,7 +122,7 @@ public class VentanaPrincipal {
 		CargarListaAdmins();
 		/**
 		 * Lista de administradores:
-		 * 12345678A  password
+		 * 12345678A   password
 		 * 12345677F  password
 		 */
 		btnAdministrador = new JButton("Administrador");
