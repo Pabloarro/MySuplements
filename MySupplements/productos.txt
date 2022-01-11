@@ -1,4 +1,2 @@
 1	59.99	Caseina 	C:\Users\ALAR\git\MySuplements\MySupplements\src/FOTOS/caseina.jpg	50	10	15	360
 2	20.0	Sudadera con gorro	C:\Users\ALAR\git\MySuplements\MySupplements\src/FOTOS/sudaderaGorro.jpg	algodón
-3	49.99	Proteina en polvo	C:\Users\ALAR\git\MySuplements\MySupplements\src/FOTOS/proteina.jpg	46	8	18	346
-4	17.5	PruebaPrueba	C:\Users\ALAR\git\MySuplements\MySupplements\src\FOTOS\caseina.jpg	Algodón

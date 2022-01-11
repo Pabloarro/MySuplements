@@ -125,7 +125,7 @@ public class VentanaProducto extends JFrame {
 				.getImage(VentanaPrincipal.class.getResource("/LOGO/logo_small_icon_only_inverted.png")));
 		setTitle("PRODUCTOS");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 750, 550);
+		setBounds(100, 100, 800, 550);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -757,9 +757,8 @@ public class VentanaProducto extends JFrame {
 							JOptionPane.showMessageDialog(null, "LO SENTIMOS HA OCURRIDO UN ERROR", "ERROR",
 									JOptionPane.ERROR_MESSAGE);
 						}
-						Image dimg = img.getScaledInstance(350, 550, Image.SCALE_AREA_AVERAGING);
 
-						lblLogo.setIcon(new ImageIcon(dimg));
+						lblLogo.setIcon(new ImageIcon(img));
 						panelCentroDerecha = new JPanel();
 						panelCentroDerecha.add(lblLogo);
 
