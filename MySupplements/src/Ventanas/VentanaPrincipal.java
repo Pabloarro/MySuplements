@@ -121,7 +121,7 @@ public class VentanaPrincipal {
 		listaAdmins = new ArrayList<>();
 		CargarListaAdmins();
 		/**
-		 * Lista de administradores:
+		 * Lista de administradores :
 		 * 12345678A   password
 		 * 12345677F  password
 		 */

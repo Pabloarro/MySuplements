@@ -126,7 +126,7 @@ public class VentanaPerfil extends JFrame{
 					String patCon = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
 					//La contaseña debe ser de al menos 8 carácteres,con al menos un digito ,una mayúscula,un carácter especial y sin espacios ni tabulaciones
 					while(true) {
-						if(txtCon.getText().matches(patCon)) {
+						if(!btnModificar.isEnabled()&& txtCon.getText().matches(patCon)) {
 							btnGuardar.setEnabled(true);
 							try {
 								Thread.sleep(6500);
@@ -136,7 +136,7 @@ public class VentanaPerfil extends JFrame{
 						}else 	{
 							
 								btnGuardar.setEnabled(false);
-							JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos:8 carácteres,un dígito,una mayúscula y sin espacios ni tabulaciones", "FORMATO ERRÓNEO/INCOMPLETO", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos:8 carácteres,un dígito,una mayúscula, un caracter especial @#$%^&+= y sin espacios ni tabulaciones", "FORMATO ERRÓNEO/INCOMPLETO", JOptionPane.ERROR_MESSAGE);
 							try {
 								Thread.sleep(13000);
 							} catch (InterruptedException e) {
@@ -153,6 +153,7 @@ public class VentanaPerfil extends JFrame{
 
 			Thread t = new Thread(r);
 			t.start();
+			
 		}
 	});
 	
